@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email, password, redirectPath = null) => {
     try {
       const response = await axiosInstance.post('/auth/login', { email, password });
       const { access_token, user } = response.data;
@@ -29,8 +29,10 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
 
-      // Route based on user type
-      if (user.userType === 'ADMIN') {
+      // Route based on redirectPath or user type
+      if (redirectPath) {
+        navigate(redirectPath, { replace: true });
+      } else if (user.userType === 'ADMIN') {
         navigate('/admin/dashboard');
       } else {
         navigate('/provider/profile'); // Or wherever provider dashboard is
@@ -54,7 +56,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      // Tell the backend to clear the HttpOnly refresh_token cookie
+      await axiosInstance.post('/auth/logout');
+    } catch {
+      // Proceed with client-side logout even if the call fails
+    }
     localStorage.removeItem('access_token');
     localStorage.removeItem('user');
     setUser(null);

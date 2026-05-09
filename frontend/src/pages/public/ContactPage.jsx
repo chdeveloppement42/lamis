@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import axiosInstance from '../../api/axiosInstance';
+import { useToast } from '../../components/Toast';
 import './ContactPage.css';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
+    setLoading(true);
     try {
       await axiosInstance.post('/contact', formData);
-      setSubmitted(true);
+      showToast({ type: 'success', message: 'Merci pour votre message ! Nous vous répondrons dans les plus brefs délais.' });
       setFormData({ name: '', email: '', subject: '', message: '' });
-      setTimeout(() => setSubmitted(false), 5000);
     } catch {
-      setError('Erreur lors de l\'envoi. Veuillez réessayer.');
+      showToast({ type: 'error', message: 'Erreur lors de l\'envoi. Veuillez réessayer.' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,17 +37,23 @@ export default function ContactPage() {
             {/* Info cards */}
             <div className="contact-info">
               <div className="contact-info__card">
-                <span className="contact-info__icon">📧</span>
+                <div className="contact-info__icon">
+                  <img src="/branding/icon-check.svg" alt="Email" style={{ width: '24px', height: '24px' }} />
+                </div>
                 <h3>Email</h3>
                 <p>contact@immolamis.com</p>
               </div>
               <div className="contact-info__card">
-                <span className="contact-info__icon">📞</span>
+                <div className="contact-info__icon">
+                  <img src="/branding/icon-check.svg" alt="Téléphone" style={{ width: '24px', height: '24px' }} />
+                </div>
                 <h3>Téléphone</h3>
                 <p>+213 555 123 456</p>
               </div>
               <div className="contact-info__card">
-                <span className="contact-info__icon">📍</span>
+                <div className="contact-info__icon">
+                  <img src="/branding/icon-pin.svg" alt="Adresse" style={{ width: '24px', height: '24px' }} />
+                </div>
                 <h3>Adresse</h3>
                 <p>Alger, Algérie</p>
               </div>
@@ -65,12 +73,6 @@ export default function ContactPage() {
           </div>
 
           <form className="contact-form" onSubmit={handleSubmit}>
-            {submitted && (
-              <div className="contact-form__success">
-                ✅ Merci pour votre message ! Nous vous répondrons dans les plus brefs délais.
-              </div>
-            )}
-
             <div className="contact-form__row">
               <div className="form-group">
                 <label className="form-label">Nom complet</label>
@@ -112,8 +114,8 @@ export default function ContactPage() {
               />
             </div>
 
-            <button type="submit" className="btn btn-primary btn-lg">
-              Envoyer le message
+            <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
+              {loading ? 'Envoi...' : 'Envoyer le message'}
             </button>
           </form>
         </div>

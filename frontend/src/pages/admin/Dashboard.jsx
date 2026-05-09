@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import './Dashboard.css';
 
@@ -28,10 +28,10 @@ export default function Dashboard() {
   }, []);
 
   const statCards = [
-    { label: 'Fournisseurs en attente', value: stats.pendingProviders, icon: '👥', color: '#fef3c7' },
-    { label: 'Annonces publiées', value: stats.publishedListings, icon: '🏠', color: '#d1fae5' },
-    { label: 'Catégories actives', value: stats.activeCategories, icon: '📂', color: '#dbeafe' },
-    { label: 'Notifications non lues', value: stats.unreadNotifications, icon: '🔔', color: '#fce7f3' },
+    { label: 'Fournisseurs en attente', value: stats.pendingProviders, icon: '👥', color: '#fef3c7', to: '/admin/providers?status=PENDING' },
+    { label: 'Annonces publiées', value: stats.publishedListings, icon: '🏠', color: '#d1fae5', to: '/admin/listings?status=PUBLISHED' },
+    { label: 'Catégories actives', value: stats.activeCategories, icon: '📂', color: '#dbeafe', to: '/admin/categories' },
+    { label: 'Notifications non lues', value: stats.unreadNotifications, icon: '🔔', color: '#fce7f3', to: '/admin/notifications' },
   ];
 
   return (
@@ -43,13 +43,13 @@ export default function Dashboard() {
 
       <div className="dashboard__stats">
         {statCards.map((card, i) => (
-          <div key={i} className="stat-card" style={{ borderLeftColor: card.color }}>
+          <Link key={i} to={card.to} className="stat-card" style={{ borderLeftColor: card.color, textDecoration: 'none' }}>
             <div className="stat-card__icon" style={{ backgroundColor: card.color }}>{card.icon}</div>
             <div className="stat-card__info">
               <span className="stat-card__value">{loading ? '…' : card.value}</span>
               <span className="stat-card__label">{card.label}</span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 

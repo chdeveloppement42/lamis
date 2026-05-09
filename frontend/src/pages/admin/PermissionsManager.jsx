@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import './AdminTable.css';
+import { useModal } from '../../components/Modal';
 
 export default function PermissionsManager() {
+  const { showModal } = useModal();
   const [roles, setRoles] = useState([]);
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,15 +63,20 @@ export default function PermissionsManager() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!confirm('Supprimer ce rôle ? Tous les utilisateurs de ce rôle seront suspendus.')) return;
-    try {
-      const res = await axiosInstance.delete(`/roles/${id}`);
-      alert(res.data.message);
-      fetchData();
-    } catch (err) {
-      alert(err.response?.data?.message || 'Erreur');
-    }
+  const handleDelete = (id) => {
+    showModal({
+      title: 'Supprimer le rôle',
+      message: 'Supprimer ce rôle ? Tous les utilisateurs de ce rôle seront suspendus.',
+      onConfirm: async () => {
+        try {
+          const res = await axiosInstance.delete(`/roles/${id}`);
+          alert(res.data.message);
+          fetchData();
+        } catch (err) {
+          alert(err.response?.data?.message || 'Erreur');
+        }
+      }
+    });
   };
 
   if (loading) return <div className="admin-loading">Chargement...</div>;
@@ -99,22 +105,48 @@ export default function PermissionsManager() {
             />
           </div>
           <div className="admin-role-form__permissions">
-            <h4>Permissions :</h4>
-            <div className="permissions-grid">
-              {permissions.map((perm) => (
-                <label key={perm.id} className="permission-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={formData.permissionIds.includes(perm.id)}
-                    onChange={() => handleTogglePermission(perm.id)}
-                  />
-                  <span className="permission-checkbox__label">
-                    <strong>{perm.action}</strong>
-                    {perm.description && <small>{perm.description}</small>}
-                  </span>
-                </label>
-              ))}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <h4>Permissions :</h4>
+              <button 
+                type="button" 
+                className="admin-btn admin-btn--sm admin-btn--outline"
+                onClick={() => {
+                  const allIds = permissions.map(p => p.id);
+                  setFormData({ ...formData, permissionIds: formData.permissionIds.length === allIds.length ? [] : allIds });
+                }}
+              >
+                {formData.permissionIds.length === permissions.length ? 'Tout désélectionner' : 'Tout sélectionner'}
+              </button>
             </div>
+            
+            {Object.entries(
+              permissions.reduce((acc, perm) => {
+                const parts = perm.action.split(':');
+                const entity = parts.length > 1 ? parts[1] : 'autres';
+                if (!acc[entity]) acc[entity] = [];
+                acc[entity].push(perm);
+                return acc;
+              }, {})
+            ).map(([group, perms]) => (
+              <div key={group} className="permission-group">
+                <h5 className="permission-group__title">{group}</h5>
+                <div className="permissions-grid">
+                  {perms.map((perm) => (
+                    <label key={perm.id} className="permission-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={formData.permissionIds.includes(perm.id)}
+                        onChange={() => handleTogglePermission(perm.id)}
+                      />
+                      <span className="permission-checkbox__label">
+                        <strong>{perm.action.split(':')[0]}</strong>
+                        {perm.description && <small>{perm.description}</small>}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
           <button type="submit" className="admin-btn admin-btn--primary">
             {editingRole ? 'Mettre à jour' : 'Créer le rôle'}

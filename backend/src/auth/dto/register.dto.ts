@@ -22,8 +22,16 @@ export class RegisterDto {
   phone: string;
 
   @IsString()
-  @IsNotEmpty({ message: "L'adresse est requise." })
-  address: string;
+  @IsNotEmpty({ message: 'La wilaya est requise.' })
+  wilaya: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'La commune est requise.' })
+  commune: string;
+
+  @IsString()
+  @IsOptional()
+  quartier?: string;
 
   @IsString()
   @IsOptional()

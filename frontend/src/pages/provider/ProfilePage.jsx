@@ -1,48 +1,59 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../components/Toast';
+import LocationSelector from '../../components/LocationSelector';
 import './ProviderPages.css';
 
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+  const { showToast } = useToast();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(null);
 
   // Password state
   const [pwForm, setPwForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
-  const [pwMsg, setPwMsg] = useState(null);
-  const [pwErr, setPwErr] = useState(null);
+  const [pwSaving, setPwSaving] = useState(false);
+
+  // Sensitive update state
+  const [sensitiveSaving, setSensitiveSaving] = useState(false);
 
   useEffect(() => {
     axiosInstance.get('/providers/profile')
       .then((res) => {
         setProfile(res.data);
+        if (res.data.status && res.data.status !== user.status) {
+          const updatedUser = { ...user, status: res.data.status };
+          setUser(updatedUser);
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+        }
       })
-      .catch(() => setError('Erreur lors du chargement du profil.'))
+      .catch(() => showToast({ type: 'error', message: 'Erreur lors du chargement du profil.' }))
       .finally(() => setLoading(false));
   }, []);
 
-  const update = (field) => (e) => setProfile({ ...profile, [field]: e.target.value });
+  const update = (field) => (e) => {
+    const value = e && e.target ? e.target.value : e;
+    setProfile(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage(null);
-    setError(null);
     try {
       const res = await axiosInstance.patch('/providers/profile', {
         firstName: profile.firstName,
         lastName: profile.lastName,
         phone: profile.phone,
-        address: profile.address,
+        wilaya: profile.wilaya,
+        commune: profile.commune,
+        quartier: profile.quartier,
       });
       setProfile({ ...profile, ...res.data });
-      setMessage('Profil mis à jour avec succès !');
+      showToast({ type: 'success', message: 'Profil mis à jour avec succès !' });
     } catch (err) {
-      setError(err.response?.data?.message || 'Erreur lors de la mise à jour.');
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur lors de la mise à jour.' });
     } finally {
       setSaving(false);
     }
@@ -50,41 +61,45 @@ export default function ProfilePage() {
 
   const handleSensitiveUpdate = async (e) => {
     e.preventDefault();
-    setSaving(true);
-    setMessage(null);
-    setError(null);
+    setSensitiveSaving(true);
     try {
       const body = {};
       if (profile.newEmail) body.email = profile.newEmail;
       const res = await axiosInstance.patch('/providers/profile/sensitive', body);
       setProfile({ ...profile, ...res.data });
-      setMessage('Données mises à jour. Votre compte est en attente de re-validation.');
+      if (res.data.status && res.data.status !== user.status) {
+        const updatedUser = { ...user, status: res.data.status };
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
+      showToast({ type: 'warning', message: 'Données mises à jour. Votre compte est en attente de re-validation.' });
     } catch (err) {
-      setError(err.response?.data?.message || 'Erreur lors de la mise à jour.');
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur lors de la mise à jour.' });
     } finally {
-      setSaving(false);
+      setSensitiveSaving(false);
     }
   };
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-    setPwMsg(null);
-    setPwErr(null);
 
     if (pwForm.newPassword !== pwForm.confirmPassword) {
-      setPwErr('Les mots de passe ne correspondent pas.');
+      showToast({ type: 'error', message: 'Les mots de passe ne correspondent pas.' });
       return;
     }
 
+    setPwSaving(true);
     try {
       const res = await axiosInstance.patch('/providers/profile/password', {
         currentPassword: pwForm.currentPassword,
         newPassword: pwForm.newPassword,
       });
-      setPwMsg(res.data.message);
+      showToast({ type: 'success', message: res.data.message || 'Mot de passe modifié avec succès !' });
       setPwForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (err) {
-      setPwErr(err.response?.data?.message || 'Erreur lors du changement de mot de passe.');
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur lors du changement de mot de passe.' });
+    } finally {
+      setPwSaving(false);
     }
   };
 
@@ -101,9 +116,6 @@ export default function ProfilePage() {
     <div className="provider-page">
       <h1>Mon Profil</h1>
       <p className="provider-page__subtitle">Gérez vos informations personnelles</p>
-
-      {message && <div className="provider-alert provider-alert--success">✅ {message}</div>}
-      {error && <div className="provider-alert provider-alert--error">❌ {error}</div>}
 
       <div className="provider-page__grid">
         {/* ─── Personal Info ─────────────────────────── */}
@@ -123,21 +135,28 @@ export default function ProfilePage() {
             <label className="form-label">Téléphone</label>
             <input type="tel" className="form-input" value={profile?.phone || ''} onChange={update('phone')} />
           </div>
-          <div className="form-group">
-            <label className="form-label">Adresse</label>
-            <input type="text" className="form-input" value={profile?.address || ''} onChange={update('address')} />
+          
+          <div style={{ marginTop: '1.5rem', marginBottom: '1.5rem', padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+            <h4 style={{ fontSize: '0.9rem', marginBottom: '1rem', color: '#374151' }}>Localisation</h4>
+            <LocationSelector
+              wilaya={profile?.wilaya}
+              commune={profile?.commune}
+              quartier={profile?.quartier}
+              onWilayaChange={(val) => update('wilaya')(val)}
+              onCommuneChange={(val) => update('commune')(val)}
+              onQuartierChange={(val) => update('quartier')(val)}
+              required={false}
+            />
           </div>
+
           <button className="btn btn-primary" type="submit" disabled={saving}>
-            {saving ? 'Sauvegarde...' : 'Sauvegarder'}
+            {saving ? 'Enregistrement...' : 'Enregistrer'}
           </button>
         </form>
 
-        {/* ─── Password Change (GAP 2) ──────────────── */}
+        {/* ─── Password Change ──────────────── */}
         <form className="provider-card" onSubmit={handlePasswordChange}>
           <h3>🔒 Changer le mot de passe</h3>
-
-          {pwMsg && <div className="provider-alert provider-alert--success">✅ {pwMsg}</div>}
-          {pwErr && <div className="provider-alert provider-alert--error">❌ {pwErr}</div>}
 
           <div className="form-group">
             <label className="form-label">Mot de passe actuel</label>
@@ -159,7 +178,9 @@ export default function ProfilePage() {
                 onChange={(e) => setPwForm({ ...pwForm, confirmPassword: e.target.value })} />
             </div>
           </div>
-          <button className="btn btn-primary" type="submit">Modifier le mot de passe</button>
+          <button className="btn btn-primary" type="submit" disabled={pwSaving}>
+            {pwSaving ? 'Modification...' : 'Modifier le mot de passe'}
+          </button>
         </form>
 
         {/* ─── Sensitive Data ────────────────────────── */}
@@ -179,8 +200,8 @@ export default function ProfilePage() {
             <label className="form-label">Document justificatif</label>
             <input type="file" className="form-input" />
           </div>
-          <button className="btn" type="submit" style={{ background: 'var(--color-warning)', color: '#fff' }}>
-            Mettre à jour (Déclenchera une re-validation)
+          <button className="btn" type="submit" style={{ background: 'var(--color-warning)', color: '#fff' }} disabled={sensitiveSaving}>
+            {sensitiveSaving ? 'Enregistrement...' : 'Mettre à jour (Déclenchera une re-validation)'}
           </button>
         </form>
       </div>

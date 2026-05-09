@@ -96,7 +96,7 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto, documentFile?: Express.Multer.File) {
-    const { firstName, lastName, email, password, phone, address } = registerDto;
+    const { firstName, lastName, email, password, phone, wilaya, commune, quartier } = registerDto;
 
     const existingProvider = await this.prisma.provider.findUnique({ where: { email } });
     const existingAdmin = await this.prisma.admin.findUnique({ where: { email } });
@@ -111,8 +111,6 @@ export class AuthService {
       const extension = path.extname(documentFile.originalname) || '.pdf';
       const filename = `${uuidv4()}${extension}`;
       finalDocumentUrl = await this.storageService.saveFile(documentFile.buffer, filename);
-    } else if (!finalDocumentUrl) {
-      throw new BadRequestException('Un document justificatif est requis.');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -124,7 +122,9 @@ export class AuthService {
         email,
         password: hashedPassword,
         phone,
-        address,
+        wilaya,
+        commune,
+        quartier,
         documentUrl: finalDocumentUrl,
         status: 'PENDING',
       },

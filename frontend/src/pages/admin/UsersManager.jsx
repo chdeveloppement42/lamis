@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import './AdminTable.css';
+import { useToast } from '../../components/Toast';
+import { DataTable } from '../../components/DataTable';
 
 export default function UsersManager() {
+  const { showToast } = useToast();
   const [admins, setAdmins] = useState([]);
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '', lastName: '', email: '', password: '', roleId: '',
   });
@@ -30,34 +33,40 @@ export default function UsersManager() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSaving(true);
     try {
       await axiosInstance.post('/admin/users', {
         ...formData,
         roleId: parseInt(formData.roleId),
       });
+      showToast({ type: 'success', message: 'Administrateur créé avec succès !' });
       setFormData({ firstName: '', lastName: '', email: '', password: '', roleId: '' });
       setShowForm(false);
       fetchData();
     } catch (err) {
-      alert(err.response?.data?.message || 'Erreur lors de la création');
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur lors de la création' });
+    } finally {
+      setSaving(false);
     }
   };
 
   const handleSuspend = async (id) => {
     try {
       await axiosInstance.patch(`/admin/users/${id}/suspend`);
+      showToast({ type: 'success', message: 'Utilisateur suspendu.' });
       fetchData();
     } catch (err) {
-      alert(err.response?.data?.message || 'Erreur');
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur' });
     }
   };
 
   const handleReactivate = async (id) => {
     try {
       await axiosInstance.patch(`/admin/users/${id}/reactivate`);
+      showToast({ type: 'success', message: 'Utilisateur réactivé.' });
       fetchData();
     } catch (err) {
-      alert(err.response?.data?.message || 'Erreur');
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur' });
     }
   };
 
@@ -66,9 +75,9 @@ export default function UsersManager() {
     if (!newPassword) return;
     try {
       await axiosInstance.patch(`/admin/users/${id}/reset-password`, { newPassword });
-      alert('Mot de passe réinitialisé');
+      showToast({ type: 'success', message: 'Mot de passe réinitialisé avec succès.' });
     } catch (err) {
-      alert(err.response?.data?.message || 'Erreur');
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur' });
     }
   };
 
@@ -81,7 +90,56 @@ export default function UsersManager() {
     return <span className={`admin-badge ${map[status] || ''}`}>{status}</span>;
   };
 
-  if (loading) return <div className="admin-loading">Chargement...</div>;
+  const columns = [
+    {
+      header: 'Nom',
+      width: '20%',
+      field: 'name',
+      render: (admin) => <strong>{admin.firstName} {admin.lastName}</strong>
+    },
+    {
+      header: 'Email',
+      width: '20%',
+      field: 'email'
+    },
+    {
+      header: 'Rôle',
+      width: '15%',
+      field: 'role',
+      render: (admin) => admin.role?.name || '—'
+    },
+    {
+      header: 'Statut',
+      width: '10%',
+      field: 'status',
+      render: (admin) => statusBadge(admin.status)
+    },
+    {
+      header: 'Créé par',
+      width: '15%',
+      field: 'createdBy',
+      render: (admin) => admin.createdBy ? `${admin.createdBy.firstName} ${admin.createdBy.lastName}` : '—'
+    },
+    {
+      header: 'Actions',
+      width: '20%',
+      render: (admin) => (
+        <div className="data-table__actions">
+          {!admin.isSuperAdmin && (
+            <>
+              {admin.status === 'VALIDATED' ? (
+                <button className="admin-btn admin-btn--sm admin-btn--warning" onClick={() => handleSuspend(admin.id)}>⏸️ Suspendre</button>
+              ) : (
+                <button className="admin-btn admin-btn--sm admin-btn--success" onClick={() => handleReactivate(admin.id)}>▶️ Réactiver</button>
+              )}
+              <button className="admin-btn admin-btn--sm admin-btn--outline" onClick={() => handleResetPassword(admin.id)}>🔑 MDP</button>
+            </>
+          )}
+          {admin.isSuperAdmin && <span className="admin-badge admin-badge--info">Super Admin</span>}
+        </div>
+      )
+    }
+  ];
 
   return (
     <div className="admin-page">
@@ -107,48 +165,19 @@ export default function UsersManager() {
               <option key={r.id} value={r.id}>{r.name}</option>
             ))}
           </select>
-          <button type="submit" className="admin-btn admin-btn--primary">Créer</button>
+          <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
+            {saving ? 'Création...' : 'Créer'}
+          </button>
         </form>
       )}
 
-      <div className="admin-table-wrapper">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Nom</th>
-              <th>Email</th>
-              <th>Rôle</th>
-              <th>Statut</th>
-              <th>Créé par</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {admins.map((admin) => (
-              <tr key={admin.id}>
-                <td><strong>{admin.firstName} {admin.lastName}</strong></td>
-                <td>{admin.email}</td>
-                <td>{admin.role?.name}</td>
-                <td>{statusBadge(admin.status)}</td>
-                <td>{admin.createdBy ? `${admin.createdBy.firstName} ${admin.createdBy.lastName}` : '—'}</td>
-                <td className="admin-table__actions">
-                  {!admin.isSuperAdmin && (
-                    <>
-                      {admin.status === 'VALIDATED' ? (
-                        <button className="admin-btn admin-btn--sm admin-btn--warning" onClick={() => handleSuspend(admin.id)}>⏸️ Suspendre</button>
-                      ) : (
-                        <button className="admin-btn admin-btn--sm admin-btn--success" onClick={() => handleReactivate(admin.id)}>▶️ Réactiver</button>
-                      )}
-                      <button className="admin-btn admin-btn--sm admin-btn--outline" onClick={() => handleResetPassword(admin.id)}>🔑 MDP</button>
-                    </>
-                  )}
-                  {admin.isSuperAdmin && <span className="admin-badge admin-badge--info">Super Admin</span>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable 
+        columns={columns}
+        data={admins}
+        isLoading={loading}
+        emptyMessage="Aucun administrateur trouvé."
+        searchPlaceholder="Rechercher par nom, email..."
+      />
     </div>
   );
 }

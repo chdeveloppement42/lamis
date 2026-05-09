@@ -1,5 +1,5 @@
 import { IsString, IsNumber, IsOptional, IsEnum, IsArray, Min } from 'class-validator';
-import { ListingStatus } from '@prisma/client';
+import { ListingStatus, ListingType } from '@prisma/client';
 
 export class CreateListingDto {
   @IsString()
@@ -12,11 +12,30 @@ export class CreateListingDto {
   @Min(0)
   price: number;
 
-  @IsString()
-  city: string;
+  @IsEnum(ListingType)
+  type: ListingType;
 
   @IsString()
-  district: string;
+  wilaya: string;
+
+  @IsString()
+  commune: string;
+
+  @IsString()
+  @IsOptional()
+  quartier?: string;
+
+  @IsNumber()
+  @IsOptional()
+  surface?: number;
+
+  @IsNumber()
+  @IsOptional()
+  rooms?: number;
+
+  @IsNumber()
+  @IsOptional()
+  floor?: number;
 
   @IsNumber()
   categoryId: number;
@@ -46,12 +65,32 @@ export class UpdateListingDto {
   price?: number;
 
   @IsOptional()
-  @IsString()
-  city?: string;
+  @IsEnum(ListingType)
+  type?: ListingType;
 
   @IsOptional()
   @IsString()
-  district?: string;
+  wilaya?: string;
+
+  @IsOptional()
+  @IsString()
+  commune?: string;
+
+  @IsOptional()
+  @IsString()
+  quartier?: string;
+
+  @IsOptional()
+  @IsNumber()
+  surface?: number;
+
+  @IsOptional()
+  @IsNumber()
+  rooms?: number;
+
+  @IsOptional()
+  @IsNumber()
+  floor?: number;
 
   @IsOptional()
   @IsNumber()

@@ -11,7 +11,7 @@ export default function PublicLayout() {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -21,27 +21,25 @@ export default function PublicLayout() {
   }, [location]);
 
   const navLinks = [
-    { to: '/', label: 'Accueil' },
+    { to: '/',        label: 'Accueil' },
     { to: '/services', label: 'Annonces' },
-    { to: '/about', label: 'À propos' },
+    { to: '/about',   label: 'À propos' },
     { to: '/contact', label: 'Contact' },
   ];
 
   return (
     <div className="public-layout">
+
       {/* ─── HEADER ─────────────────────────────────────────────── */}
       <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
-        <div className="container header__inner">
+        <div className="header__inner">
           <Link to="/" className="header__logo">
-            <div className="header__logo-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
-              </svg>
-            </div>
-            <span className="header__logo-text">
-              Immo<span className="header__logo-accent">Lamis</span>
-            </span>
+            <img
+              src="/branding/logo-horizontal.svg"
+              alt="Immo Lamis"
+              className="header__logo-img"
+              style={{ height: '55px', width: 'auto' }}
+            />
           </Link>
 
           <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}>
@@ -58,8 +56,8 @@ export default function PublicLayout() {
 
           <div className="header__actions">
             {user ? (
-              <Link 
-                to={user.userType === 'ADMIN' ? '/admin/dashboard' : '/provider/listings'} 
+              <Link
+                to={user.userType === 'ADMIN' ? '/admin/dashboard' : '/provider/listings'}
                 className="btn btn-primary btn-sm"
               >
                 Mon Espace
@@ -95,18 +93,15 @@ export default function PublicLayout() {
 
       {/* ─── FOOTER ─────────────────────────────────────────────── */}
       <footer className="footer">
-        <div className="container footer__inner">
+        <div className="footer__inner">
           <div className="footer__brand">
-            <div className="header__logo">
-              <div className="header__logo-icon" style={{ color: 'var(--color-primary-light)' }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                  <polyline points="9 22 9 12 15 12 15 22" />
-                </svg>
-              </div>
-              <span className="header__logo-text" style={{ color: '#fff' }}>
-                Immo<span className="header__logo-accent">Lamis</span>
-              </span>
+            <div className="footer__logo">
+              <img
+                src="/branding/logo-horizontal.svg"
+                alt="Immo Lamis"
+                className="footer__logo-img"
+                style={{ height: '50px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+              />
             </div>
             <p className="footer__description">
               Plateforme immobilière de confiance. Tous les biens sont vérifiés et validés par notre équipe.
@@ -136,9 +131,7 @@ export default function PublicLayout() {
         </div>
 
         <div className="footer__bottom">
-          <div className="container">
-            <p>© {new Date().getFullYear()} Immo Lamis. Tous droits réservés.</p>
-          </div>
+          <p>© {new Date().getFullYear()} Immo Lamis. Tous droits réservés.</p>
         </div>
       </footer>
     </div>

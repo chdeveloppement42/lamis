@@ -18,7 +18,9 @@ export class ProvidersService {
         lastName: true,
         email: true,
         phone: true,
-        address: true,
+        wilaya: true,
+        commune: true,
+        quartier: true,
         documentUrl: true,
         status: true,
         createdAt: true,
@@ -102,7 +104,9 @@ export class ProvidersService {
         lastName: true,
         email: true,
         phone: true,
-        address: true,
+        wilaya: true,
+        commune: true,
+        quartier: true,
         documentUrl: true,
         status: true,
         createdAt: true,
@@ -116,7 +120,7 @@ export class ProvidersService {
   // ─── PROVIDER: Update own profile ──────────────────────────────
   async updateProfile(
     id: number,
-    data: { firstName?: string; lastName?: string; phone?: string; address?: string },
+    data: { firstName?: string; lastName?: string; phone?: string; wilaya?: string; commune?: string; quartier?: string },
   ) {
     await this.getOwnProfile(id);
     return this.prisma.provider.update({
@@ -128,7 +132,9 @@ export class ProvidersService {
         lastName: true,
         email: true,
         phone: true,
-        address: true,
+        wilaya: true,
+        commune: true,
+        quartier: true,
         status: true,
       },
     });

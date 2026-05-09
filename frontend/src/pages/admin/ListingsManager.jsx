@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import './AdminTable.css';
+import { DataTable } from '../../components/DataTable';
 
-import { LISTING_STATUS, getStatusLabel, getStatusClass, ACCOUNT_STATUS } from '../../utils/statusUtils';
+import { LISTING_STATUS, ACCOUNT_STATUS, getStatusLabel } from '../../utils/statusUtils';
+import StatusBadge from '../../components/StatusBadge';
+import { useModal } from '../../components/Modal';
 
 export default function ListingsManager() {
+  const { showModal } = useModal();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
@@ -27,34 +30,104 @@ export default function ListingsManager() {
     fetchListings();
   }, [fetchListings]);
 
-  const handleAction = async (id, action) => {
-    if (!window.confirm(`Voulez-vous vraiment ${action} cette annonce ?`)) return;
-    try {
-      if (action === 'delete') {
-        await axiosInstance.delete(`/listings/admin/${id}`);
-      } else {
-        await axiosInstance.patch(`/listings/${id}/${action}`);
+  const handleAction = (id, action) => {
+    showModal({
+      title: 'Confirmation',
+      message: `Voulez-vous vraiment ${action} cette annonce ?`,
+      onConfirm: async () => {
+        try {
+          if (action === 'delete') {
+            await axiosInstance.delete(`/listings/admin/${id}`);
+          } else {
+            await axiosInstance.patch(`/listings/${id}/${action}`);
+          }
+          fetchListings(); // Refresh list
+        } catch (error) {
+          console.error(`Failed to ${action} listing:`, error);
+          alert('Erreur lors de l\'opération');
+        }
       }
-      fetchListings(); // Refresh list
-    } catch (error) {
-      console.error(`Failed to ${action} listing:`, error);
-      alert('Erreur lors de l\'opération');
-    }
+    });
   };
 
-  return (
-    <div className="admin-table-page">
-      <div className="admin-table-page__header">
-        <div>
-          <h2>Modération des Annonces</h2>
-          <p>{listings.length} annonces au total</p>
+  const columns = [
+    {
+      header: 'Annonce',
+      width: '20%',
+      field: 'title',
+      render: (l) => <strong>{l.title}</strong>
+    },
+    {
+      header: 'Fournisseur',
+      width: '15%',
+      field: 'provider',
+      render: (l) => `${l.provider?.firstName || ''} ${l.provider?.lastName || ''}`.trim() || '—'
+    },
+    {
+      header: 'Catégorie',
+      width: '10%',
+      field: 'category',
+      render: (l) => <span className="admin-badge admin-badge--info">{l.category?.name || '—'}</span>
+    },
+    {
+      header: 'Prix',
+      width: '10%',
+      field: 'price',
+      render: (l) => `${l.price} DA`
+    },
+    {
+      header: 'Statut',
+      width: '15%',
+      field: 'status',
+      render: (l) => (
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <StatusBadge status={l.status} type="listing" />
+          {l.provider?.status && l.provider.status !== ACCOUNT_STATUS.VALIDATED && (
+            <span className="admin-badge" style={{ backgroundColor: '#64748b', fontSize: '0.7rem', whiteSpace: 'nowrap' }}>
+              Masqué (Fournisseur {getStatusLabel(l.provider.status, 'account')})
+            </span>
+          )}
         </div>
-        <div className="admin-table-page__filters">
+      )
+    },
+    {
+      header: 'Date',
+      width: '10%',
+      field: 'createdAt',
+      render: (l) => new Date(l.createdAt).toLocaleDateString()
+    },
+    {
+      header: 'Actions',
+      width: '20%',
+      render: (l) => (
+        <div className="data-table__actions">
+          {l.status !== 'PUBLISHED' && (
+            <button onClick={() => handleAction(l.id, 'publish')} className="admin-btn admin-btn--sm admin-btn--primary">Publier</button>
+          )}
+          {l.status === 'PUBLISHED' && (
+            <button onClick={() => handleAction(l.id, 'unpublish')} className="admin-btn admin-btn--sm admin-btn--warning">Dépublier</button>
+          )}
+          <button onClick={() => handleAction(l.id, 'delete')} className="admin-btn admin-btn--sm admin-btn--outline" style={{ color: 'var(--color-danger)' }}>Supprimer</button>
+        </div>
+      )
+    }
+  ];
+
+  return (
+    <div className="admin-page">
+      <div className="admin-page__header">
+        <div>
+          <h2 className="admin-page__title">Modération des Annonces</h2>
+          <p className="admin-page__subtitle">{listings.length} annonces au total</p>
+        </div>
+      </div>
+
+      <div className="admin-inline-form">
+        <div className="admin-inline-form--grid">
           <select 
-            className="form-input" 
-            style={{ maxWidth: 200 }}
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
+            className="admin-input"
           >
             <option value="">Tous les statuts</option>
             <option value="DRAFT">Brouillons</option>
@@ -64,59 +137,13 @@ export default function ListingsManager() {
         </div>
       </div>
 
-      <div className="admin-table-wrapper">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Annonce</th>
-              <th>Fournisseur</th>
-              <th>Catégorie</th>
-              <th>Prix</th>
-              <th>Statut</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr><td colSpan="7" style={{textAlign: 'center', padding: '20px'}}>Chargement...</td></tr>
-            ) : listings.length === 0 ? (
-               <tr><td colSpan="7" style={{textAlign: 'center', padding: '20px'}}>Aucune annonce trouvée</td></tr>
-            ) : listings.map((l) => (
-              <tr key={l.id}>
-                <td><strong>{l.title}</strong></td>
-                <td>{l.provider?.firstName} {l.provider?.lastName}</td>
-                <td><span className="admin-badge admin-badge--info">{l.category?.name || '—'}</span></td>
-                <td>{l.price} DA</td>
-                <td>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span className={`admin-badge ${getStatusClass(l.status)}`}>
-                      {getStatusLabel(l.status)}
-                    </span>
-                    {l.provider?.status && l.provider.status !== ACCOUNT_STATUS.VALIDATED && (
-                      <span className="admin-badge" style={{ backgroundColor: '#64748b', fontSize: '0.7rem', whiteSpace: 'nowrap' }}>
-                        Masqué (Fournisseur {getStatusLabel(l.provider.status, 'account')})
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td>{new Date(l.createdAt).toLocaleDateString()}</td>
-                <td>
-                  <div className="admin-table__actions">
-                    {l.status !== 'PUBLISHED' && (
-                      <button onClick={() => handleAction(l.id, 'publish')} className="admin-btn admin-btn--sm admin-btn--primary">Publier</button>
-                    )}
-                    {l.status === 'PUBLISHED' && (
-                      <button onClick={() => handleAction(l.id, 'unpublish')} className="admin-btn admin-btn--sm admin-btn--warning">Dépublier</button>
-                    )}
-                    <button onClick={() => handleAction(l.id, 'delete')} className="admin-btn admin-btn--sm admin-btn--outline" style={{ color: 'var(--color-danger)' }}>Supprimer</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable 
+        columns={columns}
+        data={listings}
+        isLoading={loading}
+        emptyMessage="Aucune annonce trouvée."
+        searchPlaceholder="Rechercher par titre, catégorie..."
+      />
     </div>
   );
 }

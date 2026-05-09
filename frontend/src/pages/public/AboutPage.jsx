@@ -13,7 +13,9 @@ export default function AboutPage() {
       <section className="section">
         <div className="container about-content">
           <div className="about-card">
-            <div className="about-card__icon">🎯</div>
+            <div className="about-card__icon">
+              <img src="/branding/icon-house.svg" alt="Mission" style={{ width: '40px', height: '40px' }} />
+            </div>
             <h3>Notre Mission</h3>
             <p>
               Offrir un espace immobilier fiable où chaque annonce est vérifiée par notre équipe.
@@ -22,7 +24,9 @@ export default function AboutPage() {
           </div>
 
           <div className="about-card">
-            <div className="about-card__icon">✅</div>
+            <div className="about-card__icon">
+              <img src="/branding/verified-badge.svg" alt="Validation" style={{ width: '40px', height: '40px' }} />
+            </div>
             <h3>Validation Rigoureuse</h3>
             <p>
               Chaque fournisseur doit soumettre ses documents professionnels. Nos administrateurs
@@ -31,7 +35,9 @@ export default function AboutPage() {
           </div>
 
           <div className="about-card">
-            <div className="about-card__icon">🔒</div>
+            <div className="about-card__icon">
+              <img src="/branding/icon-key.svg" alt="Sécurité" style={{ width: '40px', height: '40px' }} />
+            </div>
             <h3>Sécurité Maximale</h3>
             <p>
               Photos protégées par filigrane, comptes sécurisés par authentification JWT,
@@ -40,7 +46,9 @@ export default function AboutPage() {
           </div>
 
           <div className="about-card">
-            <div className="about-card__icon">📈</div>
+            <div className="about-card__icon">
+              <img src="/branding/icon-check.svg" alt="Croissance" style={{ width: '40px', height: '40px' }} />
+            </div>
             <h3>Croissance Continue</h3>
             <p>
               Notre réseau de fournisseurs vérifiés grandit chaque jour, offrant toujours

@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getCategories } from '../../api/categories.api';
 import { getLatestListings } from '../../api/listings.api';
+import { getPlatformStats } from '../../api/stats.api';
 import ListingCard from '../../components/ListingCard';
 import './LandingPage.css';
 
-const stats = [
+const fallbackStats = [
   { number: '500+', label: 'Biens vérifiés' },
   { number: '120+', label: 'Fournisseurs' },
   { number: '10K+', label: 'Visiteurs / mois' },
@@ -25,7 +26,8 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [latestListings, setLatestListings] = useState([]);
-  const [search, setSearch] = useState({ city: '', category: '', maxPrice: '' });
+  const [search, setSearch] = useState({ wilaya: '', category: '', maxPrice: '' });
+  const [platformStats, setPlatformStats] = useState(null);
 
   useEffect(() => {
     getCategories()
@@ -35,12 +37,21 @@ export default function LandingPage() {
     getLatestListings()
       .then((data) => setLatestListings(Array.isArray(data) ? data : []))
       .catch(() => setLatestListings([]));
+
+    getPlatformStats()
+      .then(data => setPlatformStats([
+        { number: `${data.activeListings || 0}+`, label: 'Biens vérifiés' },
+        { number: `${data.totalProviders || 0}+`, label: 'Fournisseurs' },
+        { number: `${data.citiesCovered || 0}+`, label: 'Villes couvertes' },
+        { number: '100%', label: 'Validés par admin' },
+      ]))
+      .catch(() => setPlatformStats(fallbackStats));
   }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
     const params = new URLSearchParams();
-    if (search.city) params.set('city', search.city);
+    if (search.wilaya) params.set('wilaya', search.wilaya);
     if (search.category) params.set('categoryId', search.category);
     if (search.maxPrice) params.set('maxPrice', search.maxPrice);
     navigate(`/services?${params.toString()}`);
@@ -57,8 +68,12 @@ export default function LandingPage() {
 
         <div className="container hero__content">
           <div className="hero__text animate-fade-in-up">
-            <div className="hero__badge">
-              <span className="hero__badge-dot" />
+            <div className="hero__badge badge-gold">
+              <img 
+                src="/branding/verified-badge.svg" 
+                alt="Vérifié" 
+                style={{ height: '18px', width: 'auto', marginRight: '8px' }} 
+              />
               Plateforme 100% vérifiée
             </div>
             <h1 className="hero__title">
@@ -74,13 +89,13 @@ export default function LandingPage() {
             {/* Quick Search — wired to navigate with params */}
             <form className="hero__search glass" onSubmit={handleSearch}>
               <div className="hero__search-field">
-                <label>Localisation</label>
+                <label>Wilaya</label>
                 <input
                   type="text"
                   placeholder="Alger, Oran, Constantine..."
                   className="form-input"
-                  value={search.city}
-                  onChange={(e) => setSearch({ ...search, city: e.target.value })}
+                  value={search.wilaya}
+                  onChange={(e) => setSearch({ ...search, wilaya: e.target.value })}
                 />
               </div>
               <div className="hero__search-field">
@@ -117,7 +132,7 @@ export default function LandingPage() {
       {/* ═══ STATS BAR ═════════════════════════════════════════════ */}
       <section className="stats-bar">
         <div className="container stats-bar__inner">
-          {stats.map((stat, i) => (
+          {(platformStats || fallbackStats).map((stat, i) => (
             <div key={i} className="stats-bar__item">
               <span className="stats-bar__number">{stat.number}</span>
               <span className="stats-bar__label">{stat.label}</span>

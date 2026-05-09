@@ -4,9 +4,10 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
+  withCredentials: true, // send the HttpOnly refresh_token cookie on every request
 });
 
-// Request interceptor: Attach JWT if available
+// Request interceptor: attach access token from localStorage
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('access_token');
@@ -18,19 +19,62 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: Handle 401 Unauthorized globally
+// Response interceptor: on 401, try to refresh once then retry
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) prom.reject(error);
+    else prom.resolve(token);
+  });
+  failedQueue = [];
+};
+
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Clear storage so the next check (or reload) shows as logged out
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('user');
-      
-      // We do NOT force redirect here to avoid breaking public pages 
-      // that happen to have an invalid token in storage.
-      // ProtectedRoutes will handle the redirect if the user is on a guarded page.
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Skip refresh logic for the refresh endpoint itself to avoid loops
+    const isRefreshCall = originalRequest?.url?.includes('/auth/refresh');
+    const is401 = error.response?.status === 401;
+
+    if (is401 && !originalRequest._retry && !isRefreshCall) {
+      if (isRefreshing) {
+        // Queue requests that come in while a refresh is already in flight
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        }).then((token) => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          return axiosInstance(originalRequest);
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        const { data } = await axiosInstance.post('/auth/refresh');
+        const newToken = data.access_token;
+
+        localStorage.setItem('access_token', newToken);
+        axiosInstance.defaults.headers.common.Authorization = `Bearer ${newToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+
+        processQueue(null, newToken);
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     }
+
     return Promise.reject(error);
   }
 );

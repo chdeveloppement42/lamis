@@ -6,7 +6,7 @@ import api from './axiosInstance';
  */
 export async function getCategories() {
   const { data } = await api.get('/categories');
-  return data;
+  return Array.isArray(data) ? data : [];
 }
 
 /**

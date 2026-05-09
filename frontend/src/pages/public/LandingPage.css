@@ -22,10 +22,10 @@
   inset: 0;
   background: linear-gradient(
     135deg,
-    var(--color-primary-50) 0%,
-    #e0e7ff 30%,
-    #dbeafe 60%,
-    #eff6ff 100%
+    var(--color-bg-ivory) 0%,
+    #eef2f5 30%,
+    #e0e7ec 60%,
+    var(--color-bg-ivory) 100%
   );
 }
 
@@ -211,7 +211,7 @@
 
 /* ─── How It Works ──────────────────────────────────────────────── */
 .how-section {
-  background: var(--color-gray-50);
+  background: var(--color-bg-ivory);
 }
 
 .how-grid {

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { ListingStatus, NotificationType, AccountStatus } from '@prisma/client';
+import { ListingStatus, NotificationType, AccountStatus, ListingType } from '@prisma/client';
 import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
@@ -23,20 +23,24 @@ export class ListingsService {
   // ─── PUBLIC: Browse published listings with filters ─────────────
   async findPublished(filters: {
     categoryId?: number;
-    city?: string;
+    wilaya?: string;
+    commune?: string;
+    type?: ListingType;
     minPrice?: number;
     maxPrice?: number;
     page?: number;
     limit?: number;
   }) {
-    const { categoryId, city, minPrice, maxPrice, page = 1, limit = 12 } = filters;
+    const { categoryId, wilaya, commune, type, minPrice, maxPrice, page = 1, limit = 12 } = filters;
 
     const where: any = { 
       AND: [this.safetyLockWhere]
     };
     
     if (categoryId) where.AND.push({ categoryId: parseInt(categoryId as any, 10) });
-    if (city) where.AND.push({ city: { contains: city, mode: 'insensitive' } });
+    if (type) where.AND.push({ type });
+    if (wilaya) where.AND.push({ wilaya: { contains: wilaya, mode: 'insensitive' } });
+    if (commune) where.AND.push({ commune: { contains: commune, mode: 'insensitive' } });
     if (minPrice || maxPrice) {
       const priceFilter: any = {};
       if (minPrice) priceFilter.gte = parseFloat(minPrice as any);
@@ -51,8 +55,8 @@ export class ListingsService {
         take: limit,
         orderBy: { createdAt: 'desc' },
         include: {
-          category: { select: { name: true, slug: true } },
-          provider: { select: { firstName: true, lastName: true } },
+          category: { select: { id: true, name: true, slug: true } },
+          provider: { select: { id: true, firstName: true, lastName: true } },
           images: { where: { isMain: true }, take: 1 },
         },
       }),
@@ -94,7 +98,7 @@ export class ListingsService {
       take: 6,
       orderBy: { createdAt: 'desc' },
       include: {
-        category: { select: { name: true, slug: true } },
+        category: { select: { id: true, name: true, slug: true } },
         images: { where: { isMain: true }, take: 1 },
       },
     });
@@ -107,16 +111,24 @@ export class ListingsService {
       title: string;
       description: string;
       price: number;
-      city: string;
-      district: string;
+      type: ListingType;
+      wilaya: string;
+      commune: string;
+      quartier?: string;
+      surface?: number;
+      rooms?: number;
+      floor?: number;
       categoryId: number;
       status?: ListingStatus;
       images?: string[];
     },
   ) {
-    // Verify provider is VALIDATED
+    // Verify provider is VALIDATED (unless saving as DRAFT)
     const provider = await this.prisma.provider.findUnique({ where: { id: providerId } });
-    if (!provider || provider.status !== 'VALIDATED') {
+    if (!provider) throw new NotFoundException('Fournisseur introuvable.');
+    
+    const isDraft = data.status === 'DRAFT' || !data.status;
+    if (provider.status !== 'VALIDATED' && !isDraft) {
       throw new ForbiddenException('Votre compte doit être validé pour publier une annonce.');
     }
 
@@ -125,8 +137,13 @@ export class ListingsService {
         title: data.title,
         description: data.description,
         price: data.price,
-        city: data.city,
-        district: data.district,
+        type: data.type,
+        wilaya: data.wilaya,
+        commune: data.commune,
+        quartier: data.quartier,
+        surface: data.surface,
+        rooms: data.rooms,
+        floor: data.floor,
         status: data.status || 'DRAFT',
         provider: { connect: { id: providerId } },
         category: { connect: { id: data.categoryId } },
@@ -168,8 +185,9 @@ export class ListingsService {
       title?: string;
       description?: string;
       price?: number;
-      city?: string;
-      district?: string;
+      wilaya?: string;
+      commune?: string;
+      quartier?: string;
       categoryId?: number;
       status?: ListingStatus;
     },
@@ -183,9 +201,10 @@ export class ListingsService {
       throw new ForbiddenException('Vous ne pouvez modifier que vos propres annonces.');
     }
 
-    // Block if provider is not VALIDATED (Suspended/Rejected)
-    if (listing.provider.status !== 'VALIDATED') {
-      throw new ForbiddenException('Votre compte est restreint. Vous ne pouvez pas modifier cette annonce.');
+    // Block if provider is not VALIDATED (unless it's a DRAFT update)
+    const isTargetingPublished = data.status === 'PUBLISHED';
+    if (listing.provider.status !== 'VALIDATED' && (listing.status === 'PUBLISHED' || isTargetingPublished)) {
+      throw new ForbiddenException('Votre compte est restreint. Vous ne pouvez pas publier ou modifier une annonce publiée.');
     }
 
     return this.prisma.listing.update({

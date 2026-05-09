@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import './AdminTable.css';
+import { useToast } from '../../components/Toast';
+import { useModal } from '../../components/Modal';
+import { DataTable } from '../../components/DataTable';
 
 export default function CategoriesManager() {
+  const { showToast } = useToast();
+  const { showModal } = useModal();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({ name: '' });
+  const [saving, setSaving] = useState(false);
 
   const fetchCategories = async () => {
     try {
@@ -24,18 +29,23 @@ export default function CategoriesManager() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSaving(true);
     try {
       if (editingId) {
         await axiosInstance.put(`/categories/${editingId}`, formData);
+        showToast({ type: 'success', message: 'Catégorie modifiée avec succès !' });
       } else {
         await axiosInstance.post('/categories', formData);
+        showToast({ type: 'success', message: 'Catégorie créée avec succès !' });
       }
       setFormData({ name: '' });
       setEditingId(null);
       setShowForm(false);
       fetchCategories();
     } catch (err) {
-      alert(err.response?.data?.message || 'Erreur');
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur' });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -45,17 +55,57 @@ export default function CategoriesManager() {
     setShowForm(true);
   };
 
-  const handleDelete = async (id) => {
-    if (!confirm('Supprimer cette catégorie ?')) return;
-    try {
-      await axiosInstance.delete(`/categories/${id}`);
-      fetchCategories();
-    } catch (err) {
-      alert(err.response?.data?.message || 'Impossible de supprimer (annonces liées ?)');
-    }
+  const handleDelete = (id) => {
+    showModal({
+      title: 'Supprimer la catégorie',
+      message: 'Supprimer cette catégorie ?',
+      onConfirm: async () => {
+        try {
+          await axiosInstance.delete(`/categories/${id}`);
+          showToast({ type: 'success', message: 'Catégorie supprimée.' });
+          fetchCategories();
+        } catch (err) {
+          showToast({ type: 'error', message: err.response?.data?.message || 'Impossible de supprimer (annonces liées ?)' });
+        }
+      }
+    });
   };
 
-  if (loading) return <div className="admin-loading">Chargement...</div>;
+  const columns = [
+    {
+      header: 'ID',
+      width: '10%',
+      field: 'id'
+    },
+    {
+      header: 'Nom',
+      width: '30%',
+      field: 'name',
+      render: (cat) => <strong>{cat.name}</strong>
+    },
+    {
+      header: 'Slug',
+      width: '20%',
+      field: 'slug',
+      render: (cat) => <code>{cat.slug}</code>
+    },
+    {
+      header: 'Créée le',
+      width: '20%',
+      field: 'createdAt',
+      render: (cat) => new Date(cat.createdAt).toLocaleDateString('fr-FR')
+    },
+    {
+      header: 'Actions',
+      width: '20%',
+      render: (cat) => (
+        <div className="data-table__actions">
+          <button className="admin-btn admin-btn--sm admin-btn--outline" onClick={() => handleEdit(cat)}>✏️ Modifier</button>
+          <button className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => handleDelete(cat.id)}>🗑️ Supprimer</button>
+        </div>
+      )
+    }
+  ];
 
   return (
     <div className="admin-page">
@@ -79,42 +129,19 @@ export default function CategoriesManager() {
             required
             className="admin-input"
           />
-          <button type="submit" className="admin-btn admin-btn--primary">
-            {editingId ? 'Modifier' : 'Créer'}
+          <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
+            {saving ? 'Enregistrement...' : (editingId ? 'Modifier' : 'Créer')}
           </button>
         </form>
       )}
 
-      <div className="admin-table-wrapper">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nom</th>
-              <th>Slug</th>
-              <th>Créée le</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((cat) => (
-              <tr key={cat.id}>
-                <td>{cat.id}</td>
-                <td><strong>{cat.name}</strong></td>
-                <td><code>{cat.slug}</code></td>
-                <td>{new Date(cat.createdAt).toLocaleDateString('fr-FR')}</td>
-                <td className="admin-table__actions">
-                  <button className="admin-btn admin-btn--sm admin-btn--outline" onClick={() => handleEdit(cat)}>✏️ Modifier</button>
-                  <button className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => handleDelete(cat.id)}>🗑️ Supprimer</button>
-                </td>
-              </tr>
-            ))}
-            {categories.length === 0 && (
-              <tr><td colSpan="5" className="admin-table__empty">Aucune catégorie trouvée</td></tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      <DataTable 
+        columns={columns}
+        data={categories}
+        isLoading={loading}
+        emptyMessage="Aucune catégorie trouvée."
+        searchPlaceholder="Rechercher par nom..."
+      />
     </div>
   );
 }

@@ -4,10 +4,11 @@ import api from './axiosInstance';
  * Fetch published listings with optional filters + pagination.
  * Maps to: GET /listings
  */
-export async function getPublishedListings({ categoryId, city, minPrice, maxPrice, page = 1, limit = 12 } = {}) {
+export async function getPublishedListings({ categoryId, wilaya, type, minPrice, maxPrice, page = 1, limit = 12 } = {}) {
   const params = {};
   if (categoryId) params.categoryId = categoryId;
-  if (city) params.city = city;
+  if (wilaya) params.wilaya = wilaya;
+  if (type) params.type = type;
   if (minPrice) params.minPrice = minPrice;
   if (maxPrice) params.maxPrice = maxPrice;
   params.page = page;

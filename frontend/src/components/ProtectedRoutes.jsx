@@ -1,8 +1,9 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export const ProtectedRoute = ({ allowedUserTypes }) => {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
 
   if (isLoading) {
     return <div>Loading...</div>; // Could be a real spinner component
@@ -10,7 +11,7 @@ export const ProtectedRoute = ({ allowedUserTypes }) => {
 
   // Not logged in
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   // Type check if provided (e.g. ['ADMIN'] or ['PROVIDER'])
@@ -25,11 +26,12 @@ export const ProtectedRoute = ({ allowedUserTypes }) => {
 
 export const AdminPermissionRoute = ({ requiredPermission }) => {
   const { user, isLoading, hasPermission } = useAuth();
+  const location = useLocation();
 
   if (isLoading) return <div>Loading...</div>;
 
   if (!user || user.userType !== 'ADMIN') {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   if (requiredPermission && !hasPermission(requiredPermission)) {

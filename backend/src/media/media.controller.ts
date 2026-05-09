@@ -6,7 +6,7 @@ import * as multer from 'multer';
 
 @Controller('media')
 export class MediaController {
-  constructor(private readonly mediaService: MediaService) {}
+  constructor(private readonly mediaService: MediaService) { }
 
   @Post('upload')
   @UseGuards(JwtAuthGuard)
@@ -15,7 +15,7 @@ export class MediaController {
     limits: {
       fileSize: 5 * 1024 * 1024, // 5MB limit for safety, frontend sends compressed anyway
     },
-    fileFilter: (req, file, cb) => {
+    fileFilter: (req: any, file: any, cb: any) => {
       if (file.mimetype.match(/\/(jpg|jpeg|png|webp)$/)) {
         cb(null, true);
       } else {

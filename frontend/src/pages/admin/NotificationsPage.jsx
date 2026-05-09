@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import './AdminTable.css';
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);

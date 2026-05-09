@@ -8,7 +8,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../casl/permissions.guard';
 import { CheckPermissions } from '../casl/permissions.decorator';
 import { CreateListingDto, UpdateListingDto } from './dto/listing.dto';
-import { ListingStatus } from '@prisma/client';
+import { ListingStatus, ListingType } from '@prisma/client';
 
 @Controller('listings')
 export class ListingsController {
@@ -21,7 +21,9 @@ export class ListingsController {
   @Get()
   findPublished(
     @Query('categoryId') categoryId?: string,
-    @Query('city') city?: string,
+    @Query('wilaya') wilaya?: string,
+    @Query('commune') commune?: string,
+    @Query('type') type?: ListingType,
     @Query('minPrice') minPrice?: string,
     @Query('maxPrice') maxPrice?: string,
     @Query('page') page?: string,
@@ -29,7 +31,9 @@ export class ListingsController {
   ) {
     return this.listingsService.findPublished({
       categoryId: categoryId ? +categoryId : undefined,
-      city: city || undefined,
+      wilaya: wilaya || undefined,
+      commune: commune || undefined,
+      type: type || undefined,
       minPrice: minPrice ? +minPrice : undefined,
       maxPrice: maxPrice ? +maxPrice : undefined,
       page: page ? +page : 1,

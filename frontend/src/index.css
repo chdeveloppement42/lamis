@@ -5,22 +5,23 @@
 /* ─── CSS Custom Properties (Design Tokens) ─────────────────────── */
 :root {
   /* Brand Colors */
-  --color-primary: #1a56db;
-  --color-primary-light: #3b82f6;
-  --color-primary-dark: #1e3a8a;
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
+  --color-primary: #1d6fa4;
+  --color-primary-light: #3186c0;
+  --color-primary-dark: #15547c;
+  --color-primary-50: #f0f7fb;
+  --color-primary-100: #e0eff7;
 
-  --color-accent: #f59e0b;
-  --color-accent-light: #fbbf24;
+  --color-accent: #b5892a;
+  --color-accent-light: #d4a74a;
 
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
-  --color-info: #3b82f6;
+  --color-info: #1d6fa4;
 
-  /* Neutral Palette */
+  /* Background Palette */
   --color-white: #ffffff;
+  --color-bg-ivory: #f5f0e8;
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
@@ -106,7 +107,7 @@ body {
   font-size: var(--text-base);
   line-height: 1.6;
   color: var(--color-gray-800);
-  background-color: var(--color-white);
+  background-color: var(--color-bg-ivory);
   overflow-x: hidden;
 }
 
@@ -226,6 +227,13 @@ input, textarea, select {
   font-size: var(--text-xs);
 }
 
+.btn--disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
 /* ─── Cards ─────────────────────────────────────────────────────── */
 .card {
   background: var(--color-white);
@@ -270,6 +278,20 @@ input, textarea, select {
 .badge-info {
   background: var(--color-primary-100);
   color: var(--color-primary-dark);
+}
+
+.badge-gold {
+  background: #fef3c7;
+  color: var(--color-accent);
+  border: 1px solid rgba(181, 137, 42, 0.2);
+}
+
+.text-gold {
+  color: var(--color-accent);
+}
+
+.bg-gold {
+  background-color: var(--color-accent);
 }
 
 /* ─── Form Elements ─────────────────────────────────────────────── */

@@ -163,8 +163,46 @@
   color: white;
 }
 
+/* ─── Post Listing Progress ─────────────────────────────────── */
+.post-progress {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+
+.post-progress__step {
+  flex: 1;
+  text-align: center;
+  padding: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-gray-400);
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-gray-200);
+  white-space: nowrap;
+}
+
+.post-progress__step--active {
+  color: var(--color-primary-dark);
+  border-color: var(--color-primary);
+  background: var(--color-primary-50);
+}
+
+.post-step {
+  animation: fadeIn var(--transition-base);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (max-width: 768px) {
   .provider-page__grid { grid-template-columns: 1fr; }
   .provider-card__row { grid-template-columns: 1fr; }
   .provider-page__header-row { flex-direction: column; gap: var(--space-4); align-items: flex-start; }
+  .post-progress { flex-direction: column; gap: var(--space-2); }
 }

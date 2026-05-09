@@ -15,7 +15,15 @@ export class UpdateProviderProfileDto {
 
   @IsOptional()
   @IsString()
-  address?: string;
+  wilaya?: string;
+
+  @IsOptional()
+  @IsString()
+  commune?: string;
+
+  @IsOptional()
+  @IsString()
+  quartier?: string;
 }
 
 export class UpdateSensitiveFieldsDto {

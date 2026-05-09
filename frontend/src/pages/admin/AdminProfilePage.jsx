@@ -1,27 +1,25 @@
 import { useState } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../components/Toast';
 import './AdminProfilePage.css';
 
 export default function AdminProfilePage() {
   const { user } = useAuth();
+  const { showToast } = useToast();
   const [form, setForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage(null);
-    setError(null);
 
     if (form.newPassword !== form.confirmPassword) {
-      setError('Les mots de passe ne correspondent pas.');
+      showToast({ type: 'error', message: 'Les mots de passe ne correspondent pas.' });
       return;
     }
 
     if (form.newPassword.length < 4) {
-      setError('Le nouveau mot de passe doit contenir au moins 4 caractères.');
+      showToast({ type: 'error', message: 'Le nouveau mot de passe doit contenir au moins 4 caractères.' });
       return;
     }
 
@@ -31,10 +29,10 @@ export default function AdminProfilePage() {
         currentPassword: form.currentPassword,
         newPassword: form.newPassword,
       });
-      setMessage(res.data.message || 'Mot de passe modifié avec succès !');
+      showToast({ type: 'success', message: res.data.message || 'Mot de passe modifié avec succès !' });
       setForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (err) {
-      setError(err.response?.data?.message || 'Erreur lors du changement de mot de passe.');
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur lors du changement de mot de passe.' });
     } finally {
       setLoading(false);
     }
@@ -64,18 +62,6 @@ export default function AdminProfilePage() {
       {/* Password Change Form */}
       <div className="admin-profile__section">
         <h2>🔒 Changer le mot de passe</h2>
-
-        {message && (
-          <div className="admin-profile__alert admin-profile__alert--success">
-            ✅ {message}
-          </div>
-        )}
-
-        {error && (
-          <div className="admin-profile__alert admin-profile__alert--error">
-            ❌ {error}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="admin-profile__form">
           <div className="form-group">

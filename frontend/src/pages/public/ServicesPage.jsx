@@ -11,7 +11,8 @@ export default function ServicesPage() {
   // Filter state — initialized from URL params (from hero search)
   const [filters, setFilters] = useState({
     categoryId: searchParams.get('categoryId') || '',
-    city: searchParams.get('city') || '',
+    wilaya: searchParams.get('wilaya') || '',
+    type: searchParams.get('type') || '',
     minPrice: searchParams.get('minPrice') || '',
     maxPrice: searchParams.get('maxPrice') || '',
   });
@@ -23,6 +24,8 @@ export default function ServicesPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   // Fetch categories on mount
   useEffect(() => {
@@ -36,7 +39,8 @@ export default function ServicesPage() {
     setLoading(true);
     const params = {};
     if (filters.categoryId) params.categoryId = filters.categoryId;
-    if (filters.city) params.city = filters.city;
+    if (filters.wilaya) params.wilaya = filters.wilaya;
+    if (filters.type) params.type = filters.type;
     if (filters.minPrice) params.minPrice = filters.minPrice;
     if (filters.maxPrice) params.maxPrice = filters.maxPrice;
     params.page = page;
@@ -76,15 +80,17 @@ export default function ServicesPage() {
     // Sync URL params for shareability
     const params = new URLSearchParams();
     if (filters.categoryId) params.set('categoryId', filters.categoryId);
-    if (filters.city) params.set('city', filters.city);
+    if (filters.wilaya) params.set('wilaya', filters.wilaya);
+    if (filters.type) params.set('type', filters.type);
     if (filters.minPrice) params.set('minPrice', filters.minPrice);
     if (filters.maxPrice) params.set('maxPrice', filters.maxPrice);
     setSearchParams(params);
     setPage(1);
+    setIsFiltersOpen(false); // Close drawer on mobile
   };
 
   const handleClearFilters = () => {
-    setFilters({ categoryId: '', city: '', minPrice: '', maxPrice: '' });
+    setFilters({ categoryId: '', wilaya: '', type: '', minPrice: '', maxPrice: '' });
     setSearchParams({});
     setPage(1);
   };
@@ -99,10 +105,38 @@ export default function ServicesPage() {
       </div>
 
       <div className="container services-page__content">
+        <div className="services-page__mobile-header">
+          <button 
+            className="btn btn-outline services-filters-toggle"
+            onClick={() => setIsFiltersOpen(true)}
+          >
+            Filtres {(filters.categoryId || filters.wilaya || filters.type || filters.minPrice || filters.maxPrice) && '•'}
+          </button>
+        </div>
+
         {/* ─── Sidebar Filters ─────────────────────────── */}
-        <aside className="services-filters">
-          <form onSubmit={handleApplyFilters}>
+        {isFiltersOpen && (
+          <div className="services-filters-overlay" onClick={() => setIsFiltersOpen(false)} />
+        )}
+        <aside className={`services-filters ${isFiltersOpen ? 'services-filters--open' : ''}`}>
+          <div className="services-filters__header">
             <h3 className="services-filters__title">Filtres</h3>
+            <button className="services-filters__close" onClick={() => setIsFiltersOpen(false)}>✕</button>
+          </div>
+          <form onSubmit={handleApplyFilters}>
+
+            <div className="form-group">
+              <label className="form-label">Transaction</label>
+              <select
+                className="form-input"
+                value={filters.type}
+                onChange={(e) => handleFilterChange('type', e.target.value)}
+              >
+                <option value="">Toutes</option>
+                <option value="VENTE">Vente</option>
+                <option value="LOCATION">Location</option>
+              </select>
+            </div>
 
             <div className="form-group">
               <label className="form-label">Catégorie</label>
@@ -119,13 +153,13 @@ export default function ServicesPage() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Ville</label>
+              <label className="form-label">Wilaya</label>
               <input
                 type="text"
                 className="form-input"
                 placeholder="Ex: Alger"
-                value={filters.city}
-                onChange={(e) => handleFilterChange('city', e.target.value)}
+                value={filters.wilaya}
+                onChange={(e) => handleFilterChange('wilaya', e.target.value)}
               />
             </div>
 
@@ -155,7 +189,7 @@ export default function ServicesPage() {
               Appliquer les filtres
             </button>
 
-            {(filters.categoryId || filters.city || filters.minPrice || filters.maxPrice) && (
+            {(filters.categoryId || filters.wilaya || filters.type || filters.minPrice || filters.maxPrice) && (
               <button
                 type="button"
                 className="btn btn-sm services-filters__clear"
@@ -221,7 +255,9 @@ export default function ServicesPage() {
             </>
           ) : (
             <div className="services-grid__empty">
-              <div className="services-grid__empty-icon">🏠</div>
+              <div className="services-grid__empty-icon">
+                <img src="/branding/icon-house.svg" alt="House" style={{ width: '64px', height: '64px', opacity: 0.3 }} />
+              </div>
               <h3>Aucune annonce trouvée</h3>
               <p>Essayez de modifier vos filtres ou revenez plus tard.</p>
               <button className="btn btn-secondary" onClick={handleClearFilters}>

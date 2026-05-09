@@ -61,8 +61,10 @@ model Provider {
   email       String        @unique
   password    String
   phone       String
-  address     String
-  documentUrl String
+  wilaya      String?
+  commune     String?
+  quartier    String?
+  documentUrl String?
   status      AccountStatus @default(PENDING)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
@@ -85,8 +87,13 @@ model Listing {
   title       String
   description String
   price       Float
-  city        String
-  district    String
+  type        ListingType    @default(VENTE)
+  wilaya      String?
+  commune     String?
+  quartier    String?
+  surface     Float?
+  rooms       Int?
+  floor       Int?
   status      ListingStatus  @default(DRAFT)
   providerId  Int
   categoryId  Int
@@ -99,7 +106,7 @@ model Listing {
   @@index([status])
   @@index([providerId])
   @@index([categoryId])
-  @@index([city])
+  @@index([wilaya])
   @@index([status, categoryId])
 }
 
@@ -143,6 +150,11 @@ enum ListingStatus {
   DRAFT
   PUBLISHED
   UNPUBLISHED
+}
+
+enum ListingType {
+  VENTE
+  LOCATION
 }
 
 enum UserType {

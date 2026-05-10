@@ -5,14 +5,12 @@ import locationsData from '../data/algeria-locations.json';
 const LocationSelector = ({ 
   wilaya, 
   commune, 
-  quartier, 
   onWilayaChange, 
-  onCommuneChange, 
-  onQuartierChange,
-  error,
-  required = true
+  onCommuneChange,
+  showCommune = true,
+  required = true 
 }) => {
-  // Format Wilayas for react-select
+  
   const wilayaOptions = useMemo(() => {
     return locationsData.map(w => ({
       value: w.nameFr,
@@ -21,12 +19,10 @@ const LocationSelector = ({
     }));
   }, []);
 
-  // Find current wilaya object to get its communes
   const selectedWilayaObj = useMemo(() => {
     return wilayaOptions.find(opt => opt.value === wilaya);
   }, [wilaya, wilayaOptions]);
 
-  // Format Communes for the selected Wilaya
   const communeOptions = useMemo(() => {
     if (!selectedWilayaObj) return [];
     return selectedWilayaObj.communes.map(c => ({
@@ -38,78 +34,64 @@ const LocationSelector = ({
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderRadius: '8px',
-      borderColor: error ? '#ff4d4f' : provided.borderColor,
-      padding: '2px',
-      boxShadow: state.isFocused ? '0 0 0 1px #1d6fa4' : null,
-      '&:hover': {
-        borderColor: error ? '#ff4d4f' : '#1d6fa4'
-      }
+      background: 'rgba(255, 255, 255, 0.05)',
+      borderRadius: '0px',
+      border: 'none',
+      borderBottom: state.isFocused ? '1px solid #D9B48F' : '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '4px 0',
+      boxShadow: 'none',
+      '&:hover': { borderBottom: '1px solid #D9B48F' }
     }),
+    singleValue: (provided) => ({ ...provided, color: '#FFFFFF' }),
+    placeholder: (provided) => ({ ...provided, color: 'rgba(255, 255, 255, 0.4)' }),
+    input: (provided) => ({ ...provided, color: '#FFFFFF' }),
     menu: (provided) => ({
       ...provided,
-      borderRadius: '8px',
-      zIndex: 50
-    })
+      background: '#142836',
+      border: '1px solid rgba(217, 180, 143, 0.3)',
+      zIndex: 100
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      background: state.isSelected ? '#D9B48F' : state.isFocused ? 'rgba(217, 180, 143, 0.1)' : 'transparent',
+      color: state.isSelected ? '#142836' : state.isFocused ? '#D9B48F' : '#FFFFFF',
+      cursor: 'pointer'
+    }),
+    dropdownIndicator: (provided) => ({ ...provided, color: '#D9B48F' }),
+    indicatorSeparator: () => ({ display: 'none' })
   };
 
   return (
-    <div className="location-selector" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <div className="form-group">
-        <label className="form-label">
-          Wilaya {required && <span style={{ color: '#ff4d4f' }}>*</span>}
-        </label>
+    <div className="location-selector">
+      <div className="filter-group-luxe">
+        <label>WILAYA {required && <span style={{ color: '#D9B48F' }}>*</span>}</label>
         <Select
           options={wilayaOptions}
           value={wilayaOptions.find(opt => opt.value === wilaya) || null}
           onChange={(opt) => {
             onWilayaChange(opt ? opt.value : '');
-            onCommuneChange(''); // Reset commune when wilaya changes
+            if(onCommuneChange) onCommuneChange('');
           }}
-          placeholder="Sélectionnez une wilaya..."
+          placeholder="Choisir une wilaya..."
           isSearchable
           isClearable
           styles={customStyles}
-          classNamePrefix="select"
         />
       </div>
 
-      <div className="form-group">
-        <label className="form-label">
-          Commune {required && <span style={{ color: '#ff4d4f' }}>*</span>}
-        </label>
-        <Select
-          options={communeOptions}
-          value={communeOptions.find(opt => opt.value === commune) || null}
-          onChange={(opt) => onCommuneChange(opt ? opt.value : '')}
-          placeholder={wilaya ? "Sélectionnez une commune..." : "Sélectionnez d'abord une wilaya"}
-          isSearchable
-          isClearable
-          isDisabled={!wilaya}
-          styles={customStyles}
-          classNamePrefix="select"
-        />
-      </div>
-
-      <div className="form-group">
-        <label className="form-label">Quartier / Adresse <span style={{ fontSize: '0.8rem', fontWeight: 400, opacity: 0.7 }}>(optionnel)</span></label>
-        <input
-          type="text"
-          className="form-input"
-          value={quartier || ''}
-          onChange={(e) => onQuartierChange(e.target.value)}
-          placeholder="Ex: Cité 100 logements, Rue..."
-          style={{
-            width: '100%',
-            padding: '0.75rem',
-            borderRadius: '8px',
-            border: '1px solid #ddd',
-            outline: 'none'
-          }}
-        />
-      </div>
-
-      {error && <span style={{ color: '#ff4d4f', fontSize: '0.875rem' }}>{error}</span>}
+      {showCommune && (
+        <div className="filter-group-luxe mt-3">
+          <label>COMMUNE {required && <span style={{ color: '#D9B48F' }}>*</span>}</label>
+          <Select
+            options={communeOptions}
+            value={communeOptions.find(opt => opt.value === commune) || null}
+            onChange={(opt) => onCommuneChange(opt ? opt.value : '')}
+            placeholder={wilaya ? "Choisir une commune..." : "D'abord une wilaya"}
+            isDisabled={!wilaya}
+            styles={customStyles}
+          />
+        </div>
+      )}
     </div>
   );
 };

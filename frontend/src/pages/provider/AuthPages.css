@@ -1,136 +1,203 @@
-/* ═══════════════════════════════════════════════════════════════
-   AUTH PAGES — Login & Register (Split Layout)
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   IMMO LAMIS — AUTH PAGES (LOGIN & REGISTER)
+   Background : Bleu Sombre (#142836)
+   Style : Compact & Luxe
+   ═══════════════════════════════════════════════════════════════════ */
 
-.auth-page {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap');
+
+:root {
+  --primary-blue: #34657F;
+  --dark-blue: #142836;
+  --accent-gold: #D9B48F;
+  --white: #ffffff;
+  --gray-bg: #f8fafc;
+  --transition-lux: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- 1. CONFIGURATION DU BODY --- */
+html, body {
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--dark-blue);
+  color: var(--white);
 }
 
-/* Left Panel */
-.auth-page__left {
+/* --- 2. CONTENEUR & CARTE --- */
+.auth-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-10);
-  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
-  color: var(--color-white);
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: radial-gradient(circle at top right, rgba(217, 180, 143, 0.05), transparent),
+              var(--dark-blue);
 }
 
-.auth-page__brand {
-  max-width: 400px;
-}
-
-.auth-page__logo {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  font-weight: 800;
-  color: var(--color-white);
-  margin-bottom: var(--space-10);
-}
-
-.auth-page__logo img {
-  filter: brightness(0) invert(1);
-  transition: transform 0.3s ease;
-}
-
-.auth-page__logo:hover img {
-  transform: scale(1.05);
-}
-
-.auth-page__brand h1 {
-  font-size: var(--text-4xl);
-  color: var(--color-white);
-  margin-bottom: var(--space-4);
-}
-
-.auth-page__brand p {
-  font-size: var(--text-lg);
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.7;
-}
-
-/* Right Panel */
-.auth-page__right {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-10);
-  background: var(--color-gray-50);
-  overflow-y: auto;
-}
-
-.auth-form {
+.auth-card {
   width: 100%;
-  max-width: 480px;
-  padding: var(--space-10);
-  background: var(--color-white);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-lg);
-}
-
-.auth-form h2 {
-  font-size: var(--text-2xl);
-  margin-bottom: var(--space-2);
-}
-
-.auth-form__subtitle {
-  color: var(--color-gray-500);
-  font-size: var(--text-sm);
-  margin-bottom: var(--space-8);
-}
-
-.auth-form__row {
+  max-width: 1050px;
+  background: var(--white);
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-4);
+  grid-template-columns: 1fr 1.2fr;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(217, 180, 143, 0.1);
 }
 
-.auth-form__footer {
-  text-align: center;
-  margin-top: var(--space-6);
-  font-size: var(--text-sm);
-  color: var(--color-gray-500);
+/* --- 3. SECTION GAUCHE (BRANDING) --- */
+.auth-card__left {
+  background: linear-gradient(135deg, #1B3444 0%, var(--dark-blue) 100%);
+  padding: 3rem 2.5rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  border-right: 1px solid rgba(217, 180, 143, 0.1);
 }
 
-.auth-form__footer a {
-  color: var(--color-primary);
+.auth-visual__content h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.2rem;
+}
+
+.auth-visual__content p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.auth-visual__footer {
+  position: absolute;
+  bottom: 2rem;
+  left: 2.5rem;
+  font-size: 0.8rem;
+  color: var(--accent-gold);
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.auth-form__footer a:hover {
-  text-decoration: underline;
+/* --- 4. SECTION DROITE (FORMULAIRE) --- */
+.auth-card__right {
+  padding: 2.5rem 3.5rem;
+  background: var(--white);
+  color: var(--dark-blue);
 }
 
-.post-step {
-  animation: fadeIn var(--transition-base);
+.auth-form__header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--dark-blue);
+  margin-bottom: 5px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.auth-form__header p {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
 }
 
-/* ─── Mobile ────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .auth-page {
+/* --- 5. INPUTS & LABELS --- */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 800;
+  font-size: 0.75rem;
+  color: var(--primary-blue);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.form-group input, 
+.form-group select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid #eee;
+  border-radius: 8px;
+  background: #fdfdfd;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--dark-blue); /* Assure la visibilité du texte */
+  transition: var(--transition-lux);
+}
+
+.form-group input:focus, 
+.form-group select:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+  background: #fdfaf7;
+  box-shadow: 0 5px 15px rgba(217, 180, 143, 0.1);
+}
+
+/* --- 6. CORRECTIF LOCATION SELECTOR (Wilaya/Commune) --- */
+/* On force les couleurs sombres pour les éléments de sélection sur fond blanc */
+.auth-card__right select,
+.auth-card__right option,
+.auth-card__right .location-selector label {
+  color: var(--dark-blue) !important;
+}
+
+.auth-card__right .location-selector select {
+  background-color: var(--white) !important;
+  border: 1.5px solid #e2e8f0 !important;
+}
+
+/* --- 7. BOUTONS --- */
+.auth-submit-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: var(--transition-lux);
+  margin-top: 0.5rem;
+}
+
+.auth-submit-btn:hover {
+  background: var(--dark-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(52, 101, 127, 0.2);
+}
+
+/* --- 8. ALERTES --- */
+.auth-error {
+  background: #fdf2f2;
+  color: #9b2c2c;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  border: 1px solid #fbd5d5;
+}
+
+/* --- 9. RESPONSIVE --- */
+@media (max-width: 968px) {
+  .auth-card {
     grid-template-columns: 1fr;
+    max-width: 500px;
   }
-
-  .auth-page__left {
-    padding: var(--space-8) var(--space-6);
-    min-height: auto;
+  .auth-card__left {
+    display: none;
   }
-
-  .auth-page__brand h1 {
-    font-size: var(--text-2xl);
-  }
-
-  .auth-form__row {
-    grid-template-columns: 1fr;
+  .auth-card__right {
+    padding: 2.5rem 2rem;
   }
 }

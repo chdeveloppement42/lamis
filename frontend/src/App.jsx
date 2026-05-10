@@ -44,12 +44,12 @@ function App() {
             <Route path="/listing/:id" element={<ListingDetail />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
-          </Route>
+          
 
           {/* STANDALONE AUTH ROUTES */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          
+          </Route>
           {/* PROVIDER ROUTES */}
           <Route path="/provider" element={<ProtectedRoute allowedUserTypes={['PROVIDER']} />}>
             <Route element={<ProviderLayout />}>

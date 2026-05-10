@@ -1,126 +1,186 @@
 /* ═══════════════════════════════════════════════════════════════
-   ADMIN PROFILE PAGE
+   ADMIN PROFILE PAGE — PRESTIGE BLUE & GOLD
    ═══════════════════════════════════════════════════════════════ */
 
 .admin-profile {
-  max-width: 720px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
+/* HEADER */
 .admin-profile__header {
-  margin-bottom: var(--space-8);
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, #0f2633 0%, #0b1b25 100%);
+    padding: 3rem;
+    border-radius: 24px;
+    border: 1px solid rgba(217, 180, 143, 0.2);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
 }
 
 .admin-profile__header h1 {
-  font-size: var(--text-2xl);
-  margin-bottom: var(--space-2);
+    font-size: 2.5rem;
+    color: #D9B48F; /* Or Immo Lamis */
+    font-weight: 800;
+    margin-bottom: 10px;
 }
 
 .admin-profile__header p {
-  color: var(--color-gray-500);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
 }
 
-/* Info Card */
+/* INFO CARD */
 .admin-profile__info-card {
-  display: flex;
-  align-items: center;
-  gap: var(--space-6);
-  padding: var(--space-6);
-  background: var(--color-white);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-gray-200);
-  margin-bottom: var(--space-8);
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 2.5rem;
+    background: linear-gradient(145deg, #0f2633, #0b1b25);
+    border-radius: 24px;
+    border: 1px solid rgba(217, 180, 143, 0.1);
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Filigrane discret */
+.admin-profile__info-card::after {
+    content: 'IMMO LAMIS';
+    position: absolute;
+    right: -20px;
+    bottom: -10px;
+    font-size: 4rem;
+    font-weight: 900;
+    color: rgba(217, 180, 143, 0.03);
+    pointer-events: none;
 }
 
 .admin-profile__avatar {
-  width: 64px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
-  color: var(--color-white);
-  font-weight: 800;
-  font-size: var(--text-xl);
-  border-radius: var(--radius-full);
-  flex-shrink: 0;
-}
-
-.admin-profile__details {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+    width: 110px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(217, 180, 143, 0.1);
+    color: #D9B48F;
+    font-weight: 800;
+    font-size: 2.2rem;
+    border-radius: 20px;
+    border: 1px solid rgba(217, 180, 143, 0.4);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
 .admin-profile__details h3 {
-  font-size: var(--text-lg);
-  font-weight: 600;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 8px;
 }
 
 .admin-profile__role {
-  font-size: var(--text-sm);
-  color: var(--color-primary);
-  font-weight: 500;
+    display: inline-block;
+    font-size: 0.8rem;
+    background: #D9B48F; 
+    color: #0b1b25; 
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .admin-profile__email {
-  font-size: var(--text-sm);
-  color: var(--color-gray-500);
+    display: block;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
 }
 
-/* Section */
+/* SECTION FORMULAIRE */
 .admin-profile__section {
-  padding: var(--space-6);
-  background: var(--color-white);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-gray-200);
+    padding: 3rem;
+    background: #0f2633;
+    border-radius: 24px;
+    border: 1px solid rgba(217, 180, 143, 0.1);
 }
 
 .admin-profile__section h2 {
-  font-size: var(--text-lg);
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--color-gray-100);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #D9B48F;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.5px;
 }
 
-/* Form */
-.admin-profile__form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
+.admin-profile__form .form-group {
+    margin-bottom: 1.8rem;
+}
+
+.admin-profile__form .form-label {
+    display: block;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.admin-profile__form .form-input {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(217, 180, 143, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.admin-profile__form .form-input:focus {
+    border-color: #D9B48F;
+    background: rgba(255, 255, 255, 0.06);
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(217, 180, 143, 0.1);
 }
 
 .admin-profile__form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-5);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
-/* Alerts */
-.admin-profile__alert {
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-lg);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  margin-bottom: var(--space-4);
+/* BOUTON SUBMIT PRESTIGE */
+.btn-profile-submit {
+    width: 100%;
+    background: #D9B48F;
+    color: #0b1b25;
+    padding: 18px;
+    border-radius: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
 }
 
-.admin-profile__alert--success {
-  background: #d1fae5;
-  color: #065f46;
+.btn-profile-submit:hover:not(:disabled) {
+    background: #FFFFFF;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(217, 180, 143, 0.3);
 }
 
-.admin-profile__alert--error {
-  background: #fee2e2;
-  color: #991b1b;
+.btn-profile-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
+/* RESPONSIVE */
 @media (max-width: 768px) {
-  .admin-profile__form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-profile__info-card {
-    flex-direction: column;
-    text-align: center;
-  }
+    .admin-profile__form-row { grid-template-columns: 1fr; }
+    .admin-profile__info-card { flex-direction: column; text-align: center; }
+    .admin-profile__header { padding: 2rem; text-align: center; }
 }

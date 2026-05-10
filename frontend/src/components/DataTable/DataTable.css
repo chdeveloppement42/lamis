@@ -1,26 +1,66 @@
 /* ═══════════════════════════════════════════════════════════════
-   DATA TABLE — Admin table primitive
+   STRUCTURE GLOBALE - LUXURY NAVY & GOLD
    ═══════════════════════════════════════════════════════════════ */
-
 .data-table-wrapper {
-  background: var(--color-white);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--color-gray-200);
+  background: #0f2633; /* Bleu nuit Immo Lamis */
+  border-radius: 24px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(217, 180, 143, 0.15); /* Bordure Or subtile */
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-/* ─── Controls (Search, Info, Actions) ───────────────────────── */
+/* --- HEADER ADMIN PRESTIGE --- */
+.admin-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid rgba(217, 180, 143, 0.15);
+  position: relative;
+}
+
+.admin-page__header::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(to right, #D9B48F, transparent);
+}
+
+.admin-page__title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #D9B48F; /* Or Signature */
+  margin: 0;
+  letter-spacing: -1px;
+  text-transform: capitalize;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* --- SOUS-TITRE (NOIR DIRECT SANS SHADOW) --- */
+.admin-page__subtitle {
+  font-size: 1.2rem !important;
+  font-weight: 800 !important; /* Très gras pour la visibilité sur fond sombre */
+   color: #181717 !important; /* Noir pur direct */
+  text-shadow: none !important; /* Aucune ombre */
+  letter-spacing: 0.5px;
+  margin: 0.8rem 0 0 0 !important;
+  line-height: 1.4;
+  display: block;
+}
+
+/* --- CONTROLES & RECHERCHE --- */
 .data-table-controls {
-  padding: 1.25rem 1.5rem;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  border-bottom: 1px solid var(--color-gray-200);
-  background: var(--color-gray-50);
+  background: rgba(217, 180, 143, 0.03);
 }
 
 .data-table-search {
@@ -34,111 +74,350 @@
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--color-gray-400);
-  font-size: 0.875rem;
+  color: #D9B48F;
+  opacity: 0.8;
 }
 
 .data-table-search__input {
   width: 100%;
-  padding: 0.625rem 1rem 0.625rem 2.5rem;
-  border: 1px solid var(--color-gray-200);
-  border-radius: var(--radius-full);
-  font-size: var(--text-sm);
-  transition: all var(--transition-fast);
-  background: var(--color-white);
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid rgba(217, 180, 143, 0.2);
+  border-radius: 12px;
+  background: rgba(11, 27, 37, 0.5);
+  color: #FFFFFF;
+  transition: all 0.3s ease;
 }
 
 .data-table-search__input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+  border-color: #D9B48F;
+  box-shadow: 0 0 0 3px rgba(217, 180, 143, 0.1);
 }
 
 .data-table-info {
-  font-size: var(--text-sm);
-  color: var(--color-gray-500);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 500;
 }
 
-.data-table-actions {
-  display: flex;
-  gap: 0.75rem;
+/* --- TABLE STRUCTURE --- */
+.data-table-container { 
+  overflow-x: auto; 
+  width: 100%; 
 }
 
-/* ─── Table Structure ────────────────────────────────────────── */
-.data-table-container {
-  overflow-x: auto;
-  width: 100%;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
+.data-table { 
+  width: 100%; 
+  border-collapse: collapse; 
   text-align: left;
-  font-size: var(--text-sm);
 }
 
 .data-table th {
-  padding: 1rem 1.5rem;
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-500);
-  font-weight: 600;
+  padding: 1.2rem 1.5rem;
+  background-color: rgba(11, 27, 37, 0.4);
+  color: #D9B48F;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  border-bottom: 1px solid var(--color-gray-200);
-  white-space: nowrap;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(217, 180, 143, 0.1);
 }
 
 .data-table td {
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--color-gray-100);
-  color: var(--color-gray-700);
+  border-bottom: 1px solid rgba(217, 180, 143, 0.05);
+  color: #FFFFFF;
   vertical-align: middle;
 }
 
-.data-table tbody tr {
-  transition: background-color var(--transition-fast);
+.data-table tbody tr:hover { 
+  background-color: rgba(217, 180, 143, 0.03); 
 }
 
-.data-table tbody tr:hover {
-  background-color: var(--color-gray-50);
+/* ═══════════════════════════════════════════════════════════════
+   ADAPTATION MOBILE (MODE CARTE)
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .admin-page__header { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    padding: 1.5rem; 
+  }
+
+  .admin-page__title { font-size: 1.6rem; }
+  
+  .admin-page__subtitle { 
+    font-size: 1rem !important; 
+    margin-top: 0.5rem !important;
+  }
+
+  .data-table-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .data-table-search { max-width: 100%; }
+
+  /* Transformation du tableau en liste de cartes */
+  .data-table thead { display: none; }
+  
+  .data-table, 
+  .data-table tbody, 
+  .data-table tr, 
+  .data-table td { 
+    display: block; 
+    width: 100%; 
+  }
+
+  .data-table tbody tr {
+    margin: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(217, 180, 143, 0.1);
+    border-radius: 16px;
+    padding: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: right;
+    font-size: 0.9rem;
+  }
+
+  /* Libellé colonne à gauche */
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: #D9B48F;
+    text-align: left;
+    flex: 1;
+  }
+
+  .data-table td:last-child { 
+    border-bottom: none; 
+    justify-content: center; 
+    padding-top: 1rem; 
+  }
+}
+@media (max-width: 768px) {
+  .admin-page__header { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    padding: 1rem 1.5rem; 
+  }
+
+  /* Force le noir aussi sur mobile */
+  .admin-page__subtitle { 
+    font-size: 1rem !important; 
+    color: #000000 !important;
+    text-shadow: none !important;
+  }
+
+  .data-table thead { display: none; }
+  
+  .data-table tr {
+    display: block;
+    margin: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(217, 180, 143, 0.15);
+    border-radius: 16px;
+    padding: 0.5rem;
+  }
+
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    color: #FFFFFF;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    color: #D9B48F;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+  }
+}.admin-page__header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    padding-bottom: 2rem;
+
+    margin-bottom: 2.5rem;
+
+    /* Bordure très discrète couleur bronze */
+
+    border-bottom: 1px solid rgba(217, 180, 143, 0.15);
+
+    position: relative;
+
 }
 
-.data-table tbody tr:last-child td {
-  border-bottom: none;
+
+
+/* Ligne d'accentuation Or pur qui s'estompe */
+
+.admin-page__header::after {
+
+    content: "";
+
+    position: absolute;
+
+    bottom: -1px;
+
+    left: 0;
+
+    width: 120px;
+
+    height: 2px;
+
+    background: linear-gradient(to right, #D9B48F, transparent);
+
+    box-shadow: 0 0 10px rgba(217, 180, 143, 0.3);
+
 }
 
-/* ─── Common Column Utilities ────────────────────────────────── */
-.data-table__user {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
+
+
+.admin-page__title {
+
+    font-size: 2.2rem;
+
+    font-weight: 800;
+
+    color: #D9B48F; /* Or Signature */
+
+    margin: 0;
+
+    letter-spacing: -1px;
+
+    text-transform: capitalize;
+
+    /* Légère lueur pour le côté "Prestige" */
+
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
 }
 
-.data-table__avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 0.875rem;
-  flex-shrink: 0;
+
+
+.admin-page__subtitle {
+
+    /* Taille augmentée pour un impact "Luxe" */
+
+    font-size: 1.2rem !important;
+
+   
+
+    /* Noir profond forcé */
+
+    color: #000000 !important;
+
+   
+
+    /* Graisse affirmée pour la lisibilité */
+
+    font-weight: 700;
+
+   
+
+    /* Espacement des lettres pour un look moderne/aéré */
+
+    letter-spacing: 0.8px;
+
+    margin: 0.8rem 0 0 0 !important;
+
+    line-height: 1.4;
+
+    display: block;
+
+
+
+    /* L'EFFET DE LUEUR (GLOW) :
+
+       C'est ce qui va faire ressortir ton texte noir sur le bleu nuit.
+
+       On crée une barrière dorée tout autour des lettres.
+
+    */
+
+    text-shadow:
+
+        -1px -1px 0 rgba(217, 180, 143, 0.7),  
+
+         1px -1px 0 rgba(217, 180, 143, 0.7),
+
+        -1px  1px 0 rgba(217, 180, 143, 0.7),
+
+         1px  1px 0 rgba(217, 180, 143, 0.7),
+
+         0px 0px 8px rgba(217, 180, 143, 0.4); /* Halo diffus */
+
+   
+
+    /* Optionnel : légère opacité pour adoucir si besoin */
+
+    opacity: 0.95;
+
 }
 
-.data-table__email {
-  display: block;
-  font-size: 0.8125rem;
-  color: var(--color-gray-500);
-  margin-top: 0.125rem;
+
+
+/* On cible spécifiquement la balise p dans le header pour écraser les styles globaux */
+
+.admin-page__header p.admin-page__subtitle {
+
+    font-size: 1.2rem;
+
+    color: #000000 !important;
+
+    text-transform: none; /* Garde la casse normale pour le sous-titre */
+
 }
 
-.data-table__actions {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: nowrap;
+/* ─── AJUSTEMENTS RESPONSIVE ──────────────────────────────── */
+
+
+
+@media (max-width: 768px) {
+
+    .admin-page__header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 1.2rem;
+
+        padding-bottom: 1.5rem;
+
+    }
+
+
+
+    .admin-page__title {
+
+        font-size: 1.8rem;
+
+    }
+
+
+
+    .admin-page__subtitle {
+
+        font-size: 0.9rem;
+
+    }
+
 }

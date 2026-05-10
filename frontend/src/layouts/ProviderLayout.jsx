@@ -1,14 +1,24 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { 
+  LayoutDashboard, 
+  PlusCircle, 
+  UserCircle, 
+  LogOut, 
+  Clock, 
+  AlertTriangle, 
+  XCircle,
+  ChevronRight
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { useEffect } from 'react';
 import axiosInstance from '../api/axiosInstance';
 import './ProviderLayout.css';
 
 export default function ProviderLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, logout, setUser } = useAuth();
 
-  // Sync provider status dynamically without forcing re-login
   useEffect(() => {
     if (user && user.userType === 'PROVIDER') {
       axiosInstance.get('/providers/profile')
@@ -21,158 +31,118 @@ export default function ProviderLayout() {
         })
         .catch(() => {});
     }
-  }, [location.pathname]); // sync on navigation
+  }, [location.pathname, user, setUser]);
 
-  // Status-based logic
   const status = user?.status || 'PENDING';
-  const isPending   = status === 'PENDING';
-  const isRejected  = status === 'REJECTED';
+  const isPending = status === 'PENDING';
+  const isRejected = status === 'REJECTED';
   const isSuspended = status === 'SUSPENDED';
-  const isBlocked   = isPending || isRejected || isSuspended;
 
   const navLinks = [
-    { to: '/provider/listings', label: 'Mes annonces', icon: '📋' },
-    {
-      to: '/provider/post',
-      label: 'Publier',
-      icon: isBlocked ? '📝' : '📝', // Keep consistent icon, status handled inside
-      disabled: false, // Allow access to save drafts
-    },
-    { to: '/provider/profile', label: 'Mon profil', icon: '👤' },
+    { to: '/provider/listings', label: 'Mes annonces', icon: <LayoutDashboard size={20} /> },
+    { to: '/provider/post', label: 'Publier', icon: <PlusCircle size={20} /> },
+    { to: '/provider/profile', label: 'Mon profil', icon: <UserCircle size={20} /> },
   ];
 
   const initials = user
     ? `${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}`.toUpperCase()
-    : 'F';
+    : 'P';
 
   const statusLabel =
     status === 'VALIDATED' ? 'Vérifié' :
-    status === 'PENDING'   ? 'En attente' :
+    status === 'PENDING' ? 'En attente' :
     'Restreint';
 
   return (
     <div className="provider-layout">
-
-      {/* ─── Status Banners ──────────────────────────────────────────── */}
+      {/* ─── BANNIÈRES DE STATUT ─── */}
       <div className="provider-layout__banners">
         {isPending && (
           <div className="provider-banner provider-banner--warning">
-            <div className="container">
-              <span className="provider-banner__icon">⏳</span>
-              <div className="provider-banner__content">
+            <div className="banner-container">
+              <Clock className="banner-icon" size={20} />
+              <div className="banner-content">
                 <strong>Compte en attente de validation</strong>
-                <p>Votre profil est en cours d'examen par notre équipe. La publication d'annonces sera disponible dès votre validation.</p>
+                <p>Votre profil est en cours d'examen. La publication sera disponible dès validation.</p>
               </div>
             </div>
           </div>
         )}
 
-        {isRejected && (
+        {(isRejected || isSuspended) && (
           <div className="provider-banner provider-banner--danger">
-            <div className="container">
-              <span className="provider-banner__icon">❌</span>
-              <div className="provider-banner__content">
-                <strong>Inscription rejetée</strong>
-                <p>
-                  Veuillez vérifier vos documents dans votre profil ou nous{' '}
-                  <a href="mailto:contact@immolamis.dz" style={{ textDecoration: 'underline', fontWeight: 600 }}>
-                    contacter
-                  </a>.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {isSuspended && (
-          <div className="provider-banner provider-banner--danger">
-            <div className="container">
-              <span className="provider-banner__icon">🚫</span>
-              <div className="provider-banner__content">
-                <strong>Compte suspendu</strong>
-                <p>Votre accès a été restreint. Veuillez contacter l'administration.</p>
+            <div className="banner-container">
+              {isRejected ? <XCircle size={20} /> : <AlertTriangle size={20} />}
+              <div className="banner-content">
+                <strong>Accès {isRejected ? 'rejeté' : 'suspendu'}</strong>
+                <p>Veuillez contacter l'administration à <span className="gold-text">contact@immolamis.dz</span></p>
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* ─── Top Bar ─────────────────────────────────────────────────── */}
+      {/* ─── HEADER PRINCIPAL ─── */}
       <header className="provider-header">
         <div className="provider-header__inner">
           <Link to="/" className="provider-header__logo">
-            <img 
-              src="/branding/logo-horizontal.svg" 
-              alt="Immo Lamis" 
-              className="provider-header__logo-img"
-              style={{ height: '45px', width: 'auto' }}
-            />
-          </Link>
+  <div className="logo-wrapper">
+   <div className="logo-text">
+      <span className="brand-main">IMMO</span>
+      <span className="brand-sub">LAMIS</span>
+    </div>
+  </div>
+</Link>
 
           <nav className="provider-header__nav">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
-                to={link.disabled ? '#' : link.to}
-                className={[
-                  'provider-header__link',
-                  location.pathname === link.to ? 'provider-header__link--active' : '',
-                  link.disabled ? 'provider-header__link--disabled' : '',
-                ].join(' ')}
-                title={link.tooltip}
-                onClick={(e) => link.disabled && e.preventDefault()}
+                to={link.to}
+                className={`provider-header__link ${location.pathname === link.to ? 'active' : ''}`}
               >
-                <span>{link.icon}</span>
-                {link.label}
+                <span className="link-icon">{link.icon}</span>
+                <span className="link-label">{link.label}</span>
               </Link>
             ))}
           </nav>
 
           <div className="provider-header__actions">
-            <div className="provider-header__user">
-              <div className="provider-header__avatar">{initials}</div>
-              <div className="provider-header__user-info">
-                <span className="provider-header__user-name">
-                  {user?.firstName || 'Fournisseur'}
-                </span>
-                <span className={`provider-header__status provider-header__status--${status.toLowerCase()}`}>
-                  {statusLabel}
-                </span>
-              </div>
-            </div>
-            <button
-              className="provider-logout-btn"
-              title="Déconnexion"
-              onClick={logout}
-            >
-              🚪
-            </button>
+            <div className="provider-header__user-pill">
+  <div className="user-avatar">{initials}</div>
+  <div className="user-details">
+    <div className="user-name-row">
+      <span className="user-name">{user?.firstName}</span>
+      <button className="logout-action-inline" onClick={logout} title="Déconnexion">
+        <LogOut size={14} />
+      </button>
+    </div>
+    <span className={`user-status status--${status.toLowerCase()}`}>
+      {statusLabel}
+    </span>
+  </div>
+</div>
           </div>
         </div>
       </header>
 
-      {/* ─── Main Content ────────────────────────────────────────────── */}
-      <main className="provider-main">
-        <div className="container">
+      {/* ─── CONTENU PRINCIPAL ─── */}
+      <main className="provider-main-content">
+        <div className="content-container">
           <Outlet />
         </div>
       </main>
 
-      {/* ─── Mobile Bottom Nav ───────────────────────────────────────── */}
+      {/* ─── NAV MOBILE BOTTOM ─── */}
       <nav className="provider-mobile-nav">
         {navLinks.map((link) => (
           <Link
             key={link.to}
-            to={link.disabled ? '#' : link.to}
-            className={[
-              'provider-mobile-nav__link',
-              location.pathname === link.to ? 'provider-mobile-nav__link--active' : '',
-              link.disabled ? 'provider-mobile-nav__link--disabled' : '',
-            ].join(' ')}
-            onClick={(e) => link.disabled && e.preventDefault()}
+            to={link.to}
+            className={`mobile-link ${location.pathname === link.to ? 'active' : ''}`}
           >
-            <span className="provider-mobile-nav__icon">{link.icon}</span>
-            <span className="provider-mobile-nav__label">{link.label.split(' ')[0]}</span>
+            {link.icon}
+            <span>{link.label.split(' ')[0]}</span>
           </Link>
         ))}
       </nav>

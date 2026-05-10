@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-
+import './NotificationsPage.css';
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);

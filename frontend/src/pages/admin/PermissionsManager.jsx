@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import { useModal } from '../../components/Modal';
-
+import './PermissionsManager.css';
 export default function PermissionsManager() {
   const { showModal } = useModal();
   const [roles, setRoles] = useState([]);

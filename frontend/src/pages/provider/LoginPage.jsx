@@ -15,7 +15,7 @@ export default function LoginPage() {
   const location = useLocation();
   const from = location.state?.from?.pathname || null;
 
-  // Redirect if already logged in
+  // Redirection si déjà connecté
   useEffect(() => {
     if (user) {
       const target = from || (user.userType === 'ADMIN' ? '/admin/dashboard' : '/provider/profile');
@@ -29,65 +29,84 @@ export default function LoginPage() {
 
     try {
       await login(email, password, from);
-      // login method automatically handles routing and state updates!
     } catch (err) {
-      if (err.response?.status === 401) {
-        showToast({ type: 'error', message: err.response.data.message || 'Identifiants invalides' });
-      } else {
-        showToast({ type: 'error', message: 'Une erreur est survenue lors de la connexion.' });
-      }
+      const errorMsg = err.response?.status === 401 
+        ? (err.response.data.message || 'Identifiants invalides') 
+        : 'Une erreur est survenue lors de la connexion.';
+      
+      showToast({ type: 'error', message: errorMsg });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-page__left">
-        <div className="auth-page__brand">
-          <Link to="/" className="auth-page__logo">
-            <img 
-              src="/branding/logo-horizontal.svg" 
-              alt="Immo Lamis" 
-              style={{ height: '60px', width: 'auto', marginBottom: '1rem' }} 
-            />
-          </Link>
-          <h1>Bon retour !</h1>
-          <p>Connectez-vous pour accéder à votre espace</p>
+    <div className="auth-container">
+      <div className="auth-card">
+        
+        {/* Côté Gauche - Visuel Bleu Immo Lamis */}
+        <div className="auth-card__left">
+          <div className="auth-visual__content">
+            <Link to="/" className="auth-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <h1>Immo<span style={{ color: '#D9B48F' }}>Lamis</span></h1>
+            </Link>
+            <div style={{ marginTop: '2.5rem' }}>
+              <h1>Ravis de vous revoir !</h1>
+              <p>Gérez vos annonces et développez votre activité sur la plateforme immobilière de référence.</p>
+            </div>
+          </div>
+          <div className="auth-visual__footer">
+            © {new Date().getFullYear()} Immo Lamis — CH-PUB
+          </div>
         </div>
-      </div>
 
-      <div className="auth-page__right">
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <h2>Connexion</h2>
-          <p className="auth-form__subtitle">Entrez vos identifiants pour continuer</p>
+        {/* Côté Droit - Formulaire Blanc Épuré */}
+        <div className="auth-card__right">
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <div className="auth-form__header">
+              <h2>Connexion</h2>
+              <p>Entrez vos accès pour accéder au tableau de bord</p>
+            </div>
 
-          <div className="form-group">
-            <label className="form-label">Email</label>
-            <input
-              type="email" className="form-input" required
-              placeholder="votre@email.com"
-              value={email} onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+            <div className="auth-form__groups">
+              <div className="form-group">
+                <label>Email professionnel</label>
+                <input
+                  type="email"
+                  required
+                  placeholder="nom@exemple.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
 
-          <div className="form-group">
-            <label className="form-label">Mot de passe</label>
-            <input
-              type="password" className="form-input" required
-              placeholder="••••••••"
-              value={password} onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+              <div className="form-group">
+                <label>Mot de passe</label>
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+            </div>
 
-          <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={loading}>
-            {loading ? 'Connexion...' : 'Se connecter'}
-          </button>
+            <button type="submit" className="auth-submit-btn" disabled={loading}>
+              {loading ? "Authentification..." : 'Se connecter au compte'}
+            </button>
 
-          <p className="auth-form__footer">
-            Pas encore de compte ? <Link to="/register">Créer un compte fournisseur</Link>
-          </p>
-        </form>
+            <div className="auth-form__footer" style={{ marginTop: '2rem', textAlign: 'center' }}>
+              <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
+                Pas encore de compte ?
+              </p>
+              <Link to="/register" style={{ color: '#D9B48F', fontWeight: '700', textDecoration: 'none' }}>
+                Devenir fournisseur partenaire
+              </Link>
+            </div>
+          </form>
+        </div>
+
       </div>
     </div>
   );

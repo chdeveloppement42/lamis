@@ -1,246 +1,275 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  Building2, Home, Briefcase, Trees, Store, Warehouse,
+  ShieldCheck, MapPin, Headphones, ChevronLeft, ChevronRight, Send 
+} from 'lucide-react'; 
+import AOS from 'aos';
+import 'aos/dist/aos.css'; 
 import { getCategories } from '../../api/categories.api';
 import { getLatestListings } from '../../api/listings.api';
-import { getPlatformStats } from '../../api/stats.api';
 import ListingCard from '../../components/ListingCard';
 import './LandingPage.css';
 
-const fallbackStats = [
-  { number: '500+', label: 'Biens vérifiés' },
-  { number: '120+', label: 'Fournisseurs' },
-  { number: '10K+', label: 'Visiteurs / mois' },
-  { number: '100%', label: 'Validés par admin' },
-];
-
-const categoryIcons = {
-  appartement: '🏢',
-  villa: '🏡',
-  bureau: '🏬',
-  terrain: '🌳',
-  'local-commercial': '🏪',
-  entrepot: '🏭',
+const CATEGORY_ICONS = {
+  appartement: <Building2 size={40} />,
+  villa: <Home size={40} />,
+  bureau: <Briefcase size={40} />,
+  terrain: <Trees size={40} />,
+  'local-commercial': <Store size={40} />,
+  entrepot: <Warehouse size={40} />,
 };
 
 export default function LandingPage() {
-  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [latestListings, setLatestListings] = useState([]);
-  const [search, setSearch] = useState({ wilaya: '', category: '', maxPrice: '' });
-  const [platformStats, setPlatformStats] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const catRef = useRef(null);
+  const annoncesRef = useRef(null);
 
-  useEffect(() => {
-    getCategories()
-      .then(setCategories)
-      .catch(() => setCategories([]));
+  const slides = [
+    { url: '/appartement.png' },
+    { url: '/villa.png' },
+    { url: '/entrop.png' },
+    { url: '/terrain.png' }
+  ];
 
-    getLatestListings()
-      .then((data) => setLatestListings(Array.isArray(data) ? data : []))
-      .catch(() => setLatestListings([]));
-
-    getPlatformStats()
-      .then(data => setPlatformStats([
-        { number: `${data.activeListings || 0}+`, label: 'Biens vérifiés' },
-        { number: `${data.totalProviders || 0}+`, label: 'Fournisseurs' },
-        { number: `${data.citiesCovered || 0}+`, label: 'Villes couvertes' },
-        { number: '100%', label: 'Validés par admin' },
-      ]))
-      .catch(() => setPlatformStats(fallbackStats));
-  }, []);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const params = new URLSearchParams();
-    if (search.wilaya) params.set('wilaya', search.wilaya);
-    if (search.category) params.set('categoryId', search.category);
-    if (search.maxPrice) params.set('maxPrice', search.maxPrice);
-    navigate(`/services?${params.toString()}`);
+  const scroll = (ref, direction) => {
+    if (ref.current) {
+      const { clientWidth } = ref.current;
+      const move = direction === 'left' ? -clientWidth : clientWidth;
+      ref.current.scrollBy({ left: move, behavior: 'smooth' });
+    }
   };
 
+  useEffect(() => {
+    AOS.init({ duration: 1200, once: true, offset: 100 });
+    const fetchData = async () => {
+      try {
+        const [cats, listings] = await Promise.all([getCategories(), getLatestListings()]);
+        setCategories(cats);
+        setLatestListings(listings);
+        setTimeout(() => { AOS.refresh(); }, 800);
+      } catch (err) { console.error(err); }
+    };
+    fetchData();
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 2000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
   return (
-    <div className="landing">
-      {/* ═══ HERO ══════════════════════════════════════════════════ */}
-      <section className="hero">
-        <div className="hero__bg">
-          <div className="hero__gradient" />
-          <div className="hero__pattern" />
-        </div>
+    <div className="aymen-style-wrapper">
+      
+      {/* --- HERO SECTION --- */}
+      {/* --- HERO SECTION PRESTIGE --- */}
+{/* --- HERO SECTION PRESTIGE IMMO LAMIS --- */}
+<section className="hero-full">
+  {/* Fond avec Slider et Overlay Sombre */}
+  <div className="hero-slider">
+    {slides.map((slide, index) => (
+      <div 
+        key={index} 
+        className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
+        style={{ backgroundImage: ` url(${slide.url})` }}
+      />
+    ))}
+  </div>
 
-        <div className="container hero__content">
-          <div className="hero__text animate-fade-in-up">
-            <div className="hero__badge badge-gold">
-              <img 
-                src="/branding/verified-badge.svg" 
-                alt="Vérifié" 
-                style={{ height: '18px', width: 'auto', marginRight: '8px' }} 
-              />
-              Plateforme 100% vérifiée
-            </div>
-            <h1 className="hero__title">
-              Trouvez votre bien
-              <span className="hero__title-accent"> immobilier </span>
-              en toute confiance
-            </h1>
-            <p className="hero__subtitle">
-              Chaque bien sur Immo Lamis est vérifié et validé par notre équipe.
-              Pas de fausses annonces, pas de mauvaises surprises.
-            </p>
+  <div className="hero-content-centered">
+    {/* Petit badge élégant */}
+    <span className="hero-badge" data-aos="fade-down" data-aos-delay="200">
+      L'IMMOBILIER DE PRESTIGE DEPUIS 2010
+    </span>
 
-            {/* Quick Search — wired to navigate with params */}
-            <form className="hero__search glass" onSubmit={handleSearch}>
-              <div className="hero__search-field">
-                <label>Wilaya</label>
-                <input
-                  type="text"
-                  placeholder="Alger, Oran, Constantine..."
-                  className="form-input"
-                  value={search.wilaya}
-                  onChange={(e) => setSearch({ ...search, wilaya: e.target.value })}
-                />
-              </div>
-              <div className="hero__search-field">
-                <label>Type de bien</label>
-                <select
-                  className="form-input"
-                  value={search.category}
-                  onChange={(e) => setSearch({ ...search, category: e.target.value })}
-                >
-                  <option value="">Tous les types</option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="hero__search-field">
-                <label>Budget max</label>
-                <input
-                  type="number"
-                  placeholder="50 000 000 DA"
-                  className="form-input"
-                  value={search.maxPrice}
-                  onChange={(e) => setSearch({ ...search, maxPrice: e.target.value })}
-                />
-              </div>
-              <button type="submit" className="btn btn-primary btn-lg hero__search-btn">
-                Rechercher
-              </button>
-            </form>
-          </div>
-        </div>
-      </section>
+    {/* Titre Principal en Or #D9B48F */}
+    <h1 className="hero-main-title" data-aos="zoom-out" data-aos-duration="1500">
+      IMMO<span className="gold-text-brand">LAMIS</span>
+    </h1>
 
-      {/* ═══ STATS BAR ═════════════════════════════════════════════ */}
-      <section className="stats-bar">
-        <div className="container stats-bar__inner">
-          {(platformStats || fallbackStats).map((stat, i) => (
-            <div key={i} className="stats-bar__item">
-              <span className="stats-bar__number">{stat.number}</span>
-              <span className="stats-bar__label">{stat.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+    {/* Sous-titre avec lignes de séparation fines */}
+    <div className="hero-subtitle-wrapper" data-aos="fade-up" data-aos-delay="400">
+      <div className="line-prestige"></div>
+      <h2 className="hero-subtitle-italique">L'Excellence Immobilière à Alger</h2>
+      <div className="line-prestige"></div>
+    </div>
 
-      {/* ═══ CATEGORIES (dynamic) ════════════════════════════════ */}
-      <section className="section categories-section">
+    {/* Description Narrative centrée */}
+    <p className="hero-long-desc" data-aos="fade-up" data-aos-delay="600">
+      Bienvenue chez <span className="gold-highlight">IMMOLAMIS</span>, votre partenaire de confiance dédié à l’immobilier d’exception. 
+      Nous transcendons la simple transaction pour vous offrir une expérience sur mesure, 
+      alliant <span className="text-white-bold">rigueur juridique</span> et <span className="text-white-bold">art de vivre inégalé</span> au cœur de la capitale.
+    </p>
+
+    {/* Bouton d'Action Haute Performance */}
+    <div className="hero-actions" data-aos="fade-up" data-aos-delay="800">
+      <Link to="/services" className="btn-discover-gold">
+        <span className="btn-label">Explorer le catalogue</span>
+        <span className="btn-arrow-icon">→</span>
+      </Link>
+    </div>
+  </div>
+  
+  {/* Indicateur visuel pour scroller */}
+  <div className="scroll-hint" data-aos="fade-up" data-aos-delay="1000">
+    <div className="mouse-icon">
+      <div className="mouse-wheel"></div>
+    </div>
+  </div>
+</section>
+      {/* --- POURQUOI NOUS CHOISIR --- */}
+      <section className="unified-section">
         <div className="container">
-          <div className="section-header">
-            <h2 className="section-title">Explorez par catégorie</h2>
-            <p className="section-subtitle">
-              Trouvez exactement le type de bien qui vous correspond
+          <div className="section-header-large" data-aos="fade-up">
+            <p className="cursive-accent">L'Engagement</p>
+            <h2 className="massive-title">L'EXCELLENCE IMMO <span className="beige-text">LAMIS</span></h2>
+            <p className="header-description">
+              Nous redéfinissons les standards de l'immobilier algérois à travers une approche holistique où chaque détail compte, garantissant une tranquillité d'esprit absolue.
             </p>
+            <div className="title-underline-centered"></div>
           </div>
-
-          <div className="categories-grid">
-            {categories.map((cat, i) => (
-              <Link
-                key={cat.id}
-                to={`/services?categoryId=${cat.id}`}
-                className="category-card"
-                style={{ animationDelay: `${i * 0.1}s` }}
-              >
-                <span className="category-card__icon">
-                  {categoryIcons[cat.slug] || '🏠'}
-                </span>
-                <span className="category-card__name">{cat.name}</span>
-                <span className="category-card__arrow">→</span>
-              </Link>
+          <div className="why-grid-aymen">
+            {[
+              { icon: <ShieldCheck size={35}/>, title: "SÉRÉNITÉ TOTALE", desc: "Audit juridique rigoureux pour vos investissements." },
+              { icon: <MapPin size={35}/>, title: "ADRESSES D'EXCEPTION", desc: "Emplacements stratégiques et prestigieux." },
+              { icon: <Headphones size={35}/>, title: "CONCIERGERIE", desc: "Accompagnement VIP 7j/7 personnalisé." }
+            ].map((item, idx) => (
+              <div className="why-card-aymen" key={idx} data-aos="fade-up" data-aos-delay={idx * 200}>
+                <div className="why-icon-luxe">{item.icon}</div>
+                <h3>{item.title}</h3>
+                <p className="white-p">{item.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══ LATEST LISTINGS (dynamic) ═════════════════════════════ */}
-      {latestListings.length > 0 && (
-        <section className="section latest-section">
-          <div className="container">
-            <div className="section-header">
-              <h2 className="section-title">Dernières annonces</h2>
-              <p className="section-subtitle">
-                Les biens les plus récemment publiés sur notre plateforme
-              </p>
-            </div>
-
-            <div className="latest-grid">
-              {latestListings.map((listing) => (
-                <ListingCard key={listing.id} listing={listing} />
-              ))}
-            </div>
-
-            <div className="latest-section__cta">
-              <Link to="/services" className="btn btn-secondary btn-lg">
-                Voir toutes les annonces →
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ═══ HOW IT WORKS ══════════════════════════════════════════ */}
-      <section className="section how-section">
+      {/* --- NOS CATÉGORIES --- */}
+      <section className="unified-section pt-0">
         <div className="container">
-          <div className="section-header">
-            <h2 className="section-title">Comment ça marche ?</h2>
-            <p className="section-subtitle">
-              Un processus simple, transparent et sécurisé
+          <div className="section-header-large" data-aos="fade-up">
+            <p className="cursive-accent">Explorez</p>
+            <h2 className="massive-title">NOS CATÉGORIES</h2>
+            <p className="header-description">
+              Que vous cherchiez un écrin pour votre famille ou un espace de travail inspirant, découvrez notre sélection classée par univers.
             </p>
+            <div className="title-underline-centered"></div>
           </div>
-
-          <div className="how-grid">
-            <div className="how-card">
-              <div className="how-card__number">01</div>
-              <h3>Inscription Fournisseur</h3>
-              <p>Les agents immobiliers s'inscrivent avec leurs documents professionnels pour vérification.</p>
-            </div>
-            <div className="how-card">
-              <div className="how-card__number">02</div>
-              <h3>Validation Admin</h3>
-              <p>Notre équipe vérifie chaque profil et chaque annonce avant publication sur la plateforme.</p>
-            </div>
-            <div className="how-card">
-              <div className="how-card__number">03</div>
-              <h3>Annonces Fiables</h3>
-              <p>Les visiteurs accèdent à des biens 100% vérifiés avec des photos protégées par filigrane.</p>
-            </div>
+          <div className="slider-nav-container">
+            <button className="btn-slide-nav" onClick={() => scroll(catRef, 'left')}><ChevronLeft size={20}/></button>
+            <button className="btn-slide-nav" onClick={() => scroll(catRef, 'right')}><ChevronRight size={20}/></button>
+          </div>
+          <div className="categories-grid-aymen mobile-slider-touch" ref={catRef}>
+            {categories.map((cat, index) => (
+              <div key={cat.id} data-aos="fade-up" data-aos-delay={index * 150}>
+                <Link to={`/services?categoryId=${cat.id}`} className="cat-card-aymen">
+                  <div className="cat-icon-aymen">{CATEGORY_ICONS[cat.slug] || <Home size={40}/>}</div>
+                  <h3>{cat.name.toUpperCase()}</h3>
+                  <div className="cat-hover-glow"></div>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ═══ CTA ═══════════════════════════════════════════════════ */}
-      <section className="cta-section">
-        <div className="container cta-section__inner">
-          <h2>Vous êtes agent immobilier ?</h2>
-          <p>Rejoignez notre réseau de fournisseurs vérifiés et publiez vos annonces sur une plateforme de confiance.</p>
-          <div className="cta-section__buttons">
-            <Link to="/register" className="btn btn-primary btn-lg">
-              Créer mon compte
-            </Link>
-            <Link to="/about" className="btn btn-secondary btn-lg" style={{ borderColor: '#fff', color: '#fff' }}>
-              En savoir plus
-            </Link>
+      {/* --- DERNIÈRES ANNONCES --- */}
+      <section className="unified-section pt-0" id="annonces-section">
+        <div className="container">
+          <div className="section-header-large" data-aos="fade-up">
+            <p className="cursive-accent">Sélection</p>
+            <h2 className="massive-title">DERNIÈRES <span className="beige-text">PÉPITES</span></h2>
+            <p className="header-description">
+              Découvrez nos dernières offres exceptionnelles, sélectionnées pour leur qualité et leur valeur ajoutée.
+            </p>
+            <div className="title-underline-centered"></div>
+          </div>
+          <div className="slider-nav-container">
+            <button className="btn-slide-nav" onClick={() => scroll(annoncesRef, 'left')}><ChevronLeft size={20}/></button>
+            <button className="btn-slide-nav" onClick={() => scroll(annoncesRef, 'right')}><ChevronRight size={20}/></button>
+          </div>
+          <div className="grid-home-3x3 mobile-slider-touch" ref={annoncesRef}>
+            {latestListings.slice(0, 9).map((listing, index) => (
+              <div className="listing-anim-wrapper" key={listing.id} data-aos="fade-up" data-aos-delay={(index % 3) * 150}>
+                <ListingCard listing={listing} />
+              </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* --- STATS --- */}
+      <section className="unified-section stats-prestige-bg">
+        <div className="container">
+          <div className="stats-grid-aymen">
+            {[
+              { n: "15+", l: "Expertise" }, { n: "500+", l: "Biens" }, 
+              { n: "98%", l: "Clients" }, { n: "24/7", l: "Support" }
+            ].map((s, i) => (
+              <div className="stat-item" key={i} data-aos="zoom-in" data-aos-delay={i * 100}>
+                <span className="stat-number">{s.n}</span>
+                <span className="stat-label">{s.l}</span>
+                <div className="stat-line"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+     <section className="unified-section luxe-form-section">
+  <div className="container">
+    <div className="section-header-large" data-aos="fade-up">
+      <p className="cursive-accent">Privé</p>
+      <h2 className="massive-title">CONCRÉTISEZ VOTRE <span className="gold-text-brand">PROJET</span></h2>
+      <div className="title-underline-centered"></div>
+    </div>
+
+    <div className="cta-wrapper-prestige" data-aos="fade-up">
+      <div className="cta-content-luxe">
+        <div className="form-intro">
+          <h3>Demande de Consultation</h3>
+          <p>Laissez vos coordonnées, nos experts vous recontacteront sous 24h.</p>
+        </div>
+        
+        <form className="interest-form-prestige" onSubmit={(e) => e.preventDefault()}>
+          <div className="input-row">
+            <div className="form-group-prestige">
+              <input type="text" placeholder="Nom complet" required />
+              <span className="input-border"></span>
+            </div>
+            <div className="form-group-prestige">
+              <input type="email" placeholder="Email professionnel" required />
+              <span className="input-border"></span>
+            </div>
+          </div>
+
+          <div className="form-group-prestige">
+            <textarea placeholder="Décrivez votre recherche (secteur, budget, type de bien...)" rows="4" required></textarea>
+            <span className="input-border"></span>
+          </div>
+
+          <button type="submit" className="btn-gold-submit-prestige">
+            <span className="btn-label">Envoyer ma demande</span>
+            <span className="btn-shine"></span>
+          </button>
+        </form>
+      </div>
+
+      <div className="cta-visual-side">
+        <div className="visual-overlay">
+          <div className="contact-info-badge">
+            <p>Disponible 7j/7</p>
+            <span className="gold-line"></span>
+            <p>Alger, DZ</p>
+          </div>
+        </div>
+        <img src="/villa.png" alt="Immobilier Luxe" className="visual-img" />
+      </div>
+    </div>
+  </div>
+</section>
+      
     </div>
   );
 }

@@ -95,16 +95,28 @@ export default function CategoriesManager() {
       field: 'createdAt',
       render: (cat) => new Date(cat.createdAt).toLocaleDateString('fr-FR')
     },
-    {
-      header: 'Actions',
-      width: '20%',
-      render: (cat) => (
-        <div className="data-table__actions">
-          <button className="admin-btn admin-btn--sm admin-btn--outline" onClick={() => handleEdit(cat)}>✏️ Modifier</button>
-          <button className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => handleDelete(cat.id)}>🗑️ Supprimer</button>
-        </div>
-      )
-    }
+   {
+  header: 'Actions',
+  width: '15%', // Réduit un peu la largeur de la colonne
+  render: (cat) => (
+    <div className="data-table__actions">
+      <button 
+        className="admin-btn admin-btn--icon admin-btn--outline" 
+        onClick={() => handleEdit(cat)}
+        title="Modifier"
+      >
+        ✏️
+      </button>
+      <button 
+        className="admin-btn admin-btn--icon admin-btn--danger" 
+        onClick={() => handleDelete(cat.id)}
+        title="Supprimer"
+      >
+        🗑️
+      </button>
+    </div>
+  )
+}
   ];
 
   return (

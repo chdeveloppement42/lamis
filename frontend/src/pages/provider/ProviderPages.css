@@ -525,3 +525,280 @@
         gap: 10px;
     }
 }
+/* ─── HEADER ROW OPTIMIZATION ─── */
+.provider-page__header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.btn-new-listing {
+    background: var(--p-gold);
+    color: var(--p-blue-dark);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: var(--p-transition);
+    white-space: nowrap;
+}
+
+/* ─── TABLE RESPONSIVE LOGIC ─── */
+.provider-listings-container {
+    background: var(--p-blue-card);
+    border: 1px solid rgba(217, 180, 143, 0.15);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Desktop Styles */
+.responsive-table th {
+    background: rgba(11, 27, 37, 0.5);
+    padding: 1.2rem;
+    color: var(--p-gold);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: left;
+}
+
+.responsive-table td {
+    padding: 1.2rem;
+    border-bottom: 1px solid rgba(217, 180, 143, 0.08);
+    color: var(--p-bronze);
+}
+
+/* ─── MOBILE TRANSFORMATION (MAX 850px) ─── */
+@media (max-width: 850px) {
+    .provider-page { padding: 1rem; }
+    
+    .provider-page__header-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-new-listing { width: 100%; text-align: center; }
+
+    /* Cache le header de la table */
+    .responsive-table thead { display: none; }
+
+    .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .responsive-table tr {
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(217, 180, 143, 0.2);
+        border-radius: 20px;
+        background: rgba(15, 38, 51, 0.6);
+        padding: 1rem;
+    }
+
+    .responsive-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 0.5rem;
+        border-bottom: 1px solid rgba(217, 180, 143, 0.05);
+        text-align: right;
+        font-size: 0.9rem;
+    }
+
+    .responsive-table td:last-child { border-bottom: none; }
+
+    /* Ajoute les labels dynamiquement */
+    .responsive-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--p-gold);
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* Style spécifique pour le titre sur mobile */
+    .td-title-main {
+        background: rgba(217, 180, 143, 0.05);
+        margin: -1rem -1rem 0.5rem -1rem;
+        padding: 1.2rem !important;
+        border-radius: 18px 18px 0 0;
+        border-bottom: 1px solid rgba(217, 180, 143, 0.15) !important;
+        justify-content: center !important;
+    }
+    
+    .td-title-main::before { display: none; }
+    .td-title-main strong { color: var(--p-gold); font-size: 1.1rem; }
+
+    .action-flex { justify-content: flex-end; width: 100%; }
+}
+
+/* ─── ELEMENTS STYLES ─── */
+.td-price { color: #fff !important; font-weight: 700; }
+
+.btn-publish-sm {
+    background: var(--p-gold);
+    color: var(--p-blue-dark);
+    border: none;
+    padding: 6px 15px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-publish-sm.disabled { opacity: 0.3; cursor: not-allowed; }
+
+.btn-delete-icon {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+    filter: grayscale(1);
+}
+
+.btn-delete-icon:hover { filter: grayscale(0); transform: scale(1.2); }
+/* ─── GRID LAYOUT ─── */
+.provider-page__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr; /* Colonne gauche un peu plus large */
+    gap: 2rem;
+    align-items: start;
+}
+
+.grid-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* ─── LOCATION BOX (Fixing inline styles) ─── */
+.location-section-box {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: rgba(11, 27, 37, 0.4);
+    border-radius: 16px;
+    border: 1px solid rgba(217, 180, 143, 0.1);
+}
+
+.location-section-box h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--p-gold);
+    margin-bottom: 1.2rem;
+}
+
+/* ─── WARNING CARD ─── */
+.warning-note {
+    background: rgba(255, 77, 79, 0.08);
+    border-left: 3px solid #ff4d4f;
+    padding: 1rem;
+    font-size: 0.85rem;
+    color: #ffccc7;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+}
+
+.btn-danger-soft {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255, 77, 79, 0.4);
+    color: #ff7875;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-danger-soft:hover {
+    background: #ff4d4f;
+    color: white;
+}
+
+/* ─── RESPONSIVE MOBILE (MAX 1024px) ─── */
+@media (max-width: 1024px) {
+    .provider-page__grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur tablette/mobile */
+        gap: 1.5rem;
+    }
+
+    .provider-page h1 {
+        font-size: 2.2rem;
+        text-align: center;
+    }
+
+    .provider-page__subtitle {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .provider-page {
+        padding: 1rem;
+    }
+
+    .provider-card {
+        padding: 1.5rem;
+        border-radius: 20px;
+    }
+
+    .provider-card__row {
+        grid-template-columns: 1fr; /* Inputs l'un sur l'autre sur mobile */
+        gap: 0;
+    }
+
+    .btn-primary {
+        padding: 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ─── ETAT CHARGEMENT ─── */
+.loading-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    color: var(--p-gold);
+    font-weight: 700;
+}
+/* Réduction de la hauteur globale de la carte Register */
+.register-card {
+  max-width: 800px;
+  align-self: center; /* Évite l'étirement vertical */
+}
+
+/* Resserre les espaces entre les groupes */
+.register-card .form-group {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Réduction de la taille des inputs pour gagner de la place */
+.register-card input, 
+.register-card select {
+  padding: 0.5rem 0.8rem !important; /* Hauteur réduite */
+  font-size: 0.85rem !important;
+}
+
+/* Resserre le bloc de localisation */
+.register-card .location-box-wrapper {
+  padding: 0.4rem 0.8rem !important;
+  margin-top: 0.2rem !important;
+}
+
+/* Ajustement spécifique pour le header */
+.register-card .auth-form__header {
+  margin-bottom: 0.8rem !important;
+}

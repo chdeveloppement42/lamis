@@ -315,3 +315,48 @@
   .header__logo-text { font-size: 1.2rem; }
   .footer__bottom-content { justify-content: center; text-align: center; }
 }
+@media (max-width: 600px) {
+  /* Réduit l'espace global du footer sur mobile */
+  .footer {
+    padding-top: 2.5rem; 
+  }
+
+  /* Resserre la grille et réduit l'espace entre les sections */
+  .footer__inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 1.8rem; /* Réduit l'espace entre les blocs (Navigation, Support, etc.) */
+    padding-bottom: 2.5rem;
+  }
+
+  /* Description plus compacte */
+  .footer__description {
+    margin: 1rem auto 0;
+    font-size: 0.85rem; /* Texte un peu plus petit */
+    line-height: 1.4; /* Resserre les lignes de la description */
+    max-width: 280px;
+  }
+
+  /* Resserre les liens de navigation et contact */
+  .footer__links h4 {
+    margin-bottom: 0.8rem; /* Moins d'espace sous les titres (Navigation, Support) */
+    font-size: 0.8rem;
+  }
+
+  .footer__links a, 
+  .footer__links span {
+    margin-bottom: 0.4rem; /* RÉDUCTION : Espace entre chaque lien/ligne */
+    font-size: 0.9rem;      /* Taille de police légèrement réduite */
+    line-height: 1.2;      /* Resserre l'espace vertical entre les lignes */
+  }
+
+  /* Footer Bottom (Copyright) plus compact */
+  .footer__bottom {
+    padding: 1rem;
+  }
+
+  .footer__bottom-content {
+    gap: 0.4rem; /* Resserre l'espace entre le copyright et le crédit CH-PUB */
+    font-size: 0.75rem;
+  }
+}

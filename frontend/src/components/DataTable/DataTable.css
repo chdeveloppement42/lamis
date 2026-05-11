@@ -421,3 +421,63 @@
     }
 
 }
+/* --- BOUTONS ACTIONS COMPACTS --- */
+.data-table__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+/* Style de base pour les petits boutons d'action */
+.admin-btn--icon {
+  width: 32px;  /* Taille fixe pour faire un carré/cercle */
+  height: 32px;
+  padding: 0 !important; /* Supprime le padding qui fait grossir le bouton */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  border-radius: 8px; /* Un peu plus arrondi pour le look luxe */
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Variantes de couleurs */
+.admin-btn--outline {
+  background: rgba(217, 180, 143, 0.05);
+  border: 1px solid rgba(217, 180, 143, 0.3);
+  color: #D9B48F;
+}
+
+.admin-btn--outline:hover {
+  background: rgba(217, 180, 143, 0.2);
+  border-color: #D9B48F;
+  transform: translateY(-2px);
+}
+
+.admin-btn--danger {
+  background: rgba(255, 77, 79, 0.1);
+  border: 1px solid rgba(255, 77, 79, 0.3);
+  color: #ff4d4f;
+}
+
+.admin-btn--danger:hover {
+  background: #ff4d4f;
+  color: white;
+  border-color: #ff4d4f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.2);
+}
+
+/* Ajustement mobile pour les actions */
+@media (max-width: 768px) {
+  .data-table td:last-child {
+    justify-content: flex-end; /* Aligne les boutons à droite sur mobile */
+  }
+  
+  .admin-btn--icon {
+    width: 38px; /* Un peu plus grand sur mobile pour faciliter le clic au doigt */
+    height: 38px;
+    font-size: 1.1rem;
+  }
+}

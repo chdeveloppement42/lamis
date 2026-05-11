@@ -201,3 +201,326 @@ html, body {
     padding: 2.5rem 2rem;
   }
 }
+/* --- MISES À JOUR DES CLASSES --- */
+.text-gold { color: var(--accent-gold); }
+.error-text { color: #e53e3e; font-size: 0.75rem; margin-top: 4px; display: block; }
+.link-gold { color: var(--accent-gold); font-weight: 700; text-decoration: none; }
+
+/* Grille flexible pour les champs Nom/Prénom etc. */
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.location-box-wrapper {
+  margin-top: 0.5rem;
+  padding: 1.2rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #edf2f7;
+}
+
+/* Zone Upload */
+.file-upload-container {
+  border: 2px dashed #e2e8f0;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  background: #f8fafc;
+  transition: var(--transition-lux);
+}
+.file-upload-container.has-file { background: #f0fff4; border-color: #48bb78; }
+.file-upload-label { cursor: pointer; color: var(--primary-blue); font-weight: 800; font-size: 0.8rem; }
+.file-upload-hint { font-size: 0.7rem; color: #64748b; margin-top: 0.5rem; }
+
+.verification-note { font-size: 0.85rem; color: #64748b; font-style: italic; margin-top: 1rem; }
+
+/* Groupe de boutons */
+.auth-actions-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.auth-btn-back {
+  flex: 1;
+  background: #e2e8f0;
+  color: #475569;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* --- AJUSTEMENTS RESPONSIVE --- */
+@media (max-width: 968px) {
+  .auth-container { padding: 1rem; }
+  
+  .auth-card {
+    grid-template-columns: 1fr; /* Une seule colonne */
+    max-width: 550px;
+    border-radius: 1rem;
+  }
+
+  .auth-card__left { display: none; } /* On cache le visuel sur mobile */
+
+  .auth-card__right {
+    padding: 2rem 1.5rem;
+  }
+
+  .form-row-2 {
+    grid-template-columns: 1fr; /* On empile les champs sur mobile */
+    gap: 0;
+  }
+
+  .auth-visual__main-text h1 { font-size: 1.8rem; }
+}
+
+@media (max-width: 480px) {
+  .auth-form__header h2 { font-size: 1.5rem; }
+  .auth-submit-btn { font-size: 0.85rem; padding: 0.8rem; }
+  .location-box-wrapper { padding: 0.8rem; }
+}
+/* --- 2. CONTENEUR & CARTE (CORRIGÉ) --- */
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem; /* Moins de padding autour */
+  background: radial-gradient(circle at top right, rgba(217, 180, 143, 0.05), transparent),
+              var(--dark-blue);
+}
+
+.auth-card {
+  width: 100%;
+  /* RÉDUCTION RADICALE ICI */
+  max-width: 850px; 
+  background: var(--white);
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr; /* On équilibre les deux côtés */
+  border-radius: 1.2rem;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* --- 3. SECTION GAUCHE (PLUS COMPACTE) --- */
+
+
+.auth-visual__content h1 {
+  font-size: 1.8rem; /* Plus petit */
+}
+
+.auth-visual__content p {
+  font-size: 0.95rem; /* Plus petit */
+}
+
+/* --- 4. SECTION DROITE (PLUS COMPACTE) --- */
+.auth-card__right {
+  padding: 2rem 2.5rem; /* Réduit de 3.5rem à 2.5rem */
+  background: var(--white);
+}
+
+.auth-form__header {
+  margin-bottom: 1.2rem;
+}
+
+.auth-form__header h2 {
+  font-size: 1.5rem; /* Plus compact */
+}
+
+/* --- 5. INPUTS & GROUPES (RESSERRÉS) --- */
+.form-group {
+  margin-bottom: 0.7rem; /* Réduit l'espace vertical */
+}
+
+.form-group label {
+  font-size: 0.7rem; /* Plus discret */
+  margin-bottom: 0.3rem;
+}
+
+.form-group input, 
+.form-group select {
+  padding: 0.65rem 0.9rem; /* Inputs moins hauts */
+  font-size: 0.9rem;
+}
+
+/* --- LOCATION SELECTOR COMPACT --- */
+.location-box-wrapper {
+  margin-top: 0.5rem;
+  padding: 0.8rem; /* Réduit de 1.2rem */
+  gap: 0.5rem;
+}
+
+/* --- BOUTONS --- */
+.auth-submit-btn {
+  padding: 0.8rem; /* Moins massif */
+  font-size: 0.85rem;
+}
+
+/* --- RESPONSIVE MOBILE (CORRIGÉ) --- */
+@media (max-width: 968px) {
+  .auth-card {
+    grid-template-columns: 1fr;
+    max-width: 420px; /* Largeur de carte mobile idéale */
+  }
+  
+  .auth-card__right {
+    padding: 1.5rem;
+  }
+}
+/* --- OPTIMISATION COMPACTE MOBILE --- */
+@media (max-width: 968px) {
+  .auth-container {
+    padding: 0.2rem; /* Moins d'espace autour de la carte */
+  }
+
+  .auth-card {
+    grid-template-columns: 1fr;
+    max-width: 380px; /* RÉDUCTION : Largeur plus étroite pour mobile */
+    border-radius: 1rem; /* Arrondi plus petit pour plus de place */
+  }
+  
+  .auth-card__right {
+    padding: 1.1rem 1.3rem; /* RÉDUCTION : Moins de vide sur les côtés */
+  }
+
+  .auth-form__header {
+    margin-bottom: 1rem; /* Resserre le titre vers le haut */
+    text-align: center;
+  }
+
+  .auth-form__header h2 {
+    font-size: 1.3rem; /* Titre plus petit */
+  }
+
+  .auth-form__header p {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Resserre encore plus les champs */
+  .form-group {
+    margin-bottom: 0.6rem;
+  }
+
+  .form-group input {
+    padding: 0.6rem 0.8rem; /* Champs plus fins */
+    font-size: 0.85rem;
+  }
+
+  .location-box-wrapper {
+    padding: 0.7rem; /* Sélecteur de wilaya plus serré */
+    margin-top: 0.2rem;
+  }
+
+  .auth-actions-group {
+    margin-top: 1rem;
+    gap: 0.6rem; /* Boutons plus proches */
+  }
+
+  .auth-submit-btn {
+    padding: 0.7rem; /* Bouton moins haut */
+    font-size: 0.8rem;
+  }
+
+  /* Zone d'upload document plus compacte */
+  .file-upload-container {
+    padding: 1.2rem;
+  }
+}
+
+/* --- OPTIMISATION ÉCRANS TRÈS PETITS --- */
+@media (max-width: 400px) {
+  .auth-card {
+    max-width: 100%; /* Prend toute la largeur disponible sans dépasser */
+  }
+  
+  .auth-card__right {
+    padding: 1rem;
+  }
+}
+/* --- COMPORTEMENT DE LA SECTION GAUCHE SUR MOBILE --- */
+@media (max-width: 968px) {
+  .auth-card {
+    grid-template-columns: 1fr; /* Une seule colonne */
+    max-width: 400px;
+  }
+
+  /* On ne cache plus la section, on la transforme en bandeau supérieur */
+ 
+
+  .auth-visual__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Réduction massive du logo et des marges pour sauver de l'espace */
+  .auth-logo h1 {
+    font-size: 1.4rem !important; 
+    margin: 0 !important;
+  }
+
+  /* Le bloc "Ravis de vous revoir" devient très discret sur mobile */
+  .auth-visual__content div[style*="margin-top: 2.5rem"] {
+    margin-top: 0.5rem !important; /* On réduit le 2.5rem à 0.5rem */
+  }
+
+  .auth-visual__content div h1 {
+    font-size: 1.1rem !important; /* Titre plus petit */
+    margin-bottom: 0.2rem !important;
+  }
+
+  .auth-visual__content p {
+    font-size: 0.8rem !important; /* Texte de description petit */
+    line-height: 1.3;
+    max-width: 280px;
+    margin: 0 auto;
+    opacity: 0.7;
+  }
+
+  /* On cache le footer copyright sur mobile pour gagner de la hauteur */
+  .auth-visual__footer {
+    display: none; 
+  }
+}
+
+/* --- OPTIMISATION ÉCRANS TRÈS PETITS --- */
+@media (max-width: 480px) {
+  .auth-card__left {
+    padding: 1rem !important;
+  }
+  
+  /* Sur très petit écran, on peut même cacher le paragraphe pour ne garder que le logo et le titre */
+  .auth-visual__content p {
+    display: none; 
+  }
+}
+/* Rendre le sélecteur de localisation ultra-compact */
+.location-box-wrapper .location-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Met Wilaya et Commune sur la même ligne */
+  gap: 0.8rem; /* Espace entre les deux */
+}
+
+/* Si vous avez un champ Quartier en dessous, il prendra toute la largeur */
+.location-box-wrapper .location-selector .form-group:last-child {
+  grid-column: span 2; 
+}
+
+/* Réduction drastique des marges internes du sélecteur */
+.location-box-wrapper .form-group {
+  margin-bottom: 0.3rem !important;
+}
+
+.location-box-wrapper label {
+  font-size: 0.6rem !important; /* Labels encore plus petits */
+  margin-bottom: 0.1rem !important;
+}
+
+.location-box-wrapper select {
+  padding: 0.4rem 0.6rem !important; /* Sélecteurs très fins */
+  font-size: 0.8rem !important;
+  height: auto !important;
+}

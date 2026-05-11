@@ -61,21 +61,23 @@ export default function MyListingsPage() {
   return (
     <div className="provider-page">
       <div className="provider-page__header-row">
-        <div>
+        <div className="header-text-group">
           <h1>Mes Annonces</h1>
-          <p className="provider-page__subtitle">{listings.length} annonce{listings.length !== 1 ? 's' : ''}</p>
+          <p className="provider-page__subtitle">
+            {listings.length} annonce{listings.length !== 1 ? 's' : ''}
+          </p>
         </div>
         <button 
-          className="btn btn-primary"
+          className="btn-new-listing"
           onClick={() => navigate('/provider/post')}
         >
-          + Nouvelle annonce
+          <span className="plus-icon">+</span> Nouvelle annonce
         </button>
       </div>
 
       {loading ? (
-        <div className="provider-card" style={{ textAlign: 'center', padding: '3rem' }}>
-          <p>Chargement...</p>
+        <div className="provider-card loading-state">
+          <p>Chargement de vos biens...</p>
         </div>
       ) : listings.length === 0 ? (
         <EmptyState
@@ -86,53 +88,58 @@ export default function MyListingsPage() {
           onAction={() => navigate('/provider/post')}
         />
       ) : (
-        <div className="provider-listings-table">
-          <table>
+        <div className="provider-listings-container">
+          <table className="responsive-table">
             <thead>
               <tr>
-                <th>Titre</th>
+                <th>Annonce</th>
                 <th>Localisation</th>
                 <th>Prix</th>
                 <th>Statut</th>
                 <th>Date</th>
-                <th>Actions</th>
+                <th className="text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {listings.map((listing) => (
-                  <tr key={listing.id}>
-                    <td className="provider-listings-table__title">{listing.title}</td>
-                    <td>{listing.wilaya}, {listing.commune}</td>
-                    <td>{formatPrice(listing.price)}</td>
-                    <td>
-                      <StatusBadge status={listing.status} type="listing" />
-                    </td>
-                    <td>{new Date(listing.createdAt).toLocaleDateString('fr-FR')}</td>
-                    <td>
-                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                        {listing.status === 'DRAFT' && (
-                          <button
-                            className={`btn btn-sm btn-primary ${!isValidated ? 'btn--disabled' : ''}`}
-                            onClick={() => isValidated && handlePublish(listing.id)}
-                            disabled={!isValidated}
-                            style={{ padding: '0.25rem 0.75rem', fontSize: '0.75rem' }}
-                            title={!isValidated ? 'Validation requise' : ''}
-                          >
-                            Publier
-                          </button>
-                        )}
+                <tr key={listing.id}>
+                  <td data-label="Annonce" className="td-title-main">
+                    <strong>{listing.title}</strong>
+                  </td>
+                  <td data-label="Localisation">
+                    {listing.wilaya}, {listing.commune}
+                  </td>
+                  <td data-label="Prix" className="td-price">
+                    {formatPrice(listing.price)}
+                  </td>
+                  <td data-label="Statut">
+                    <StatusBadge status={listing.status} type="listing" />
+                  </td>
+                  <td data-label="Date">
+                    {new Date(listing.createdAt).toLocaleDateString('fr-FR')}
+                  </td>
+                  <td data-label="Actions" className="td-actions">
+                    <div className="action-flex">
+                      {listing.status === 'DRAFT' && (
                         <button
-                          className="btn btn-sm"
-                          style={{ color: 'var(--color-danger)', border: 'none', background: 'transparent' }}
-                          onClick={() => handleDelete(listing.id)}
-                          title="Supprimer"
+                          className={`btn-publish-sm ${!isValidated ? 'disabled' : ''}`}
+                          onClick={() => isValidated && handlePublish(listing.id)}
+                          disabled={!isValidated}
                         >
-                          🗑️
+                          Publier
                         </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      )}
+                      <button
+                        className="btn-delete-icon"
+                        onClick={() => handleDelete(listing.id)}
+                        title="Supprimer"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

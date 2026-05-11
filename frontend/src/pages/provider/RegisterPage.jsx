@@ -20,7 +20,6 @@ export default function RegisterPage() {
   const [documentFile, setDocumentFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Redirection automatique si déjà connecté
   useEffect(() => {
     if (user) {
       const target = user.userType === 'ADMIN' ? '/admin/dashboard' : '/provider/listings';
@@ -83,7 +82,6 @@ export default function RegisterPage() {
 
       const res = await register(data);
       showToast({ type: 'success', message: res.message || 'Inscription réussie !' });
-      
       const from = location.state?.from?.pathname || null;
       await login(formData.email, formData.password, from);
     } catch (err) {
@@ -99,119 +97,111 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card register-card">
-        
-        {/* Côté Gauche - Branding */}
-        <div className="auth-card__left">
-          <div className="auth-visual__content">
-            <Link to="/" className="auth-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <h1>Immo<span style={{ color: '#D9B48F' }}>Lamis</span></h1>
-            </Link>
-            <div style={{ marginTop: '2.5rem' }}>
-              <h1>Devenez Partenaire</h1>
-              <p>Rejoignez le premier réseau immobilier et gérez vos biens avec des outils professionnels.</p>
-            </div>
-          </div>
-          <div className="auth-visual__footer">
-            Propulsé par CH-PUB
+  <div className="auth-container">
+    {/* Ajout d'une classe spécifique register-card pour plus de contrôle */}
+    <div className="auth-card register-card">
+      
+      <div className="auth-card__left">
+        <div className="auth-visual__content">
+          <Link to="/" className="auth-logo">
+            <h1>Immo<span className="text-gold">Lamis</span></h1>
+          </Link>
+          {/* Réduction de la marge du haut de 2.5rem à 1.5rem */}
+          <div className="auth-visual__main-text" style={{ marginTop: '1.5rem' }}>
+            <h1>Devenez Partenaire</h1>
+            <p>Rejoignez le premier réseau immobilier de référence.</p>
           </div>
         </div>
+        <div className="auth-visual__footer">Propulsé par CH-PUB</div>
+      </div>
 
-        {/* Côté Droit - Formulaire */}
-        <div className="auth-card__right">
-          <form className="auth-form" onSubmit={(e) => { e.preventDefault(); step === 1 ? nextStep() : handleSubmit(e); }}>
-            <div className="auth-form__header">
-              <h2>Inscription</h2>
-              <p>Étape {step} sur 2 — Informations {step === 1 ? 'personnelles' : 'professionnelles'}</p>
-            </div>
+      <div className="auth-card__right">
+        <form className="auth-form" onSubmit={(e) => { e.preventDefault(); step === 1 ? nextStep() : handleSubmit(e); }}>
+          <div className="auth-form__header" style={{ marginBottom: '0.8rem' }}>
+            <h2 style={{ fontSize: '1.4rem' }}>Inscription</h2>
+            <p style={{ fontSize: '0.8rem' }}>Étape {step}/2 — {step === 1 ? 'Infos personnelles' : 'Documents'}</p>
+          </div>
 
-            {step === 1 ? (
-              <div className="auth-form__groups">
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  <div className="form-group">
-                    <label>Prénom</label>
-                    <input type="text" required placeholder="Ahmed" value={formData.firstName} onChange={update('firstName')} />
-                  </div>
-                  <div className="form-group">
-                    <label>Nom</label>
-                    <input type="text" required placeholder="Benali" value={formData.lastName} onChange={update('lastName')} />
-                  </div>
-                </div>
-
+          {step === 1 ? (
+            <div className="auth-form__groups">
+              {/* Utilisation de form-row-2 pour gagner de la hauteur */}
+              <div className="form-row-2">
                 <div className="form-group">
-                  <label>Email professionnel</label>
+                  <label>Prénom</label>
+                  <input type="text" required placeholder="Ahmed" value={formData.firstName} onChange={update('firstName')} />
+                </div>
+                <div className="form-group">
+                  <label>Nom</label>
+                  <input type="text" required placeholder="Benali" value={formData.lastName} onChange={update('lastName')} />
+                </div>
+              </div>
+
+              {/* Email et Password sur la même ligne pour gagner une ligne entière */}
+              <div className="form-row-2">
+                <div className="form-group">
+                  <label>Email</label>
                   <input type="email" required placeholder="contact@agence.com" value={formData.email} onChange={update('email')} />
-                  {errors.email && <span style={{ color: '#e53e3e', fontSize: '0.7rem' }}>{errors.email}</span>}
                 </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '1rem' }}>
-                  <div className="form-group">
-                    <label>Téléphone</label>
-                    <input type="tel" required placeholder="0555..." value={formData.phone} onChange={update('phone')} />
-                  </div>
-                  <div className="form-group">
-                    <label>Mot de passe</label>
-                    <input type="password" required placeholder="••••••••" value={formData.password} onChange={update('password')} />
-                  </div>
-                </div>
-
-                <div style={{ marginTop: '0.5rem', padding: '1rem', background: '#f8fafc', borderRadius: '12px', border: '1px solid #edf2f7' }}>
-                  <LocationSelector
-                    wilaya={formData.wilaya}
-                    commune={formData.commune}
-                    quartier={formData.quartier}
-                    onWilayaChange={(val) => update('wilaya')(val)}
-                    onCommuneChange={(val) => update('commune')(val)}
-                    onQuartierChange={(val) => update('quartier')(val)}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="auth-form__groups">
                 <div className="form-group">
-                  <label>Justificatif d'activité (PDF/Image)</label>
-                  <div className="file-upload-wrapper" style={{ 
-                    border: '2px dashed #e2e8f0', 
-                    padding: '2rem', 
-                    borderRadius: '12px', 
-                    textAlign: 'center',
-                    background: documentFile ? '#f0fff4' : '#f8fafc'
-                  }}>
-                    <input type="file" id="doc" accept=".pdf,.jpg,.jpeg,.png" onChange={handleFileChange} style={{ display: 'none' }} />
-                    <label htmlFor="doc" style={{ cursor: 'pointer', color: '#34657F', fontWeight: '800', fontSize: '0.8rem' }}>
-                      {documentFile ? `✅ ${documentFile.name}` : '📁 CLIQUER POUR AJOUTER UN DOCUMENT'}
-                    </label>
-                    <p style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '0.5rem' }}>Registre de commerce ou carte d'identité (Max 5Mo)</p>
-                  </div>
+                  <label>Mot de passe</label>
+                  <input type="password" required placeholder="••••••••" value={formData.password} onChange={update('password')} />
                 </div>
-                <p style={{ fontSize: '0.85rem', color: '#64748b', fontStyle: 'italic' }}>
-                  Note : Vos informations seront vérifiées par notre équipe administrative avant validation finale.
-                </p>
               </div>
-            )}
 
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-              {step === 2 && (
-                <button type="button" className="auth-submit-btn" onClick={() => setStep(1)} 
-                  style={{ background: '#e2e8f0', color: '#475569', flex: 1 }}>
-                  Retour
-                </button>
-              )}
-              <button type="submit" className="auth-submit-btn" disabled={loading} style={{ flex: 2 }}>
-                {loading ? "Chargement..." : step === 1 ? 'Continuer →' : 'Créer mon compte'}
-              </button>
+              {/* Téléphone seul ou avec un autre champ */}
+              <div className="form-group">
+                <label>Téléphone</label>
+                <input type="tel" required placeholder="0555..." value={formData.phone} onChange={update('phone')} />
+              </div>
+
+              {/* Le LocationSelector est souvent le plus grand, on réduit son wrapper */}
+              <div className="location-box-wrapper" style={{ padding: '0.5rem', marginTop: '0.2rem' }}>
+                <LocationSelector
+                  wilaya={formData.wilaya}
+                  commune={formData.commune}
+                  quartier={formData.quartier}
+                  onWilayaChange={(val) => update('wilaya')(val)}
+                  onCommuneChange={(val) => update('commune')(val)}
+                  onQuartierChange={(val) => update('quartier')(val)}
+                />
+              </div>
             </div>
-
-            <div className="auth-form__footer" style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-              <p style={{ color: '#64748b', fontSize: '0.9rem' }}>
-                Déjà partenaire ? <Link to="/login" style={{ color: '#D9B48F', fontWeight: '700', textDecoration: 'none' }}>Se connecter</Link>
+          ) : (
+            <div className="auth-form__groups">
+              <div className="form-group">
+                <label>Justificatif d'activité</label>
+                {/* On réduit le padding du container d'upload */}
+                <div className={`file-upload-container ${documentFile ? 'has-file' : ''}`} style={{ padding: '1rem' }}>
+                  <input type="file" id="doc" accept=".pdf,.jpg,.jpeg,.png" onChange={handleFileChange} style={{ display: 'none' }} />
+                  <label htmlFor="doc" className="file-upload-label" style={{ fontSize: '0.75rem' }}>
+                    {documentFile ? `✅ ${documentFile.name}` : '📁 CLIQUEZ ICI'}
+                  </label>
+                </div>
+              </div>
+              <p className="verification-note" style={{ fontSize: '0.7rem', marginTop: '0.5rem' }}>
+                Note : Vérification par notre équipe avant validation.
               </p>
             </div>
-          </form>
-        </div>
+          )}
 
+          {/* Actions resserrées */}
+          <div className="auth-actions-group" style={{ marginTop: '1rem', gap: '0.5rem' }}>
+            {step === 2 && (
+              <button type="button" className="auth-btn-back" onClick={() => setStep(1)} style={{ padding: '0.6rem' }}>
+                Retour
+              </button>
+            )}
+            <button type="submit" className="auth-submit-btn" disabled={loading} style={{ padding: '0.7rem' }}>
+              {loading ? "..." : step === 1 ? 'Continuer' : 'Créer mon compte'}
+            </button>
+          </div>
+
+          <div className="auth-form__footer" style={{ marginTop: '0.8rem' }}>
+            <p style={{ fontSize: '0.8rem' }}>Déjà partenaire ? <Link to="/login" className="link-gold">Se connecter</Link></p>
+          </div>
+        </form>
       </div>
     </div>
-  );
+  </div>
+);
 }

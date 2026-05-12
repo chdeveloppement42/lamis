@@ -117,6 +117,7 @@ export default function PublicLayout() {
             <Link to="/login">Connexion</Link>
             
           </div>
+          </div>
          <div className="footer__links">
   <h4>Contact</h4>
   

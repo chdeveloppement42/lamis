@@ -1,7 +1,7 @@
 /* --- VARIABLES UNIFIÉES --- */
 
 :root {
-  --aymen-bg: #162b3a; 
+  --aymen-bg: #1a3142; 
   --aymen-gold: #D9B48F;
   --aymen-gold-low: rgba(217, 180, 143, 0.2);
   --white: #FFFFFF;
@@ -50,15 +50,18 @@
 
 /* --- LAYOUT GRID --- */
 
+
 .services-layout {
   display: grid;
   grid-template-columns: 320px 1fr;
   gap: 40px;
-  padding: 60px 20px;
+  /* On force une marge extérieure imposante */
+  margin-top: 80px !important; 
+  padding: 40px 20px;
   max-width: 1400px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
-
 
 /* --- FILTRES (SIDEBAR) --- */
 
@@ -70,7 +73,7 @@
   backdrop-filter: blur(10px);
   height: fit-content;
   position: sticky;
-  top: 100px;
+  top: 120px;
 }
 
 .filter-title-luxe {
@@ -290,7 +293,7 @@
   .services-layout {
     grid-template-columns: 1fr;
     gap: 20px;
-    padding: 30px 14px;
+    padding: 40px 14px;
   }
 
   .filters-sidebar {

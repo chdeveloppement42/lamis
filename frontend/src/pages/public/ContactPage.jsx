@@ -6,16 +6,51 @@ import 'aos/dist/aos.css';
 import './ContactPage.css';
 
 const FAQ_CONTENT = {
-  acheteur: [
-    { q: "Comment planifier une visite ?", a: "Cliquez sur 'Contacter l'agent' sur l'annonce du bien. Vous pourrez choisir un créneau horaire directement." },
-    { q: "Y a-t-il des frais de dossier ?", a: "La consultation et la mise en relation sur Immo Lamis sont entièrement gratuites pour les acheteurs." },
-    { q: "Les prix sont-ils négociables ?", a: "Oui, la plupart des vendeurs acceptent la négociation. Nous vous conseillons d'en discuter lors de la visite." }
+ acheteur: [
+    { 
+      q: "Dois-je créer un compte pour contacter un vendeur ?", 
+      a: "Non, aucun compte n'est requis. Vous pouvez accéder directement au numéro de téléphone du vendeur ou lui envoyer un message via WhatsApp en un clic." 
+    },
+    { 
+      q: "Comment prendre rendez-vous pour une visite ?", 
+      a: "Il suffit de cliquer sur le bouton 'Appeler' ou l'icône WhatsApp sur l'annonce du bien pour discuter directement avec le propriétaire ou l'agent." 
+    },
+    { 
+      q: "Est-ce que le service est gratuit pour moi ?", 
+      a: "Oui, la consultation des annonces et la mise en relation directe avec les offreurs sont 100% gratuites et sans intermédiaire." 
+    },
+    { 
+      q: "Comment savoir si le vendeur est fiable ?", 
+      a: "Nous vérifions manuellement les coordonnées des annonceurs. Privilégiez les profils avec le badge 'Vérifié' pour une sécurité optimale." 
+    }
   ],
   fournisseur: [
-    { q: "Comment publier mon catalogue ?", a: "Créez un compte 'Partenaire', remplissez votre profil entreprise et commencez à uploader vos produits." },
-    { q: "Quelle est la visibilité de mes annonces ?", a: "Vos annonces sont diffusées auprès de milliers de visiteurs ciblés en Algérie chaque jour." },
-    { q: "Puis-je modifier une annonce publiée ?", a: "Absolument. Votre tableau de bord vous permet de modifier prix et photos en temps réel." }
-  ]
+    { 
+      q: "Comment les clients vont-ils me contacter ?", 
+      a: "Les clients vous contactent directement sur votre numéro de téléphone ou votre WhatsApp. Vous recevez des prospects qualifiés sans intermédiaire." 
+    },
+    { 
+      q: "Dois-je obligatoirement avoir WhatsApp ?", 
+      a: "Ce n'est pas obligatoire mais fortement recommandé pour faciliter les échanges rapides et l'envoi de photos supplémentaires aux clients." 
+    },
+    { 
+      q: "Comment publier mes annonces ?", 
+      a: "Pour vous, la création d'un compte partenaire est nécessaire afin de gérer votre catalogue, modifier vos prix et suivre vos statistiques de vues." 
+    },
+    { 
+      q: "Comment s'inscrire en tant que vendeur ?", 
+      a: "Remplissez le formulaire d'inscription Partenaire. Après avoir choisi votre pack et effectué le paiement, un administrateur vous contactera pour valider votre identité et activer votre compte." 
+    },
+    { 
+      q: "Quelles sont les étapes pour commencer à publier ?", 
+      a: "1. Inscription en ligne. 2. Paiement de l'abonnement. 3. Appel de validation de l'administrateur sous 24h. 4. Mise en ligne de vos annonces." 
+    },
+    { 
+      q: "Pourquoi l'accès vendeur est-il payant ?", 
+      a: "Le paiement garantit le sérieux de nos partenaires. Cela nous permet de maintenir une plateforme haut de gamme, sans publicité intrusive et sans fausses annonces pour vos futurs clients." 
+    }
+    ]
+
 };
 
 export default function ContactPage() {

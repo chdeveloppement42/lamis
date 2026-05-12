@@ -2,7 +2,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './PublicLayout.css';
-
+import { MessageCircle } from 'lucide-react';
 export default function PublicLayout() {
   const { user } = useAuth();
   const location = useLocation();
@@ -117,12 +117,29 @@ export default function PublicLayout() {
             <Link to="/login">Connexion</Link>
             
           </div>
-          <div className="footer__links">
-            <h4>Contact</h4>
-            <span>📍 Alger, Algérie</span>
-            <span>📞 +213 (0) 555 00 00 00</span>
-          </div>
-        </div>
+         <div className="footer__links">
+  <h4>Contact</h4>
+  
+  <div className="footer__item">
+    📍 Oran, Algérie
+  </div>
+  
+  <a href="tel:+213555000000" className="footer__item footer__contact-link">
+    📞 +213 (0) 555 00 00 00
+  </a>
+
+  <a 
+    href="https://wa.me/213555000000" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    className="footer__item whatsapp-footer-link"
+  >
+    <div className="whatsapp-icon-wrapper">
+      <MessageCircle size={16} fill="currentColor" />
+    </div>
+    <span>WhatsApp</span>
+  </a>
+</div>
         <div className="footer__bottom">
           <div className="footer__bottom-content">
             <p>&copy; 2026 Immo Lamis. Tous droits réservés.</p>

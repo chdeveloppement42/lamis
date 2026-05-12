@@ -31,7 +31,8 @@ export default function LandingPage() {
     { url: '/appartement.png' },
     { url: '/villa.png' },
     { url: '/entrop.png' },
-    { url: '/terrain.png' }
+    { url: '/bureau.png' },
+    { url: '/local.png' }
   ];
 
   const scroll = (ref, direction) => {
@@ -65,6 +66,7 @@ export default function LandingPage() {
       {/* --- HERO SECTION --- */}
       {/* --- HERO SECTION PRESTIGE --- */}
 {/* --- HERO SECTION PRESTIGE IMMO LAMIS --- */}
+
 <section className="hero-full">
   {/* Fond avec Slider et Overlay Sombre */}
   <div className="hero-slider">
@@ -91,17 +93,16 @@ export default function LandingPage() {
     {/* Sous-titre avec lignes de séparation fines */}
     <div className="hero-subtitle-wrapper" data-aos="fade-up" data-aos-delay="400">
       <div className="line-prestige"></div>
-      <h2 className="hero-subtitle-italique">L'Excellence Immobilière à Alger</h2>
+      <h2 className="hero-subtitle-italique">Votre Vitrine de Prestige en Algérie</h2>
       <div className="line-prestige"></div>
     </div>
 
     {/* Description Narrative centrée */}
+   
     <p className="hero-long-desc" data-aos="fade-up" data-aos-delay="600">
-      Bienvenue chez <span className="gold-highlight">IMMOLAMIS</span>, votre partenaire de confiance dédié à l’immobilier d’exception. 
-      Nous transcendons la simple transaction pour vous offrir une expérience sur mesure, 
-      alliant <span className="text-white-bold">rigueur juridique</span> et <span className="text-white-bold">art de vivre inégalé</span> au cœur de la capitale.
+      Que vous soyez un <span className="gold-highlight">propriétaire exigeant</span> souhaitant valoriser son bien ou un <span className="gold-highlight">acquéreur</span> en quête d'exception, ImmoLamis simplifie votre projet. 
+      Villas, appartements ou terrains : accédez à une mise en relation <span className="text-white-bold">directe, transparente et sécurisée</span>.
     </p>
-
     {/* Bouton d'Action Haute Performance */}
     <div className="hero-actions" data-aos="fade-up" data-aos-delay="800">
       <Link to="/services" className="btn-discover-gold">
@@ -125,15 +126,17 @@ export default function LandingPage() {
             <p className="cursive-accent">L'Engagement</p>
             <h2 className="massive-title">L'EXCELLENCE IMMO <span className="beige-text">LAMIS</span></h2>
             <p className="header-description">
-              Nous redéfinissons les standards de l'immobilier algérois à travers une approche holistique où chaque détail compte, garantissant une tranquillité d'esprit absolue.
+             Nous redéfinissons les standards de la mise en relation immobilière à travers une plateforme où chaque annonce est rigoureusement validée.
             </p>
             <div className="title-underline-centered"></div>
           </div>
           <div className="why-grid-aymen">
             {[
-              { icon: <ShieldCheck size={35}/>, title: "SÉRÉNITÉ TOTALE", desc: "Audit juridique rigoureux pour vos investissements." },
-              { icon: <MapPin size={35}/>, title: "ADRESSES D'EXCEPTION", desc: "Emplacements stratégiques et prestigieux." },
-              { icon: <Headphones size={35}/>, title: "CONCIERGERIE", desc: "Accompagnement VIP 7j/7 personnalisé." }
+              { icon: <ShieldCheck size={35}/>, title: "ANNONCES VÉRIFIÉES", desc: "Chaque bien est audité par nos modérateurs avant publication pour garantir une sérénité totale."},
+              { icon: <MapPin size={35}/>, title: "VISIBILITÉ PREMIUM", 
+          desc: "Une vitrine de haut standing pour sublimer vos villas, terrains et locaux commerciaux."},
+              { icon: <Headphones size={35}/>, title: "CONTACT DIRECT", 
+          desc: "Pas d'intermédiaires inutiles. Contactez le fournisseur directement sur son numéro vérifié." }
             ].map((item, idx) => (
               <div className="why-card-aymen" key={idx} data-aos="fade-up" data-aos-delay={idx * 200}>
                 <div className="why-icon-luxe">{item.icon}</div>
@@ -216,7 +219,48 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+{/* --- SECTION TÉMOIGNAGES --- */}
+<section className="unified-section testimonials-prestige">
+  <div className="container">
+    <div className="section-header-large" data-aos="fade-up">
+      <p className="cursive-accent">Confiance</p>
+      <h2 className="massive-title">ILS NOUS ONT <span className="gold-text-brand">CHOISIS</span></h2>
+      <div className="title-underline-centered"></div>
+    </div>
 
+    <div className="testimonials-grid" data-aos="fade-up">
+      {[
+        { 
+          name: "Karim Benali", role: "Acquéreur", 
+          text: "J'ai trouvé ma villa à Hydra en quelques clics. Le contact direct avec le propriétaire a facilité toute la transaction.",
+          initials: "KB"
+        },
+        { 
+          name: "Sonia Hamidi", role: "Propriétaire", 
+          text: "En publiant sur ImmoLamis, j'ai reçu uniquement des appels qualifiés. Mon appartement a été loué en une semaine.",
+          initials: "SH"
+        },
+        { 
+          name: "Amine Touati", role: "Promoteur Pro", 
+          text: "La plateforme idéale pour valoriser mes locaux commerciaux et bureaux. Le rendu visuel est simplement impeccable.",
+          initials: "AT"
+        }
+      ].map((t, i) => (
+        <div className="testimonial-card-luxe" key={i}>
+          <div className="quote-icon">"</div>
+          <p className="testimonial-text">« {t.text} »</p>
+          <div className="testimonial-author">
+            <div className="author-avatar">{t.initials}</div>
+            <div className="author-info">
+              <h4>{t.name}</h4>
+              <span>{t.role}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
      <section className="unified-section luxe-form-section">
   <div className="container">
     <div className="section-header-large" data-aos="fade-up">

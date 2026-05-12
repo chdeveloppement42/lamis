@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Playfair+Display:ital,wght@1,600&display=swap');
 
 :root {
-  --immo-bg: #162b3a; 
+  --immo-bg: #1a3142; 
   --immo-gold: #D9B48F;
   --white: #FFFFFF;
   --glass: rgba(255, 255, 255, 0.03);
@@ -785,7 +785,141 @@
     gap: 0; /* Gap géré par le margin-bottom des groups */
   }
 }
+/* --- SECTION TÉMOIGNAGES --- */
+.testimonials-prestige {
+  background: linear-gradient(to bottom, var(--immo-bg), #0d1b25);
+}
 
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.testimonial-card-luxe {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(217, 180, 143, 0.1);
+  padding: 40px;
+  border-radius: 4px;
+  position: relative;
+  transition: var(--transition);
+}
+
+.testimonial-card-luxe:hover {
+  transform: translateY(-10px);
+  border-color: var(--immo-gold);
+  background: rgba(217, 180, 143, 0.03);
+}
+
+.quote-icon {
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem;
+  color: var(--immo-gold);
+  opacity: 0.2;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+}
+
+.testimonial-text {
+  font-style: italic;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 20px;
+}
+
+.author-avatar {
+  width: 45px;
+  height: 45px;
+  background: var(--immo-gold);
+  color: var(--immo-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.author-info h4 {
+  font-size: 1rem;
+  margin: 0;
+  color: var(--white);
+}
+
+.author-info span {
+  font-size: 0.8rem;
+  color: var(--immo-gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+/* --- OPTIMISATION DU PARAGRAPHE HERO --- */
+.hero-long-desc {
+  font-size: clamp(1rem, 2.2vw, 1.25rem); /* Taille adaptative légèrement plus grande */
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.95); /* Blanc quasi pur pour la lisibilité */
+  font-weight: 400; /* Un peu plus épais que 300 pour éviter l'effet "invisible" */
+  margin: 35px auto;
+  max-width: 850px;
+  letter-spacing: 0.5px;
+  
+  /* Ombre portée subtile pour détacher le texte du fond (fond clair ou sombre) */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 
+               0 1px 3px rgba(0, 0, 0, 0.3);
+  
+  /* Optionnel : un léger fond sombre très diffus pour garantir le contraste */
+  background: radial-gradient(circle, rgba(20, 40, 54, 0.4) 0%, transparent 80%);
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+/* --- MISE EN VALEUR DES MOTS CLÉS --- */
+.gold-highlight {
+  color: #D9B48F; /* Ta couleur Or ImmoLamis */
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.text-white-bold {
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(217, 180, 143, 0.4);
+  text-underline-offset: 4px;
+}
+
+/* --- AJUSTEMENT MOBILE --- */
+@media (max-width: 768px) {
+  .hero-long-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 0 15px;
+    background: none; /* On retire le fond diffus sur mobile pour plus de clarté */
+  }
+}
+/* Responsive Témoignages */
+@media (max-width: 992px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .testimonial-card-luxe {
+    padding: 30px;
+  }
+}
 @media (max-width: 480px) {
   .form-intro h3 {
     font-size: 1.5rem;

@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "0.0.1",
-  "description": "",
+  "description": "<p align=\"center\">\r   <a href=\"http://nestjs.com/\" target=\"blank\"><img src=\"https://nestjs.com/img/logo-small.svg\" width=\"120\" alt=\"Nest Logo\" /></a>\r </p>",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -37,6 +37,9 @@
     "class-validator": "^0.15.1",
     "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
     "form-data": "^4.0.5",
     "helmet": "^8.1.0",
     "joi": "^18.1.2",
@@ -105,5 +108,11 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "main": "create_db.js",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [],
+  "type": "commonjs"
 }

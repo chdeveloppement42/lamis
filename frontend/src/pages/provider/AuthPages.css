@@ -38,7 +38,7 @@ html, body {
 
 .auth-card {
   width: 100%;
-  max-width: 1050px;
+  max-width: 1000px;
   background: var(--white);
   display: grid;
   grid-template-columns: 1fr 1.2fr;
@@ -106,7 +106,7 @@ html, body {
 
 /* --- 5. INPUTS & LABELS --- */
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .form-group label {
@@ -281,82 +281,6 @@ html, body {
   .auth-submit-btn { font-size: 0.85rem; padding: 0.8rem; }
   .location-box-wrapper { padding: 0.8rem; }
 }
-/* --- 2. CONTENEUR & CARTE (CORRIGÉ) --- */
-.auth-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 1rem; /* Moins de padding autour */
-  background: radial-gradient(circle at top right, rgba(217, 180, 143, 0.05), transparent),
-              var(--dark-blue);
-}
-
-.auth-card {
-  width: 100%;
-  /* RÉDUCTION RADICALE ICI */
-  max-width: 850px; 
-  background: var(--white);
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr; /* On équilibre les deux côtés */
-  border-radius: 1.2rem;
-  overflow: hidden;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-}
-
-/* --- 3. SECTION GAUCHE (PLUS COMPACTE) --- */
-
-
-.auth-visual__content h1 {
-  font-size: 1.8rem; /* Plus petit */
-}
-
-.auth-visual__content p {
-  font-size: 0.95rem; /* Plus petit */
-}
-
-/* --- 4. SECTION DROITE (PLUS COMPACTE) --- */
-.auth-card__right {
-  padding: 2rem 2.5rem; /* Réduit de 3.5rem à 2.5rem */
-  background: var(--white);
-}
-
-.auth-form__header {
-  margin-bottom: 1.2rem;
-}
-
-.auth-form__header h2 {
-  font-size: 1.5rem; /* Plus compact */
-}
-
-/* --- 5. INPUTS & GROUPES (RESSERRÉS) --- */
-.form-group {
-  margin-bottom: 0.7rem; /* Réduit l'espace vertical */
-}
-
-.form-group label {
-  font-size: 0.7rem; /* Plus discret */
-  margin-bottom: 0.3rem;
-}
-
-.form-group input, 
-.form-group select {
-  padding: 0.65rem 0.9rem; /* Inputs moins hauts */
-  font-size: 0.9rem;
-}
-
-/* --- LOCATION SELECTOR COMPACT --- */
-.location-box-wrapper {
-  margin-top: 0.5rem;
-  padding: 0.8rem; /* Réduit de 1.2rem */
-  gap: 0.5rem;
-}
-
-/* --- BOUTONS --- */
-.auth-submit-btn {
-  padding: 0.8rem; /* Moins massif */
-  font-size: 0.85rem;
-}
 
 /* --- RESPONSIVE MOBILE (CORRIGÉ) --- */
 @media (max-width: 968px) {
@@ -523,4 +447,40 @@ html, body {
   padding: 0.4rem 0.6rem !important; /* Sélecteurs très fins */
   font-size: 0.8rem !important;
   height: auto !important;
+}
+/* Wrapper principal pour empiler Hero et Container */
+.auth-page-wrapper {
+  background-color: var(--dark-blue);
+  min-height: 100vh;
+}
+
+/* Ajustement du container pour qu'il ne prenne plus toute la hauteur (vh) 
+   puisqu'il y a le Hero au-dessus */
+.auth-container {
+  padding: 4rem 1.5rem; /* Un peu d'espace après le Hero */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Aligne la carte vers le haut */
+}
+
+/* On s'assure que le Hero garde son style Luxe */
+/* --- AUGMENTATION DE LA HAUTEUR DU HERO --- */
+.contact-hero-luxe {
+  /* Augmentez cette valeur selon votre besoin (ex: de 40vh à 60vh) */
+  height: 60vh; 
+  min-height: 450px; /* Assure une hauteur minimum sur les petits écrans */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Ajustement pour le responsive (Tablettes et Mobiles) */
+@media (max-width: 968px) {
+  .contact-hero-luxe {
+    height: 45vh; /* Hauteur un peu plus courte sur mobile pour voir le formulaire */
+    min-height: 350px;
+  }
 }

@@ -97,9 +97,18 @@ export default function RegisterPage() {
   };
 
   return (
+    <div className="auth-page-wrapper">
+      {/* SECTION IMAGE AU DÉBUT (HERO) */}
+      <section className="contact-hero-luxe">
+        <div className="hero-overlay-dark" style={{ backgroundImage: `url('/login.png')` }} />
+        <div className="container hero-content-luxe" data-aos="zoom-out">
+          <span className="gold-badge">Espace Partenaire</span>
+          <h1 className="massive-title">ACCÉDEZ À <span className="text-gold">VOTRE COMPTE</span></h1>
+        </div>
+      </section>
   <div className="auth-container">
     {/* Ajout d'une classe spécifique register-card pour plus de contrôle */}
-    <div className="auth-card register-card">
+    <div className="auth-card ">
       
       <div className="auth-card__left">
         <div className="auth-visual__content">
@@ -203,5 +212,6 @@ export default function RegisterPage() {
       </div>
     </div>
   </div>
+   </div>
 );
 }

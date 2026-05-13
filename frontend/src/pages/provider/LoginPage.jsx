@@ -41,6 +41,15 @@ export default function LoginPage() {
   };
 
   return (
+    <div className="auth-page-wrapper">
+      {/* SECTION IMAGE AU DÉBUT (HERO) */}
+      <section className="contact-hero-luxe">
+        <div className="hero-overlay-dark" style={{ backgroundImage: `url('/login.png')` }} />
+        <div className="container hero-content-luxe" data-aos="zoom-out">
+          <span className="gold-badge">Espace Partenaire</span>
+          <h1 className="massive-title">ACCÉDEZ À <span className="text-gold">VOTRE COMPTE</span></h1>
+        </div>
+      </section>
     <div className="auth-container">
       <div className="auth-card">
         
@@ -108,6 +117,7 @@ export default function LoginPage() {
         </div>
 
       </div>
+    </div>
     </div>
   );
 }

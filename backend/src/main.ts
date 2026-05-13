@@ -58,4 +58,8 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000);
 }
 
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Erreur lors du démarrage du serveur Immo Lamis :', err);
+  process.exit(1);
+});
+// Fix final pour le groupe CH-PUB

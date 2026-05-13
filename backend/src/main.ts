@@ -12,11 +12,12 @@ import helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
-  // Use Pino as the application logger (replaces the default NestJS logger)
+  // Utilise Pino pour les logs (remplace le logger par défaut de NestJS)
   app.useLogger(app.get(Logger));
 
   app.use(cookieParser());
 
+  // Configuration Helmet pour autoriser les ressources cross-origin (images, etc.)
   app.use(
     helmet({
       crossOriginResourcePolicy: { policy: 'cross-origin' },
@@ -33,12 +34,19 @@ async function bootstrap() {
     }),
   );
 
-  // CORS — in dev allow any localhost port, in prod restrict to FRONTEND_URL
+  // --- CONFIGURATION CORS CORRIGÉE ---
   const isDev = process.env.NODE_ENV !== 'production';
+
   app.enableCors({
-    origin: isDev ? /^http:\/\/localhost(:\d+)?$/ : process.env.FRONTEND_URL,
+    // Autorise localhost en dev et votre domaine Vercel en production
+    origin: isDev
+      ? /^http:\/\/localhost(:\d+)?$/
+      : 'https://lamis-project-notes.vercel.app',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
+    allowedHeaders: 'Content-Type, Accept, Authorization',
   });
+  // -----------------------------------
 
   const uploadDir = process.env.UPLOAD_DIR || './uploads';
   if (!fs.existsSync(uploadDir)) {
@@ -46,6 +54,7 @@ async function bootstrap() {
   }
   app.use('/api/uploads', express.static(path.join(process.cwd(), uploadDir)));
 
+  // Écoute sur le port fourni par Render ou 3000 par défaut
   await app.listen(process.env.PORT ?? 3000);
 }
 

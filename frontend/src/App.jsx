@@ -19,6 +19,10 @@ import ProfilePage from './pages/provider/ProfilePage';
 import PostListing from './pages/provider/PostListing';
 import MyListingsPage from './pages/provider/MyListingsPage';
 
+// Auth Pages
+import ForgotPasswordPage from './pages/public/ForgotPasswordPage';
+import ResetPasswordPage from './pages/public/ResetPasswordPage';
+
 // Admin Pages
 import Dashboard from './pages/admin/Dashboard';
 import ProvidersManager from './pages/admin/ProvidersManager';
@@ -44,11 +48,12 @@ function App() {
             <Route path="/listing/:id" element={<ListingDetail />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
-          
 
-          {/* STANDALONE AUTH ROUTES */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+            {/* STANDALONE AUTH ROUTES */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
           </Route>
           {/* PROVIDER ROUTES */}
           <Route path="/provider" element={<ProtectedRoute allowedUserTypes={['PROVIDER']} />}>

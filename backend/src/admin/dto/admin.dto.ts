@@ -1,4 +1,11 @@
-import { IsString, IsEmail, IsNotEmpty, IsNumber, IsOptional, MinLength } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  MinLength,
+} from 'class-validator';
 
 export class CreateAdminDto {
   @IsString()
@@ -14,7 +21,9 @@ export class CreateAdminDto {
   email: string;
 
   @IsString()
-  @MinLength(4, { message: 'Le mot de passe doit contenir au moins 4 caractères.' })
+  @MinLength(4, {
+    message: 'Le mot de passe doit contenir au moins 4 caractères.',
+  })
   password: string;
 
   @IsNumber()
@@ -38,7 +47,9 @@ export class UpdateAdminDto {
 
 export class ResetPasswordDto {
   @IsString()
-  @MinLength(4, { message: 'Le mot de passe doit contenir au moins 4 caractères.' })
+  @MinLength(4, {
+    message: 'Le mot de passe doit contenir au moins 4 caractères.',
+  })
   newPassword: string;
 }
 
@@ -48,7 +59,8 @@ export class ChangePasswordDto {
   currentPassword: string;
 
   @IsString()
-  @MinLength(4, { message: 'Le nouveau mot de passe doit contenir au moins 4 caractères.' })
+  @MinLength(4, {
+    message: 'Le nouveau mot de passe doit contenir au moins 4 caractères.',
+  })
   newPassword: string;
 }
-

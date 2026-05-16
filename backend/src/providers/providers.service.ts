@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AccountStatus } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
@@ -50,7 +54,9 @@ export class ProvidersService {
   async validate(id: number) {
     const provider = await this.findOne(id);
     if (provider.status !== 'PENDING') {
-      throw new BadRequestException('Seuls les comptes en attente peuvent être validés.');
+      throw new BadRequestException(
+        'Seuls les comptes en attente peuvent être validés.',
+      );
     }
     return this.prisma.provider.update({
       where: { id },
@@ -62,7 +68,9 @@ export class ProvidersService {
   async reject(id: number) {
     const provider = await this.findOne(id);
     if (provider.status !== 'PENDING') {
-      throw new BadRequestException('Seuls les comptes en attente peuvent être rejetés.');
+      throw new BadRequestException(
+        'Seuls les comptes en attente peuvent être rejetés.',
+      );
     }
     return this.prisma.provider.update({
       where: { id },
@@ -86,7 +94,9 @@ export class ProvidersService {
   async reactivate(id: number) {
     const provider = await this.findOne(id);
     if (provider.status !== 'SUSPENDED') {
-      throw new BadRequestException('Seuls les comptes suspendus peuvent être réactivés.');
+      throw new BadRequestException(
+        'Seuls les comptes suspendus peuvent être réactivés.',
+      );
     }
     return this.prisma.provider.update({
       where: { id },
@@ -120,7 +130,14 @@ export class ProvidersService {
   // ─── PROVIDER: Update own profile ──────────────────────────────
   async updateProfile(
     id: number,
-    data: { firstName?: string; lastName?: string; phone?: string; wilaya?: string; commune?: string; quartier?: string },
+    data: {
+      firstName?: string;
+      lastName?: string;
+      phone?: string;
+      wilaya?: string;
+      commune?: string;
+      quartier?: string;
+    },
   ) {
     await this.getOwnProfile(id);
     return this.prisma.provider.update({
@@ -169,10 +186,13 @@ export class ProvidersService {
     if (!provider) throw new NotFoundException('Fournisseur introuvable.');
 
     const isMatch = await bcrypt.compare(currentPassword, provider.password);
-    if (!isMatch) throw new BadRequestException('Mot de passe actuel incorrect.');
+    if (!isMatch)
+      throw new BadRequestException('Mot de passe actuel incorrect.');
 
     if (newPassword.length < 4) {
-      throw new BadRequestException('Le nouveau mot de passe doit contenir au moins 4 caractères.');
+      throw new BadRequestException(
+        'Le nouveau mot de passe doit contenir au moins 4 caractères.',
+      );
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);

@@ -1,4 +1,11 @@
-import { IsString, IsNumber, IsOptional, IsEnum, IsArray, Min } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsEnum,
+  IsArray,
+  Min,
+} from 'class-validator';
 import { ListingStatus, ListingType } from '@prisma/client';
 
 export class CreateListingDto {

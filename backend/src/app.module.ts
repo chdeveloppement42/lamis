@@ -34,7 +34,12 @@ import { envValidationSchema } from './config/env.validation';
         return {
           pinoHttp: {
             level: isDev ? 'debug' : 'info',
-            transport: isDev ? { target: 'pino-pretty', options: { colorize: true, singleLine: true } } : undefined,
+            transport: isDev
+              ? {
+                  target: 'pino-pretty',
+                  options: { colorize: true, singleLine: true },
+                }
+              : undefined,
             redact: ['req.headers.authorization', 'req.body.password'],
           },
         };

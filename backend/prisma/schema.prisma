@@ -97,8 +97,8 @@ model Listing {
   status      ListingStatus  @default(DRAFT)
   providerId  Int
   categoryId  Int
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   category    Category       @relation(fields: [categoryId], references: [id])
   provider    Provider       @relation(fields: [providerId], references: [id])
   images      ListingImage[]
@@ -129,6 +129,19 @@ model Notification {
   admin     Admin            @relation(fields: [adminId], references: [id])
 
   @@index([adminId, isRead])
+}
+
+model PasswordResetToken {
+  id          Int      @id @default(autoincrement())
+  userType    UserType
+  userId      Int
+  tokenHash   String   @unique
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  usedAt      DateTime?
+
+  @@index([userType, userId])
+  @@index([expiresAt])
 }
 
 enum NotificationType {

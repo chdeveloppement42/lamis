@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException, OnModuleInit, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  OnModuleInit,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -67,8 +72,13 @@ export class StorageService implements OnModuleInit {
 
       return this.saveToDisk(processed, webpFilename);
     } catch (error) {
-      this.logger.error(`saveWatermarked failed: ${(error as Error)?.message}`, (error as Error)?.stack);
-      throw new InternalServerErrorException("Erreur lors du traitement de l'image");
+      this.logger.error(
+        `saveWatermarked failed: ${(error as Error)?.message}`,
+        (error as Error)?.stack,
+      );
+      throw new InternalServerErrorException(
+        "Erreur lors du traitement de l'image",
+      );
     }
   }
 
@@ -81,10 +91,14 @@ export class StorageService implements OnModuleInit {
     const filePath = path.join(docDir, filename);
     try {
       await fs.promises.writeFile(filePath, buffer);
-      const publicPath = this.uploadDir.startsWith('.') ? this.uploadDir.substring(1) : this.uploadDir;
+      const publicPath = this.uploadDir.startsWith('.')
+        ? this.uploadDir.substring(1)
+        : this.uploadDir;
       return `${publicPath}/documents/${filename}`;
     } catch {
-      throw new InternalServerErrorException('Erreur lors de la sauvegarde du document');
+      throw new InternalServerErrorException(
+        'Erreur lors de la sauvegarde du document',
+      );
     }
   }
 
@@ -105,16 +119,22 @@ export class StorageService implements OnModuleInit {
   private async saveToDisk(buffer: Buffer, filename: string): Promise<string> {
     const filePath = path.join(this.uploadDir, filename);
     await fs.promises.writeFile(filePath, buffer);
-    const publicPath = this.uploadDir.startsWith('.') ? this.uploadDir.substring(1) : this.uploadDir;
+    const publicPath = this.uploadDir.startsWith('.')
+      ? this.uploadDir.substring(1)
+      : this.uploadDir;
     return `${publicPath}/${filename}`;
   }
 
-  private uploadToCloudinary(buffer: Buffer, publicId: string): Promise<string> {
+  private uploadToCloudinary(
+    buffer: Buffer,
+    publicId: string,
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         { public_id: publicId, resource_type: 'image', overwrite: true },
         (error: any, result: any) => {
-          if (error || !result) return reject(error ?? new Error('Cloudinary upload failed'));
+          if (error || !result)
+            return reject(error ?? new Error('Cloudinary upload failed'));
           resolve(result.secure_url);
         },
       );

@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable, ForbiddenException } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { CaslAbilityFactory } from './casl-ability.factory';
 import { PERMISSIONS_KEY, PermissionRule } from './permissions.decorator';
@@ -23,7 +28,7 @@ export class PermissionsGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const user: JwtPayload = request.user;
-    
+
     if (!user) {
       throw new ForbiddenException('Utilisateur non authentifié.');
     }
@@ -35,7 +40,9 @@ export class PermissionsGuard implements CanActivate {
     );
 
     if (!hasPermission) {
-      throw new ForbiddenException('Vous ne disposez pas des permissions requises pour cette action.');
+      throw new ForbiddenException(
+        'Vous ne disposez pas des permissions requises pour cette action.',
+      );
     }
 
     return true;

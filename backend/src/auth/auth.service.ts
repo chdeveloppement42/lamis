@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -28,7 +32,9 @@ export class AuthService {
 
     let user: any = await this.prisma.admin.findUnique({
       where: { email },
-      include: { role: { include: { permissions: { include: { permission: true } } } } },
+      include: {
+        role: { include: { permissions: { include: { permission: true } } } },
+      },
     });
     let userType: 'ADMIN' | 'PROVIDER' = 'ADMIN';
 
@@ -40,10 +46,13 @@ export class AuthService {
     if (!user) throw new UnauthorizedException('Identifiants invalides');
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) throw new UnauthorizedException('Identifiants invalides');
+    if (!isPasswordValid)
+      throw new UnauthorizedException('Identifiants invalides');
 
     if (userType === 'ADMIN' && user.status === 'SUSPENDED') {
-      throw new UnauthorizedException('Votre compte administrateur a été suspendu.');
+      throw new UnauthorizedException(
+        'Votre compte administrateur a été suspendu.',
+      );
     }
 
     const payload: JwtPayload = {
@@ -69,9 +78,10 @@ export class AuthService {
         status: user.status,
         roleName: userType === 'ADMIN' ? user.role.name : null,
         isSuperAdmin: userType === 'ADMIN' ? user.isSuperAdmin : false,
-        permissions: userType === 'ADMIN'
-          ? user.role.permissions.map((p: any) => p.permission.action)
-          : [],
+        permissions:
+          userType === 'ADMIN'
+            ? user.role.permissions.map((p: any) => p.permission.action)
+            : [],
       },
     };
   }
@@ -84,22 +94,43 @@ export class AuthService {
 
       // Strip JWT metadata fields before re-signing
       const { userId, email, userType, status, roleId } = payload;
-      const newPayload: JwtPayload = { userId, email, userType, status, roleId };
+      const newPayload: JwtPayload = {
+        userId,
+        email,
+        userType,
+        status,
+        roleId,
+      };
 
       const newAccessToken = this.jwtService.sign(newPayload);
       const newRefreshToken = this.signRefreshToken(newPayload);
 
       return { access_token: newAccessToken, refresh_token: newRefreshToken };
     } catch {
-      throw new UnauthorizedException('Session expirée. Veuillez vous reconnecter.');
+      throw new UnauthorizedException(
+        'Session expirée. Veuillez vous reconnecter.',
+      );
     }
   }
 
   async register(registerDto: RegisterDto, documentFile?: Express.Multer.File) {
-    const { firstName, lastName, email, password, phone, wilaya, commune, quartier } = registerDto;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      phone,
+      wilaya,
+      commune,
+      quartier,
+    } = registerDto;
 
-    const existingProvider = await this.prisma.provider.findUnique({ where: { email } });
-    const existingAdmin = await this.prisma.admin.findUnique({ where: { email } });
+    const existingProvider = await this.prisma.provider.findUnique({
+      where: { email },
+    });
+    const existingAdmin = await this.prisma.admin.findUnique({
+      where: { email },
+    });
 
     if (existingProvider || existingAdmin) {
       throw new BadRequestException('Cet email est déjà utilisé.');
@@ -110,7 +141,10 @@ export class AuthService {
     if (documentFile) {
       const extension = path.extname(documentFile.originalname) || '.pdf';
       const filename = `${uuidv4()}${extension}`;
-      finalDocumentUrl = await this.storageService.saveFile(documentFile.buffer, filename);
+      finalDocumentUrl = await this.storageService.saveFile(
+        documentFile.buffer,
+        filename,
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -136,7 +170,8 @@ export class AuthService {
     });
 
     return {
-      message: 'Compte créé avec succès. En attente de validation par un administrateur.',
+      message:
+        'Compte créé avec succès. En attente de validation par un administrateur.',
       providerId: provider.id,
     };
   }
@@ -144,7 +179,10 @@ export class AuthService {
   private signRefreshToken(payload: JwtPayload): string {
     return this.jwtService.sign(payload, {
       secret: this.config.getOrThrow<string>('JWT_REFRESH_SECRET'),
-      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d') as StringValue,
+      expiresIn: this.config.get<string>(
+        'JWT_REFRESH_EXPIRES_IN',
+        '7d',
+      ) as StringValue,
     });
   }
 }

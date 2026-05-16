@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
@@ -42,7 +47,13 @@ export class AdminService {
         createdById: true,
         createdAt: true,
         updatedAt: true,
-        role: { select: { id: true, name: true, permissions: { include: { permission: true } } } },
+        role: {
+          select: {
+            id: true,
+            name: true,
+            permissions: { include: { permission: true } },
+          },
+        },
         createdBy: { select: { id: true, firstName: true, lastName: true } },
       },
     });
@@ -62,7 +73,9 @@ export class AdminService {
     },
   ) {
     // Check email uniqueness
-    const existing = await this.prisma.admin.findUnique({ where: { email: data.email } });
+    const existing = await this.prisma.admin.findUnique({
+      where: { email: data.email },
+    });
     if (existing) throw new BadRequestException('Cet email est déjà utilisé');
 
     // Verify role exists and is not SuperAdmin role
@@ -71,20 +84,28 @@ export class AdminService {
       include: { permissions: { include: { permission: true } } },
     });
     if (!role) throw new NotFoundException('Rôle introuvable');
-    if (role.isSuperAdmin) throw new ForbiddenException('Impossible d\'assigner le rôle Super Admin');
+    if (role.isSuperAdmin)
+      throw new ForbiddenException("Impossible d'assigner le rôle Super Admin");
 
     // ── Permission Escalation Check ────────────────────────────────
     // The creator cannot assign a role with permissions they don't have themselves
     const creator = await this.prisma.admin.findUnique({
       where: { id: creatorId },
-      include: { role: { include: { permissions: { include: { permission: true } } } } },
+      include: {
+        role: { include: { permissions: { include: { permission: true } } } },
+      },
     });
 
     if (creator && !creator.isSuperAdmin) {
-      const creatorPermissions = creator.role?.permissions.map((rp: any) => rp.permission.action) || [];
-      const targetPermissions = role.permissions.map((rp: any) => rp.permission.action);
+      const creatorPermissions =
+        creator.role?.permissions.map((rp: any) => rp.permission.action) || [];
+      const targetPermissions = role.permissions.map(
+        (rp: any) => rp.permission.action,
+      );
 
-      const escalated = targetPermissions.filter((p: string) => !creatorPermissions.includes(p));
+      const escalated = targetPermissions.filter(
+        (p: string) => !creatorPermissions.includes(p),
+      );
       if (escalated.length > 0) {
         throw new ForbiddenException(
           `Escalation interdite : vous ne possédez pas les permissions [${escalated.join(', ')}]`,
@@ -122,12 +143,18 @@ export class AdminService {
   ) {
     const admin = await this.prisma.admin.findUnique({ where: { id } });
     if (!admin) throw new NotFoundException('Admin introuvable');
-    if (admin.isSuperAdmin) throw new ForbiddenException('Le Super Admin ne peut pas être modifié');
+    if (admin.isSuperAdmin)
+      throw new ForbiddenException('Le Super Admin ne peut pas être modifié');
 
     if (data.roleId) {
-      const role = await this.prisma.role.findUnique({ where: { id: data.roleId } });
+      const role = await this.prisma.role.findUnique({
+        where: { id: data.roleId },
+      });
       if (!role) throw new NotFoundException('Rôle introuvable');
-      if (role.isSuperAdmin) throw new ForbiddenException('Impossible d\'assigner le rôle Super Admin');
+      if (role.isSuperAdmin)
+        throw new ForbiddenException(
+          "Impossible d'assigner le rôle Super Admin",
+        );
     }
 
     return this.prisma.admin.update({
@@ -148,7 +175,8 @@ export class AdminService {
   async suspend(id: number) {
     const admin = await this.prisma.admin.findUnique({ where: { id } });
     if (!admin) throw new NotFoundException('Admin introuvable');
-    if (admin.isSuperAdmin) throw new ForbiddenException('Le Super Admin ne peut pas être suspendu');
+    if (admin.isSuperAdmin)
+      throw new ForbiddenException('Le Super Admin ne peut pas être suspendu');
 
     return this.prisma.admin.update({
       where: { id },
@@ -170,7 +198,10 @@ export class AdminService {
   async resetPassword(id: number, newPassword: string) {
     const admin = await this.prisma.admin.findUnique({ where: { id } });
     if (!admin) throw new NotFoundException('Admin introuvable');
-    if (admin.isSuperAdmin) throw new ForbiddenException('Utilisez un autre mécanisme pour le Super Admin');
+    if (admin.isSuperAdmin)
+      throw new ForbiddenException(
+        'Utilisez un autre mécanisme pour le Super Admin',
+      );
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await this.prisma.admin.update({
@@ -186,16 +217,21 @@ export class AdminService {
     currentPassword: string,
     newPassword: string,
   ) {
-    const admin = await this.prisma.admin.findUnique({ where: { id: adminId } });
+    const admin = await this.prisma.admin.findUnique({
+      where: { id: adminId },
+    });
     if (!admin) throw new NotFoundException('Admin introuvable');
 
     // Verify current password
     const isMatch = await bcrypt.compare(currentPassword, admin.password);
-    if (!isMatch) throw new BadRequestException('Mot de passe actuel incorrect');
+    if (!isMatch)
+      throw new BadRequestException('Mot de passe actuel incorrect');
 
     // Validate new password
     if (newPassword.length < 4) {
-      throw new BadRequestException('Le nouveau mot de passe doit contenir au moins 4 caractères');
+      throw new BadRequestException(
+        'Le nouveau mot de passe doit contenir au moins 4 caractères',
+      );
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -209,22 +245,32 @@ export class AdminService {
 
   // ─── DASHBOARD STATS ──────────────────────────────────────────
   async getDashboardStats() {
-    const [pendingProviders, publishedListings, activeCategories, unreadNotifications] =
-      await Promise.all([
-        this.prisma.provider.count({ where: { status: 'PENDING' } }),
-        this.prisma.listing.count({ where: { status: 'PUBLISHED' } }),
-        this.prisma.category.count(),
-        this.prisma.notification.count({ where: { isRead: false } }),
-      ]);
+    const [
+      pendingProviders,
+      publishedListings,
+      activeCategories,
+      unreadNotifications,
+    ] = await Promise.all([
+      this.prisma.provider.count({ where: { status: 'PENDING' } }),
+      this.prisma.listing.count({ where: { status: 'PUBLISHED' } }),
+      this.prisma.category.count(),
+      this.prisma.notification.count({ where: { isRead: false } }),
+    ]);
 
-    return { pendingProviders, publishedListings, activeCategories, unreadNotifications };
+    return {
+      pendingProviders,
+      publishedListings,
+      activeCategories,
+      unreadNotifications,
+    };
   }
 
   // ─── DELETE ADMIN ──────────────────────────────────────────────
   async delete(id: number) {
     const admin = await this.prisma.admin.findUnique({ where: { id } });
     if (!admin) throw new NotFoundException('Admin introuvable');
-    if (admin.isSuperAdmin) throw new ForbiddenException('Le Super Admin ne peut pas être supprimé');
+    if (admin.isSuperAdmin)
+      throw new ForbiddenException('Le Super Admin ne peut pas être supprimé');
 
     await this.prisma.admin.delete({ where: { id } });
     return { message: 'Compte administrateur supprimé avec succès' };

@@ -18,10 +18,13 @@ export class MediaService {
     const uploadPromises = files.map(async (file) => {
       // Generate unique filename base
       const filename = `${uuidv4()}`;
-      
+
       // Save with watermark (handles resize/webp/watermark)
-      const fileUrl = await this.storageService.saveWatermarked(file.buffer, filename);
-      
+      const fileUrl = await this.storageService.saveWatermarked(
+        file.buffer,
+        filename,
+      );
+
       return fileUrl;
     });
 

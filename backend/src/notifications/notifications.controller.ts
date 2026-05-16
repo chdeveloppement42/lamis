@@ -1,5 +1,10 @@
 import {
-  Controller, Get, Patch, Param, ParseIntPipe, Req,
+  Controller,
+  Get,
+  Patch,
+  Param,
+  ParseIntPipe,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import type { Request } from 'express';
@@ -41,4 +46,3 @@ export class NotificationsController {
     return this.notificationsService.markAllAsRead((req.user as any).userId);
   }
 }
-

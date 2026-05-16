@@ -1,11 +1,25 @@
-import { Controller, Get, Patch, Param, Query, ParseIntPipe, UseGuards, Body, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Param,
+  Query,
+  ParseIntPipe,
+  UseGuards,
+  Body,
+  Request,
+} from '@nestjs/common';
 import { ProvidersService } from './providers.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../casl/permissions.guard';
 import { CheckPermissions } from '../casl/permissions.decorator';
 import { AccountStatus } from '@prisma/client';
 
-import { UpdateProviderProfileDto, UpdateSensitiveFieldsDto, ChangePasswordDto } from './dto/provider.dto';
+import {
+  UpdateProviderProfileDto,
+  UpdateSensitiveFieldsDto,
+  ChangePasswordDto,
+} from './dto/provider.dto';
 
 @Controller('providers')
 export class ProvidersController {
@@ -22,20 +36,39 @@ export class ProvidersController {
 
   @Patch('profile')
   @UseGuards(JwtAuthGuard)
-  updateProfile(@Request() req: any, @Body() updateProviderProfileDto: UpdateProviderProfileDto) {
-    return this.providersService.updateProfile(req.user.userId, updateProviderProfileDto);
+  updateProfile(
+    @Request() req: any,
+    @Body() updateProviderProfileDto: UpdateProviderProfileDto,
+  ) {
+    return this.providersService.updateProfile(
+      req.user.userId,
+      updateProviderProfileDto,
+    );
   }
 
   @Patch('profile/sensitive')
   @UseGuards(JwtAuthGuard)
-  updateSensitiveFields(@Request() req: any, @Body() updateSensitiveFieldsDto: UpdateSensitiveFieldsDto) {
-    return this.providersService.updateSensitiveFields(req.user.userId, updateSensitiveFieldsDto);
+  updateSensitiveFields(
+    @Request() req: any,
+    @Body() updateSensitiveFieldsDto: UpdateSensitiveFieldsDto,
+  ) {
+    return this.providersService.updateSensitiveFields(
+      req.user.userId,
+      updateSensitiveFieldsDto,
+    );
   }
 
   @Patch('profile/password')
   @UseGuards(JwtAuthGuard)
-  changePassword(@Request() req: any, @Body() changePasswordDto: ChangePasswordDto) {
-    return this.providersService.changeOwnPassword(req.user.userId, changePasswordDto.currentPassword, changePasswordDto.newPassword);
+  changePassword(
+    @Request() req: any,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.providersService.changeOwnPassword(
+      req.user.userId,
+      changePasswordDto.currentPassword,
+      changePasswordDto.newPassword,
+    );
   }
 
   // ─── ADMIN ENDPOINTS ────────────────────────────────────────────

@@ -1,6 +1,13 @@
 import {
-  Controller, Get, Post, Patch, Delete,
-  Body, Param, ParseIntPipe, Req,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  ParseIntPipe,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import type { Request } from 'express';
@@ -9,7 +16,12 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../casl/permissions.guard';
 import { CheckPermissions } from '../casl/permissions.decorator';
 
-import { CreateAdminDto, UpdateAdminDto, ResetPasswordDto, ChangePasswordDto } from './dto/admin.dto';
+import {
+  CreateAdminDto,
+  UpdateAdminDto,
+  ResetPasswordDto,
+  ChangePasswordDto,
+} from './dto/admin.dto';
 
 @Controller('admin')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -53,10 +65,7 @@ export class AdminController {
   // ─── CREATE ADMIN ─────────────────────────────────────────────
   @Post('users')
   @CheckPermissions({ action: 'manage', subject: 'admins' })
-  create(
-    @Req() req: Request,
-    @Body() createAdminDto: CreateAdminDto,
-  ) {
+  create(@Req() req: Request, @Body() createAdminDto: CreateAdminDto) {
     return this.adminService.create((req.user as any).userId, createAdminDto);
   }
 

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -21,7 +25,13 @@ export class RolesService {
       include: {
         permissions: { include: { permission: true } },
         admins: {
-          select: { id: true, firstName: true, lastName: true, email: true, status: true },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            status: true,
+          },
         },
       },
     });
@@ -30,8 +40,11 @@ export class RolesService {
   }
 
   async create(data: { name: string; permissionIds: number[] }) {
-    const existing = await this.prisma.role.findUnique({ where: { name: data.name } });
-    if (existing) throw new BadRequestException('Un rôle avec ce nom existe déjà');
+    const existing = await this.prisma.role.findUnique({
+      where: { name: data.name },
+    });
+    if (existing)
+      throw new BadRequestException('Un rôle avec ce nom existe déjà');
 
     return this.prisma.role.create({
       data: {
@@ -49,7 +62,10 @@ export class RolesService {
   async update(id: number, data: { name?: string; permissionIds?: number[] }) {
     const role = await this.prisma.role.findUnique({ where: { id } });
     if (!role) throw new NotFoundException('Rôle introuvable');
-    if (role.isSuperAdmin) throw new BadRequestException('Le rôle Super Admin ne peut pas être modifié');
+    if (role.isSuperAdmin)
+      throw new BadRequestException(
+        'Le rôle Super Admin ne peut pas être modifié',
+      );
 
     if (data.permissionIds) {
       await this.prisma.rolePermission.deleteMany({ where: { roleId: id } });
@@ -77,8 +93,14 @@ export class RolesService {
       include: { _count: { select: { admins: true } } },
     });
     if (!role) throw new NotFoundException('Rôle introuvable');
-    if (role.isSuperAdmin) throw new BadRequestException('Le rôle Super Admin ne peut pas être supprimé');
-    if (role.isDefault) throw new BadRequestException('Les rôles par défaut ne peuvent pas être supprimés');
+    if (role.isSuperAdmin)
+      throw new BadRequestException(
+        'Le rôle Super Admin ne peut pas être supprimé',
+      );
+    if (role.isDefault)
+      throw new BadRequestException(
+        'Les rôles par défaut ne peuvent pas être supprimés',
+      );
 
     await this.prisma.admin.updateMany({
       where: { roleId: id },
@@ -100,7 +122,9 @@ export class RolesService {
 
     await this.prisma.role.delete({ where: { id } });
 
-    return { message: `Rôle "${role.name}" supprimé. ${role._count.admins} utilisateur(s) suspendu(s).` };
+    return {
+      message: `Rôle "${role.name}" supprimé. ${role._count.admins} utilisateur(s) suspendu(s).`,
+    };
   }
 
   async findAllPermissions() {

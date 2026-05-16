@@ -7,7 +7,11 @@ export class NotificationsService {
   constructor(private prisma: PrismaService) {}
 
   // ─── CREATE NOTIFICATION ───────────────────────────────────────
-  async create(data: { type: NotificationType; message: string; adminId: number }) {
+  async create(data: {
+    type: NotificationType;
+    message: string;
+    adminId: number;
+  }) {
     return this.prisma.notification.create({ data });
   }
 

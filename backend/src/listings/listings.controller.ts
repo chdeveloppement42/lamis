@@ -1,7 +1,16 @@
 import {
-  Controller, Get, Post, Put, Delete, Patch,
-  Body, Param, Query, ParseIntPipe,
-  UseGuards, Request,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Patch,
+  Body,
+  Param,
+  Query,
+  ParseIntPipe,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ListingsService } from './listings.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -57,10 +66,7 @@ export class ListingsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(
-    @Request() req: any,
-    @Body() createListingDto: CreateListingDto,
-  ) {
+  create(@Request() req: any, @Body() createListingDto: CreateListingDto) {
     return this.listingsService.create(req.user.userId, createListingDto);
   }
 

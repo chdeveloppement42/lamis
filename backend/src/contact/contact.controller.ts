@@ -7,7 +7,13 @@ export class ContactController {
 
   @Post()
   submit(
-    @Body() body: { name: string; email: string; subject: string; message: string },
+    @Body()
+    body: {
+      name: string;
+      email: string;
+      subject: string;
+      message: string;
+    },
   ) {
     return this.contactService.submit(body);
   }

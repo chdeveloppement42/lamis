@@ -112,6 +112,11 @@ export default function LoginPage() {
               <Link to="/register" style={{ color: '#D9B48F', fontWeight: '700', textDecoration: 'none' }}>
                 Devenir fournisseur partenaire
               </Link>
+              <div style={{ marginTop: '0.8rem' }}>
+                <Link to="/forgot-password" style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem' }}>
+                  Mot de passe oublié ?
+                </Link>
+              </div>
             </div>
           </form>
         </div>

@@ -1,6 +1,15 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { ListingStatus, NotificationType, AccountStatus, ListingType } from '@prisma/client';
+import {
+  ListingStatus,
+  NotificationType,
+  AccountStatus,
+  ListingType,
+} from '@prisma/client';
 import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
@@ -31,16 +40,28 @@ export class ListingsService {
     page?: number;
     limit?: number;
   }) {
-    const { categoryId, wilaya, commune, type, minPrice, maxPrice, page = 1, limit = 12 } = filters;
+    const {
+      categoryId,
+      wilaya,
+      commune,
+      type,
+      minPrice,
+      maxPrice,
+      page = 1,
+      limit = 12,
+    } = filters;
 
-    const where: any = { 
-      AND: [this.safetyLockWhere]
+    const where: any = {
+      AND: [this.safetyLockWhere],
     };
-    
-    if (categoryId) where.AND.push({ categoryId: parseInt(categoryId as any, 10) });
+
+    if (categoryId)
+      where.AND.push({ categoryId: parseInt(categoryId as any, 10) });
     if (type) where.AND.push({ type });
-    if (wilaya) where.AND.push({ wilaya: { contains: wilaya, mode: 'insensitive' } });
-    if (commune) where.AND.push({ commune: { contains: commune, mode: 'insensitive' } });
+    if (wilaya)
+      where.AND.push({ wilaya: { contains: wilaya, mode: 'insensitive' } });
+    if (commune)
+      where.AND.push({ commune: { contains: commune, mode: 'insensitive' } });
     if (minPrice || maxPrice) {
       const priceFilter: any = {};
       if (minPrice) priceFilter.gte = parseFloat(minPrice as any);
@@ -80,12 +101,24 @@ export class ListingsService {
       where: { id },
       include: {
         category: true,
-        provider: { select: { id: true, firstName: true, lastName: true, phone: true, status: true } },
+        provider: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            phone: true,
+            status: true,
+          },
+        },
         images: { orderBy: { isMain: 'desc' } },
       },
     });
-    
-    if (!listing || listing.status !== 'PUBLISHED' || listing.provider.status !== 'VALIDATED') {
+
+    if (
+      !listing ||
+      listing.status !== 'PUBLISHED' ||
+      listing.provider.status !== 'VALIDATED'
+    ) {
       throw new NotFoundException('Annonce introuvable.');
     }
     return listing;
@@ -124,12 +157,16 @@ export class ListingsService {
     },
   ) {
     // Verify provider is VALIDATED (unless saving as DRAFT)
-    const provider = await this.prisma.provider.findUnique({ where: { id: providerId } });
+    const provider = await this.prisma.provider.findUnique({
+      where: { id: providerId },
+    });
     if (!provider) throw new NotFoundException('Fournisseur introuvable.');
-    
+
     const isDraft = data.status === 'DRAFT' || !data.status;
     if (provider.status !== 'VALIDATED' && !isDraft) {
-      throw new ForbiddenException('Votre compte doit être validé pour publier une annonce.');
+      throw new ForbiddenException(
+        'Votre compte doit être validé pour publier une annonce.',
+      );
     }
 
     const listing = await this.prisma.listing.create({
@@ -148,10 +185,11 @@ export class ListingsService {
         provider: { connect: { id: providerId } },
         category: { connect: { id: data.categoryId } },
         images: {
-          create: data.images?.map((url, index) => ({
-            url,
-            isMain: index === 0,
-          })) || [],
+          create:
+            data.images?.map((url, index) => ({
+              url,
+              isMain: index === 0,
+            })) || [],
         },
       },
       include: { category: true, images: true },
@@ -192,19 +230,26 @@ export class ListingsService {
       status?: ListingStatus;
     },
   ) {
-    const listing = await this.prisma.listing.findUnique({ 
+    const listing = await this.prisma.listing.findUnique({
       where: { id },
-      include: { provider: { select: { status: true } } }
+      include: { provider: { select: { status: true } } },
     });
     if (!listing) throw new NotFoundException('Annonce introuvable.');
     if (listing.providerId !== providerId) {
-      throw new ForbiddenException('Vous ne pouvez modifier que vos propres annonces.');
+      throw new ForbiddenException(
+        'Vous ne pouvez modifier que vos propres annonces.',
+      );
     }
 
     // Block if provider is not VALIDATED (unless it's a DRAFT update)
     const isTargetingPublished = data.status === 'PUBLISHED';
-    if (listing.provider.status !== 'VALIDATED' && (listing.status === 'PUBLISHED' || isTargetingPublished)) {
-      throw new ForbiddenException('Votre compte est restreint. Vous ne pouvez pas publier ou modifier une annonce publiée.');
+    if (
+      listing.provider.status !== 'VALIDATED' &&
+      (listing.status === 'PUBLISHED' || isTargetingPublished)
+    ) {
+      throw new ForbiddenException(
+        'Votre compte est restreint. Vous ne pouvez pas publier ou modifier une annonce publiée.',
+      );
     }
 
     return this.prisma.listing.update({
@@ -216,18 +261,22 @@ export class ListingsService {
 
   // ─── PROVIDER: Delete own listing ───────────────────────────────
   async removeByProvider(id: number, providerId: number) {
-    const listing = await this.prisma.listing.findUnique({ 
+    const listing = await this.prisma.listing.findUnique({
       where: { id },
-      include: { provider: { select: { status: true } } }
+      include: { provider: { select: { status: true } } },
     });
     if (!listing) throw new NotFoundException('Annonce introuvable.');
     if (listing.providerId !== providerId) {
-      throw new ForbiddenException('Vous ne pouvez supprimer que vos propres annonces.');
+      throw new ForbiddenException(
+        'Vous ne pouvez supprimer que vos propres annonces.',
+      );
     }
 
     // Block if provider is not VALIDATED
     if (listing.provider.status !== 'VALIDATED') {
-      throw new ForbiddenException('Votre compte est restreint. Vous ne pouvez pas supprimer cette annonce.');
+      throw new ForbiddenException(
+        'Votre compte est restreint. Vous ne pouvez pas supprimer cette annonce.',
+      );
     }
 
     // Delete images first, then listing
@@ -242,7 +291,15 @@ export class ListingsService {
       orderBy: { createdAt: 'desc' },
       include: {
         category: { select: { name: true } },
-        provider: { select: { id: true, firstName: true, lastName: true, email: true, status: true } },
+        provider: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            status: true,
+          },
+        },
         images: { where: { isMain: true }, take: 1 },
       },
     });
@@ -252,14 +309,20 @@ export class ListingsService {
   async publish(id: number) {
     const listing = await this.prisma.listing.findUnique({ where: { id } });
     if (!listing) throw new NotFoundException('Annonce introuvable.');
-    return this.prisma.listing.update({ where: { id }, data: { status: 'PUBLISHED' } });
+    return this.prisma.listing.update({
+      where: { id },
+      data: { status: 'PUBLISHED' },
+    });
   }
 
   // ─── ADMIN: Unpublish a listing ─────────────────────────────────
   async unpublish(id: number) {
     const listing = await this.prisma.listing.findUnique({ where: { id } });
     if (!listing) throw new NotFoundException('Annonce introuvable.');
-    return this.prisma.listing.update({ where: { id }, data: { status: 'UNPUBLISHED' } });
+    return this.prisma.listing.update({
+      where: { id },
+      data: { status: 'UNPUBLISHED' },
+    });
   }
 
   // ─── ADMIN: Delete any listing ──────────────────────────────────

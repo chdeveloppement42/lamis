@@ -10,7 +10,10 @@ export const envValidationSchema = Joi.object({
 
   JWT_REFRESH_SECRET: Joi.string().min(16).required(),
   JWT_REFRESH_EXPIRES_IN: Joi.string().default('7d'),
-  NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
+  PASSWORD_RESET_EXPIRES_IN: Joi.string().default('30m'),
+  NODE_ENV: Joi.string()
+    .valid('development', 'production', 'test')
+    .default('development'),
 
   STORAGE_PROVIDER: Joi.string().valid('disk', 'cloudinary').default('disk'),
   CLOUDINARY_CLOUD_NAME: Joi.when('STORAGE_PROVIDER', {
@@ -29,4 +32,12 @@ export const envValidationSchema = Joi.object({
     otherwise: Joi.string().optional(),
   }),
 
+  // ─── SMTP / Email (Password reset) ─────────────────────────────
+  // Optional at boot so the app can start even if SMTP isn't configured yet.
+  SMTP_HOST: Joi.string().optional(),
+  SMTP_PORT: Joi.number().port().optional(),
+  SMTP_USER: Joi.string().optional(),
+  SMTP_PASS: Joi.string().optional(),
+  MAIL_FROM: Joi.string().email().optional(),
+  CONTACT_EMAIL: Joi.string().email().required(),
 });

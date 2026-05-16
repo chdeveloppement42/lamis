@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { AbilityBuilder, createMongoAbility, MongoAbility, ExtractSubjectType } from '@casl/ability';
+import {
+  AbilityBuilder,
+  createMongoAbility,
+  MongoAbility,
+  ExtractSubjectType,
+} from '@casl/ability';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtPayload } from '../auth/strategies/jwt.strategy';
 
@@ -17,13 +22,15 @@ export class CaslAbilityFactory {
     } else if (userPayload.userType === 'ADMIN') {
       const admin = await this.prisma.admin.findUnique({
         where: { id: userPayload.userId },
-        include: { role: { include: { permissions: { include: { permission: true } } } } },
+        include: {
+          role: { include: { permissions: { include: { permission: true } } } },
+        },
       });
 
       if (admin && admin.isSuperAdmin) {
         can('manage', 'all');
       } else if (admin) {
-        admin.role.permissions.forEach(p => {
+        admin.role.permissions.forEach((p) => {
           const parts = p.permission.action.split(':');
           if (parts.length === 2) {
             can(parts[0], parts[1]);
@@ -35,7 +42,7 @@ export class CaslAbilityFactory {
     }
 
     return build({
-      detectSubjectType: item => item.constructor as ExtractSubjectType<any>,
+      detectSubjectType: (item) => item.constructor as ExtractSubjectType<any>,
     });
   }
 }

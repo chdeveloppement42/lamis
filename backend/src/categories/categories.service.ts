@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -48,7 +52,9 @@ export class CategoriesService {
   async remove(id: number) {
     await this.findOne(id);
     // Check if category has listings
-    const count = await this.prisma.listing.count({ where: { categoryId: id } });
+    const count = await this.prisma.listing.count({
+      where: { categoryId: id },
+    });
     if (count > 0) {
       throw new ConflictException(
         `Impossible de supprimer : ${count} annonce(s) utilisent cette catégorie.`,

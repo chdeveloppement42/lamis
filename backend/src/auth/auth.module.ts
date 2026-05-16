@@ -9,6 +9,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { PrismaModule } from '../prisma/prisma.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { StorageModule } from '../storage/storage.module';
+import { PasswordResetService } from './password-reset.service';
 
 @Module({
   imports: [
@@ -22,11 +23,13 @@ import { StorageModule } from '../storage/storage.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.getOrThrow<string>('JWT_SECRET'),
-        signOptions: { expiresIn: config.get<string>('JWT_EXPIRES_IN', '1d') as StringValue },
+        signOptions: {
+          expiresIn: config.get<string>('JWT_EXPIRES_IN', '1d') as StringValue,
+        },
       }),
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, ConfigService],
+  providers: [AuthService, JwtStrategy, ConfigService, PasswordResetService],
 })
 export class AuthModule {}

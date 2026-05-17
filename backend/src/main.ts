@@ -36,7 +36,7 @@ async function bootstrap() {
 
   // --- CONFIGURATION CORS CORRIGÉE ---
   const isDev = process.env.NODE_ENV !== 'production';
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+  const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/+$/, '');
 
   app.enableCors({
     origin: isDev

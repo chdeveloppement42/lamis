@@ -602,7 +602,7 @@
   background: rgba(217, 180, 143, 0.1);
   border-color: var(--aymen-gold);
 }
-
+/* ─── AFFICHAGE/MASQUAGE SIDEBAR MOBILE ─── */
 /* ─── AFFICHAGE/MASQUAGE SIDEBAR MOBILE ─── */
 
 @media (max-width: 1024px) {

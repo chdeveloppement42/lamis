@@ -36,12 +36,12 @@ async function bootstrap() {
 
   // --- CONFIGURATION CORS CORRIGÉE ---
   const isDev = process.env.NODE_ENV !== 'production';
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
 
   app.enableCors({
-    // Autorise localhost en dev et votre domaine Vercel en production
     origin: isDev
       ? /^http:\/\/localhost(:\d+)?$/
-      : 'https://lamis-project-notes.vercel.app',
+      : frontendUrl,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     allowedHeaders: 'Content-Type, Accept, Authorization',

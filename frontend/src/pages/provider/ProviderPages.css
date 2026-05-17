@@ -576,8 +576,8 @@
     color: var(--p-bronze);
 }
 
-/* ─── MOBILE TRANSFORMATION (MAX 850px) ─── */
-@media (max-width: 850px) {
+/* ─── MOBILE TRANSFORMATION (MAX 1024px) ─── */
+@media (max-width: 1024px) {
     .provider-page { padding: 1rem; }
     
     .provider-page__header-row {

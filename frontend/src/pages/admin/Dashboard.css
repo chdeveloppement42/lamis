@@ -107,7 +107,7 @@
 }
 
 /* ─── ADAPTATION MOBILE ────────────────────────────────────── */
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
   .dashboard__stats { grid-template-columns: repeat(2, 1fr); }
 }
 

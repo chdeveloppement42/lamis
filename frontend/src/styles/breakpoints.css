@@ -1,0 +1,92 @@
+/* ═══════════════════════════════════════════════════════════ */
+/* BREAKPOINTS STANDARDISÉS POUR TOUTES LES PAGES             */
+/* ═══════════════════════════════════════════════════════════ */
+
+/* 
+  xs: 320px  - 480px   → Téléphones très petits
+  sm: 480px  - 640px   → Téléphones petits
+  md: 640px  - 1024px  → Téléphones grands + Tablettes
+  lg: 1024px - 1280px  → Tablettes grandes + Petits laptops
+  xl: 1280px +         → Desktops
+*/
+
+/* ─── MOBILE XS (Very Small) ─── */
+@media (max-width: 480px) {
+  :root {
+    --container-width-xs: calc(100vw - 16px);
+  }
+}
+
+/* ─── MOBILE SM (Small) ─── */
+@media (min-width: 481px) and (max-width: 640px) {
+  :root {
+    --container-width-sm: calc(100vw - 24px);
+  }
+}
+
+/* ─── TABLET/MOBILE MD (Medium) ─── */
+@media (min-width: 641px) and (max-width: 1024px) {
+  :root {
+    --container-width-md: calc(100vw - 32px);
+  }
+}
+
+/* ─── TABLET LG (Large) ─── */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  :root {
+    --container-width-lg: calc(100vw - 48px);
+  }
+}
+
+/* ─── DESKTOP XL (Extra Large) ─── */
+@media (min-width: 1281px) {
+  :root {
+    --container-width-xl: min(1400px, calc(100vw - 64px));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* CLASSES UTILITAIRES POUR MOBILE                            */
+/* ═══════════════════════════════════════════════════════════ */
+
+/* Afficher seulement sur mobile */
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .mobile-only {
+    display: block;
+  }
+  .desktop-only {
+    display: none;
+  }
+}
+
+/* Afficher seulement sur XS */
+.xs-only {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .xs-only {
+    display: block;
+  }
+}
+
+/* Marges/padding standard pour mobile */
+.container-mobile {
+  padding: 20px 16px; /* XS */
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+  .container-mobile {
+    padding: 24px 20px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container-mobile {
+    padding: 32px 24px;
+  }
+}

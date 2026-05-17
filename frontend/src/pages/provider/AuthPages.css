@@ -189,7 +189,7 @@ html, body {
 }
 
 /* --- 9. RESPONSIVE --- */
-@media (max-width: 968px) {
+@media (max-width: 1024px) {
   .auth-card {
     grid-template-columns: 1fr;
     max-width: 500px;

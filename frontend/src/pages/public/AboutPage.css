@@ -210,7 +210,7 @@
 }
 
 /* --- RESPONSIVE MOBILE --- */
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .about-hero-luxe {
     height: 55vh;
   }

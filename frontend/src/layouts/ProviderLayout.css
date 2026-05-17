@@ -119,7 +119,7 @@
 .logout-danger { margin-top: 2rem; color: #ff6b6b; border: none; background: none; width: 100%; text-align: left; cursor: pointer; }
 
 /* ─── RESPONSIVE ─── */
-@media (max-width: 850px) {
+@media (max-width: 1024px) {
   .burger-menu { display: block; }
   .p-desktop-nav, .desktop-only { display: none; }
   .p-header-inner { padding: 0 1rem; }

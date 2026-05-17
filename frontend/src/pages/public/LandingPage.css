@@ -115,7 +115,7 @@
 .btn-slide-nav { background: none; border: 1px solid var(--immo-gold); color: var(--immo-gold); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; transition: 0.3s; }
 .btn-slide-nav:hover { background: var(--immo-gold); color: var(--immo-bg); }
 
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .hero-main-title { font-size: 3.5rem; }
   .grid-home-3x3, .why-grid-aymen, .stats-grid-aymen { grid-template-columns: 1fr; }
   .mobile-slider-touch { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding-bottom: 30px; }
@@ -629,7 +629,7 @@
 }
 
 /* RESPONSIVE */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .cta-wrapper-prestige { flex-direction: column; }
   .input-row { grid-template-columns: 1fr; }
   .cta-visual-side { min-height: 250px; order: -1; }
@@ -765,7 +765,7 @@
 
 /* --- ADAPTATION MOBILE & TABLETTE --- */
 
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .cta-wrapper-prestige {
     flex-direction: column; /* On empile l'image et le formulaire */
   }
@@ -910,7 +910,7 @@
   }
 }
 /* Responsive Témoignages */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .testimonials-grid {
     grid-template-columns: 1fr;
     gap: 20px;

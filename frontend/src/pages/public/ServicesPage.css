@@ -573,7 +573,31 @@
     justify-content: center;
   }
 }
+.mobile-filter-button {
+  flex: 1;
+  display: flex !important; /* Force l'alignement flex */
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Espace bien l'icône du texte */
+  background: var(--aymen-gold) !important;
+  color: var(--aymen-bg) !important; /* Force la couleur du texte */
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
 
+/* Force l'affichage du texte s'il était masqué par un autre style global */
+.mobile-filter-text {
+  display: inline-block !important;
+  visibility: visible !important;
+  color: var(--aymen-bg) !important; /* Utilise la couleur sombre de fond pour contraster sur le doré */
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 .mobile-filter-close:hover {
   background: rgba(217, 180, 143, 0.1);
   border-color: var(--aymen-gold);

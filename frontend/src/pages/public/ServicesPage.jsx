@@ -75,25 +75,18 @@ export default function ServicesPage() {
       </section>
 
       {/* ─── BOUTON FILTRE MOBILE ─── */}
-      <div className="mobile-filter-button-container">
-        <button 
-          className="mobile-filter-button"
-          onClick={() => setIsFilterOpen(!isFilterOpen)}
-          title={isFilterOpen ? "Fermer les filtres" : "Afficher les filtres"}
-        >
-          <Filter size={20} />
-          <span>{isFilterOpen ? 'Fermer filtres' : 'Afficher filtres'}</span>
-        </button>
-        {isFilterOpen && (
-          <button 
-            className="mobile-filter-close"
-            onClick={() => setIsFilterOpen(false)}
-            aria-label="Fermer"
-          >
-            <X size={18} />
-          </button>
-        )}
-      </div>
+     {!isFilterOpen && (
+  <div className="mobile-filter-button-container">
+    <button 
+      className="mobile-filter-button"
+      onClick={() => setIsFilterOpen(true)}
+      title="Afficher les filtres"
+    >
+      <Filter size={20} />
+      <span className="mobile-filter-text">Filtrer</span>
+    </button>
+  </div>
+)}
 
       <div className="container services-layout">
         <aside className={`filters-sidebar ${isFilterOpen ? 'open' : ''}`}>

@@ -5,10 +5,43 @@ import { useToast } from '../../components/Toast';
 import './AdminProfilePage.css';
 
 export default function AdminProfilePage() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const { showToast } = useToast();
+  const [profileForm, setProfileForm] = useState({
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    email: user?.email || '',
+  });
   const [form, setForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
+
+  const handleProfileSubmit = async (e) => {
+    e.preventDefault();
+    setSavingProfile(true);
+
+    try {
+      const res = await axiosInstance.patch('/admin/profile', {
+        firstName: profileForm.firstName,
+        lastName: profileForm.lastName,
+        email: profileForm.email,
+      });
+
+      showToast({ type: 'success', message: res.data.message || 'Profil mis à jour avec succès !' });
+      const updatedUser = {
+        ...user,
+        firstName: res.data.firstName,
+        lastName: res.data.lastName,
+        email: res.data.email,
+      };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    } catch (err) {
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur lors de la mise à jour du profil.' });
+    } finally {
+      setSavingProfile(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +73,7 @@ export default function AdminProfilePage() {
 
   return (
     <div className="admin-profile">
-      <div className="admin-page__header">
+      <div className="admin-profile__header">
         <div>
           <h1 className="admin-page__title">Mon Profil</h1>
           <p className="admin-page__subtitle">Gérez vos informations personnelles et votre sécurité</p>
@@ -61,7 +94,48 @@ export default function AdminProfilePage() {
         </div>
       </div>
 
-      {/* Section Sécurité (uniformisée) */}
+      <div className="admin-section">
+        <h2 className="admin-section__title">👤 Informations du compte</h2>
+
+        <form onSubmit={handleProfileSubmit} className="admin-profile__form">
+          <div className="admin-profile__form-row">
+            <div className="form-group">
+              <label className="form-label">Prénom</label>
+              <input
+                type="text"
+                className="form-input"
+                value={profileForm.firstName}
+                onChange={(e) => setProfileForm({ ...profileForm, firstName: e.target.value })}
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Nom</label>
+              <input
+                type="text"
+                className="form-input"
+                value={profileForm.lastName}
+                onChange={(e) => setProfileForm({ ...profileForm, lastName: e.target.value })}
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input
+              type="email"
+              className="form-input"
+              value={profileForm.email}
+              onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
+            />
+          </div>
+
+          <button type="submit" className="btn-profile-submit" disabled={savingProfile}>
+            {savingProfile ? 'Enregistrement en cours...' : 'Enregistrer les informations'}
+          </button>
+        </form>
+      </div>
+
       <div className="admin-section">
         <h2 className="admin-section__title">🔒 Sécurité du compte</h2>
 

@@ -45,6 +45,20 @@ export class UpdateAdminDto {
   roleId?: number;
 }
 
+export class UpdateAdminProfileDto {
+  @IsOptional()
+  @IsString()
+  firstName?: string;
+
+  @IsOptional()
+  @IsString()
+  lastName?: string;
+
+  @IsOptional()
+  @IsEmail({}, { message: 'Veuillez fournir une adresse email valide.' })
+  email?: string;
+}
+
 export class ResetPasswordDto {
   @IsString()
   @MinLength(4, {

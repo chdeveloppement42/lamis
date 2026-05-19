@@ -211,6 +211,32 @@ export class AdminService {
     return { message: 'Mot de passe réinitialisé avec succès' };
   }
 
+  async updateOwnProfile(
+    adminId: number,
+    data: { firstName?: string; lastName?: string; email?: string },
+  ) {
+    const admin = await this.prisma.admin.findUnique({ where: { id: adminId } });
+    if (!admin) throw new NotFoundException('Admin introuvable');
+
+    if (data.email && data.email !== admin.email) {
+      const existing = await this.prisma.admin.findUnique({ where: { email: data.email } });
+      if (existing) throw new BadRequestException('Cet email est déjà utilisé.');
+    }
+
+    return this.prisma.admin.update({
+      where: { id: adminId },
+      data,
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        status: true,
+        role: { select: { id: true, name: true } },
+      },
+    });
+  }
+
   // ─── CHANGE OWN PASSWORD (self) ────────────────────────────────
   async changeOwnPassword(
     adminId: number,

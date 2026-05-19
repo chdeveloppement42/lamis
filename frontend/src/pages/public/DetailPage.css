@@ -211,6 +211,7 @@
     position: relative;
     
     /* Fix pour certains navigateurs mobiles avec border-radius + overflow */
+    mask-image: radial-gradient(white, black);
     -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
@@ -325,5 +326,68 @@
     .detail-description p {
         font-size: 0.95rem;
         line-height: 1.6;
+    }
+}
+
+@media (max-width: 420px) {
+    .detail-page {
+        min-height: auto;
+    }
+
+    .detail-page__hero {
+        padding: 60px 12px 14px;
+    }
+
+    .detail-content {
+        padding: 15px 12px 25px;
+    }
+
+    .detail-gallery__main {
+        height: 200px;
+    }
+
+    .detail-gallery__thumbs {
+        gap: 8px;
+    }
+
+    .detail-gallery__thumb {
+        width: 64px;
+        height: 48px;
+    }
+
+    .detail-header {
+        padding: 16px 0;
+    }
+
+    .detail-header__title {
+        font-size: 1.6rem;
+    }
+
+    .detail-header__price {
+        font-size: 1.4rem;
+    }
+
+    .detail-info-table td {
+        padding: 10px 8px;
+        font-size: 0.9rem;
+    }
+
+    .detail-info-table .label {
+        width: auto;
+    }
+
+    .detail-info-table td {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .detail-provider-card {
+        padding: 16px;
+    }
+
+    .btn-phone-luxe {
+        padding: 14px;
     }
 }

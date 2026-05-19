@@ -205,175 +205,6 @@
     padding-top: 1rem; 
   }
 }
-@media (max-width: 768px) {
-  .admin-page__header { 
-    flex-direction: column; 
-    align-items: flex-start; 
-    padding: 1rem 1.5rem; 
-  }
-
-  /* Force le noir aussi sur mobile */
-  .admin-page__subtitle { 
-    font-size: 1rem !important; 
-    color: #000000 !important;
-    text-shadow: none !important;
-  }
-
-  .data-table thead { display: none; }
-  
-  .data-table tr {
-    display: block;
-    margin: 1rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(217, 180, 143, 0.15);
-    border-radius: 16px;
-    padding: 0.5rem;
-  }
-
-  .data-table td {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.8rem 1rem;
-    color: #FFFFFF;
-  }
-
-  .data-table td::before {
-    content: attr(data-label);
-    color: #D9B48F;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-  }
-}.admin-page__header {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: flex-end;
-
-    padding-bottom: 2rem;
-
-    margin-bottom: 2.5rem;
-
-    /* Bordure très discrète couleur bronze */
-
-    border-bottom: 1px solid rgba(217, 180, 143, 0.15);
-
-    position: relative;
-
-}
-
-
-
-/* Ligne d'accentuation Or pur qui s'estompe */
-
-.admin-page__header::after {
-
-    content: "";
-
-    position: absolute;
-
-    bottom: -1px;
-
-    left: 0;
-
-    width: 120px;
-
-    height: 2px;
-
-    background: linear-gradient(to right, #D9B48F, transparent);
-
-    box-shadow: 0 0 10px rgba(217, 180, 143, 0.3);
-
-}
-
-
-
-.admin-page__title {
-
-    font-size: 2.2rem;
-
-    font-weight: 800;
-
-    color: #D9B48F; /* Or Signature */
-
-    margin: 0;
-
-    letter-spacing: -1px;
-
-    text-transform: capitalize;
-
-    /* Légère lueur pour le côté "Prestige" */
-
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-
-}
-
-
-
-.admin-page__subtitle {
-
-    /* Taille augmentée pour un impact "Luxe" */
-
-    font-size: 1.2rem !important;
-
-   
-
-    /* Noir profond forcé */
-
-    color: #000000 !important;
-
-   
-
-    /* Graisse affirmée pour la lisibilité */
-
-    font-weight: 700;
-
-   
-
-    /* Espacement des lettres pour un look moderne/aéré */
-
-    letter-spacing: 0.8px;
-
-    margin: 0.8rem 0 0 0 !important;
-
-    line-height: 1.4;
-
-    display: block;
-
-
-
-    /* L'EFFET DE LUEUR (GLOW) :
-
-       C'est ce qui va faire ressortir ton texte noir sur le bleu nuit.
-
-       On crée une barrière dorée tout autour des lettres.
-
-    */
-
-    text-shadow:
-
-        -1px -1px 0 rgba(217, 180, 143, 0.7),  
-
-         1px -1px 0 rgba(217, 180, 143, 0.7),
-
-        -1px  1px 0 rgba(217, 180, 143, 0.7),
-
-         1px  1px 0 rgba(217, 180, 143, 0.7),
-
-         0px 0px 8px rgba(217, 180, 143, 0.4); /* Halo diffus */
-
-   
-
-    /* Optionnel : légère opacité pour adoucir si besoin */
-
-    opacity: 0.95;
-
-}
-
-
-
 /* On cible spécifiquement la balise p dans le header pour écraser les styles globaux */
 
 .admin-page__header p.admin-page__subtitle {
@@ -426,6 +257,29 @@
   display: flex;
   gap: 8px;
   justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.data-table__user {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.data-table__avatar {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 50%;
+  background: rgba(217, 180, 143, 0.12);
+  color: #D9B48F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
 }
 
 /* Style de base pour les petits boutons d'action */
@@ -479,5 +333,40 @@
     width: 38px; /* Un peu plus grand sur mobile pour faciliter le clic au doigt */
     height: 38px;
     font-size: 1.1rem;
+  }
+
+  .data-table__user {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .data-table__actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .data-table__actions button {
+    flex: 1 1 auto;
+    min-width: 120px;
+  }
+
+  .data-table td {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.45rem;
+    padding: 0.9rem 1rem;
+    text-align: left;
+  }
+
+  .data-table td::before {
+    width: 100%;
+    margin-bottom: 0.35rem;
+  }
+
+  .data-table td:last-child {
+    justify-content: flex-start;
   }
 }

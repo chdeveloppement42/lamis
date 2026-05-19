@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import './NotificationsPage.css';
 export default function NotificationsPage() {
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,6 +40,32 @@ export default function NotificationsPage() {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const getNotificationTarget = (notif) => {
+    switch (notif.type) {
+      case 'NEW_PROVIDER':
+      case 'PROVIDER_VALIDATED':
+      case 'PROVIDER_REJECTED':
+        return '/admin/providers';
+      case 'NEW_LISTING':
+        return '/admin/listings';
+      case 'CONTACT_MESSAGE':
+        return '/admin/dashboard';
+      default:
+        return '/admin/dashboard';
+    }
+  };
+
+  const handleNotificationClick = async (notif) => {
+    if (!notif.isRead) {
+      try {
+        await handleMarkRead(notif.id);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    navigate(getNotificationTarget(notif));
   };
 
   const typeIcon = (type) => {
@@ -80,7 +108,7 @@ export default function NotificationsPage() {
             <div
               key={notif.id}
               className={`notification-card ${!notif.isRead ? 'notification-card--unread' : ''}`}
-              onClick={() => !notif.isRead && handleMarkRead(notif.id)}
+              onClick={() => handleNotificationClick(notif)}
             >
               <div className="notification-card__icon">{typeIcon(notif.type)}</div>
               <div className="notification-card__content">

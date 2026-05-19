@@ -184,6 +184,39 @@
 }
 
 /* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .admin-page {
+        padding: 1.5rem 1rem;
+    }
+
+    .admin-page__header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .notifications-list {
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .notification-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+
+    .notification-card__content {
+        min-width: 0;
+    }
+
+    .admin-btn--outline {
+        width: 100%;
+        max-width: 320px;
+    }
+}
+
 @media (max-width: 600px) {
     .admin-page__header {
         flex-direction: column;
@@ -201,5 +234,13 @@
         height: 44px;
         min-width: 44px;
         font-size: 1.2rem;
+    }
+
+    .admin-page__title {
+        font-size: 1.5rem;
+    }
+
+    .admin-page__subtitle {
+        font-size: 0.88rem;
     }
 }

@@ -180,7 +180,40 @@
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-    .admin-profile__form-row { grid-template-columns: 1fr; }
-    .admin-profile__info-card { flex-direction: column; text-align: center; }
-    .admin-profile__header { padding: 2rem; text-align: center; }
+    .admin-profile {
+        padding: 16px;
+    }
+
+    .admin-profile__header {
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .admin-profile__info-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .admin-profile__avatar {
+        width: 90px;
+        height: 90px;
+        font-size: 1.8rem;
+    }
+
+    .admin-profile__details h3 {
+        font-size: 1.5rem;
+    }
+
+    .admin-profile__role {
+        padding: 6px 14px;
+    }
+
+    .admin-profile__form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-profile-submit {
+        padding: 16px;
+    }
 }

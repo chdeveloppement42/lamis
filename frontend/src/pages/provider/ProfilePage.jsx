@@ -28,7 +28,7 @@ export default function ProfilePage() {
       })
       .catch(() => showToast({ type: 'error', message: 'Erreur lors du chargement du profil.' }))
       .finally(() => setLoading(false));
-  }, []);
+  }, [setUser, showToast, user]);
 
   const update = (field) => (valOrEvent) => {
     const value = valOrEvent?.target ? valOrEvent.target.value : valOrEvent;
@@ -54,6 +54,8 @@ export default function ProfilePage() {
     } finally { setSaving(false); }
   };
 
+  const [sensitiveForm, setSensitiveForm] = useState({ email: '' });
+
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     if (pwForm.newPassword !== pwForm.confirmPassword) {
@@ -68,6 +70,29 @@ export default function ProfilePage() {
     } catch (err) {
       showToast({ type: 'error', message: err.response?.data?.message || 'Erreur.' });
     } finally { setPwSaving(false); }
+  };
+
+  const handleEmailChange = async (e) => {
+    e.preventDefault();
+    if (!sensitiveForm.email.trim()) {
+      showToast({ type: 'error', message: 'Veuillez saisir un nouvel email.' });
+      return;
+    }
+
+    setSensitiveSaving(true);
+    try {
+      const res = await axiosInstance.patch('/providers/profile/sensitive', {
+        email: sensitiveForm.email.trim(),
+      });
+      setProfile((prev) => ({ ...prev, email: res.data.email, status: res.data.status }));
+      setSensitiveForm({ email: '' });
+      const updatedUser = { ...user, email: res.data.email, status: res.data.status };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      showToast({ type: 'success', message: 'Email modifié. Compte en attente de validation.' });
+    } catch (err) {
+      showToast({ type: 'error', message: err.response?.data?.message || 'Erreur lors de la mise à jour de l’email.' });
+    } finally { setSensitiveSaving(false); }
   };
 
   if (loading) return <div className="provider-page loading-center"><p>Chargement du profil...</p></div>;
@@ -141,16 +166,28 @@ export default function ProfilePage() {
             </button>
           </form>
 
-          <form className="provider-card provider-card--warning" onSubmit={(e) => e.preventDefault()}>
+          <form className="provider-card provider-card--warning" onSubmit={handleEmailChange}>
             <h3>⚠️ Données critiques</h3>
             <p className="warning-note">
               Changer votre email suspend l'activité le temps d'une nouvelle vérification.
             </p>
             <div className="form-group">
-              <label className="form-label">Email : {profile?.email}</label>
-              <input type="email" className="form-input" placeholder="Nouvel email" />
+              <label className="form-label">Email actuel</label>
+              <input type="email" className="form-input" value={profile?.email || ''} readOnly />
             </div>
-            <button className="btn-danger-soft">Mettre à jour l'email</button>
+            <div className="form-group">
+              <label className="form-label">Nouvel email</label>
+              <input
+                type="email"
+                className="form-input"
+                placeholder="Nouvel email"
+                value={sensitiveForm.email}
+                onChange={(e) => setSensitiveForm({ email: e.target.value })}
+              />
+            </div>
+            <button className="btn-danger-soft" type="submit" disabled={sensitiveSaving}>
+              {sensitiveSaving ? 'Mise à jour...' : "Mettre à jour l'email"}
+            </button>
           </form>
         </div>
       </div>

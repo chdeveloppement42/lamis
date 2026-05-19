@@ -19,6 +19,7 @@ import { CheckPermissions } from '../casl/permissions.decorator';
 import {
   CreateAdminDto,
   UpdateAdminDto,
+  UpdateAdminProfileDto,
   ResetPasswordDto,
   ChangePasswordDto,
 } from './dto/admin.dto';
@@ -33,6 +34,18 @@ export class AdminController {
   @CheckPermissions({ action: 'view', subject: 'dashboard' })
   getDashboardStats() {
     return this.adminService.getDashboardStats();
+  }
+
+  // ─── UPDATE OWN PROFILE ───────────────────────────────────────
+  @Patch('profile')
+  updateOwnProfile(
+    @Req() req: Request,
+    @Body() updateAdminProfileDto: UpdateAdminProfileDto,
+  ) {
+    return this.adminService.updateOwnProfile(
+      (req.user as any).userId,
+      updateAdminProfileDto,
+    );
   }
 
   // ─── CHANGE OWN PASSWORD ────────────────────────────────────────

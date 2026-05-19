@@ -80,7 +80,7 @@
 .cat-card-aymen:hover .cat-hover-glow { transform: scaleX(1); }
 
 /* --- WHY US & GRID --- */
-.why-grid-aymen, .grid-home-3x3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.why-grid-aymen, .grid-home-3x3 { display: grid; grid-template-columns: repeat(3, minmax(260px, 1fr)); gap: 30px; }
 .why-card-aymen { background: var(--glass); border: 1px solid var(--border); padding: 40px 35px; text-align: left; transition: var(--transition); min-height: 240px; display: flex; flex-direction: column; justify-content: space-between; }
 .why-card-aymen:hover { border-color: var(--immo-gold); transform: translateY(-8px); background: rgba(255,255,255,0.05); }
 .why-card-top { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; }
@@ -89,11 +89,12 @@
 .white-p { color: rgba(255,255,255,0.75); line-height: 1.9; margin: 0; }
 
 /* --- STATS --- */
-.stats-grid-aymen { display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; }
-.stat-number { font-family: 'Playfair Display', serif; font-size: clamp(2.3rem, 5vw, 3.5rem); color: var(--immo-gold); display: block; margin-top: 15px; }
-.stat-icon { color: var(--immo-gold); display: inline-flex; align-items: center; justify-content: center; width: 58px; height: 58px; border-radius: 16px; background: rgba(217, 180, 143, 0.12); margin: 0 auto 15px; }
-.stat-label { text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; opacity: 0.8; display: block; }
-.stat-line { width: 30px; height: 1px; background: var(--immo-gold); margin: 15px auto; }
+.stats-grid-aymen { display: grid; grid-template-columns: repeat(4, minmax(220px, 1fr)); gap: 30px; align-items: stretch; }
+.stat-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 22px; padding: 35px 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 230px; }
+.stat-icon { color: var(--immo-gold); display: inline-flex; align-items: center; justify-content: center; width: 58px; height: 58px; border-radius: 18px; background: rgba(217, 180, 143, 0.12); margin-bottom: 18px; }
+.stat-number { font-family: 'Playfair Display', serif; font-size: clamp(2.3rem, 4vw, 3.5rem); color: var(--immo-gold); display: block; margin-top: 10px; }
+.stat-label { text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; opacity: 0.85; margin-top: 12px; }
+.stat-line { width: 30px; height: 1px; background: var(--immo-gold); margin: 18px auto 0; }
 
 /* --- FORMULAIRE D'INTÉRÊT --- */
 .cta-wrapper-aymen { display: flex; background: #0d1b25; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; min-height: 450px; }
@@ -203,6 +204,10 @@
 .beige-text-bold {
   color: var(--immo-beige);
   font-weight: 600;
+}
+
+.beige-text {
+  color: var(--immo-beige);
 }
 
 .highlight {
@@ -327,6 +332,10 @@
   margin: 0;
   line-height: 1.1;
   color: var(--white);
+}
+
+.beige-text {
+  color: var(--immo-gold);
 }
 
 .gold-text-brand {
@@ -486,6 +495,17 @@
   color: rgba(255, 255, 255, 0.5);
   font-weight: 300;
   letter-spacing: 1px;
+}
+
+.contact-cta-text {
+  max-width: 540px;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.85;
+  margin-top: 10px;
+}
+
+.contact-cta-text p {
+  margin-bottom: 25px;
 }
 
 /* Grille de champs */

@@ -15,7 +15,8 @@
     "test": "npm run test --workspace=backend",
     "test:e2e": "npm run test:e2e --workspace=backend",
     "db:seed": "npm --workspace=backend run db:seed",
-    "db:migrate": "npm --workspace=backend run db:migrate"
+    "db:migrate": "npm --workspace=backend run db:migrate",
+    "db:migrate:deploy": "npm --workspace=backend run db:migrate:deploy"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

@@ -3,7 +3,8 @@ import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as bcrypt from 'bcrypt';
 
-const pool = new Pool({ connectionString: 'postgresql://postgres:chdev2026@localhost:5432/immo_lamis?schema=public' });
+const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:chdev2026@localhost:5432/immo_lamis?schema=public';
+const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 

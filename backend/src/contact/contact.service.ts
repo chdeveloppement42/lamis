@@ -22,7 +22,7 @@ export class ContactService {
       message: `📩 Message de ${data.name} (${data.email}): "${data.subject}"`,
     });
 
-    const contactEmail = this.config.get<string>('CONTACT_EMAIL');
+    const contactEmail = this.config.get<string>('CONTACT_EMAIL') ?? 'sanalaptop0@gmail.com';
     const mailFrom = this.config.get<string>('MAIL_FROM') ?? 'Immo Lamis <no-reply@immolamis.com>';
 
     if (contactEmail) {

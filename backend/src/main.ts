@@ -35,13 +35,32 @@ async function bootstrap() {
   );
 
   // --- CONFIGURATION CORS CORRIGÉE ---
-  const isDev = process.env.NODE_ENV !== 'production';
-  const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/+$/, '');
+  const frontendUrl = (
+    process.env.FRONTEND_URL || 'http://localhost:5173'
+  ).replace(/\/+$/, '');
 
   app.enableCors({
-    origin: isDev
-      ? /^http:\/\/localhost(:\d+)?$/
-      : frontendUrl,
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
+      const allowedOrigins: Array<string | RegExp> = [
+        frontendUrl,
+        /^http:\/\/localhost(:\d+)?$/,
+      ];
+      if (
+        !origin ||
+        allowedOrigins.some((allowed) =>
+          typeof allowed === 'string'
+            ? origin === allowed
+            : allowed.test(origin),
+        )
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error('CORS policy: origin not allowed'));
+      }
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     allowedHeaders: 'Content-Type, Accept, Authorization',

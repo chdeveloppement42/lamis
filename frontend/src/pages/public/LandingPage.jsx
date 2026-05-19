@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Building2, Home, Briefcase, Trees, Store, Warehouse,
-  ShieldCheck, MapPin, Headphones, ChevronLeft, ChevronRight, Send 
+  ShieldCheck, MapPin, Headphones, ChevronLeft, ChevronRight,
+  Award, Users, Clock, Sparkles
 } from 'lucide-react'; 
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
@@ -139,8 +140,10 @@ export default function LandingPage() {
           desc: "Pas d'intermédiaires inutiles. Contactez le fournisseur directement sur son numéro vérifié." }
             ].map((item, idx) => (
               <div className="why-card-aymen" key={idx} data-aos="fade-up" data-aos-delay={idx * 200}>
-                <div className="why-icon-luxe">{item.icon}</div>
-                <h3>{item.title}</h3>
+                <div className="why-card-top">
+                  <div className="why-icon-luxe">{item.icon}</div>
+                  <h3>{item.title}</h3>
+                </div>
                 <p className="white-p">{item.desc}</p>
               </div>
             ))}
@@ -207,10 +210,13 @@ export default function LandingPage() {
         <div className="container">
           <div className="stats-grid-aymen">
             {[
-              { n: "15+", l: "Expertise" }, { n: "500+", l: "Biens" }, 
-              { n: "98%", l: "Clients" }, { n: "24/7", l: "Support" }
+              { icon: <Award size={32} />, n: "15+", l: "Expertise" },
+              { icon: <Home size={32} />, n: "500+", l: "Biens" }, 
+              { icon: <Users size={32} />, n: "98%", l: "Clients" },
+              { icon: <Clock size={32} />, n: "24/7", l: "Support" }
             ].map((s, i) => (
               <div className="stat-item" key={i} data-aos="zoom-in" data-aos-delay={i * 100}>
+                <div className="stat-icon">{s.icon}</div>
                 <span className="stat-number">{s.n}</span>
                 <span className="stat-label">{s.l}</span>
                 <div className="stat-line"></div>
@@ -231,31 +237,33 @@ export default function LandingPage() {
     <div className="testimonials-grid" data-aos="fade-up">
       {[
         { 
-          name: "Karim Benali", role: "Acquéreur", 
+          icon: <Sparkles size={28} />, name: "Karim Benali", role: "Acquéreur", 
           text: "J'ai trouvé ma villa à Hydra en quelques clics. Le contact direct avec le propriétaire a facilité toute la transaction.",
           initials: "KB"
         },
         { 
-          name: "Sonia Hamidi", role: "Propriétaire", 
+          icon: <Sparkles size={28} />, name: "Sonia Hamidi", role: "Propriétaire", 
           text: "En publiant sur ImmoLamis, j'ai reçu uniquement des appels qualifiés. Mon appartement a été loué en une semaine.",
           initials: "SH"
         },
         { 
-          name: "Amine Touati", role: "Promoteur Pro", 
+          icon: <Sparkles size={28} />, name: "Amine Touati", role: "Promoteur Pro", 
           text: "La plateforme idéale pour valoriser mes locaux commerciaux et bureaux. Le rendu visuel est simplement impeccable.",
           initials: "AT"
         }
       ].map((t, i) => (
         <div className="testimonial-card-luxe" key={i}>
-          <div className="quote-icon">"</div>
-          <p className="testimonial-text">« {t.text} »</p>
-          <div className="testimonial-author">
-            <div className="author-avatar">{t.initials}</div>
-            <div className="author-info">
-              <h4>{t.name}</h4>
-              <span>{t.role}</span>
+          <div className="testimonial-card-top">
+            <div className="testimonial-icon">{t.icon}</div>
+            <div className="testimonial-author">
+              <div className="author-avatar">{t.initials}</div>
+              <div className="author-info">
+                <h4>{t.name}</h4>
+                <span>{t.role}</span>
+              </div>
             </div>
           </div>
+          <p className="testimonial-text">« {t.text} »</p>
         </div>
       ))}
     </div>
@@ -275,29 +283,16 @@ export default function LandingPage() {
           <h3>Demande de Consultation</h3>
           <p>Laissez vos coordonnées, nos experts vous recontacteront sous 24h.</p>
         </div>
-        
-        <form className="interest-form-prestige" onSubmit={(e) => e.preventDefault()}>
-          <div className="input-row">
-            <div className="form-group-prestige">
-              <input type="text" placeholder="Nom complet" required />
-              <span className="input-border"></span>
-            </div>
-            <div className="form-group-prestige">
-              <input type="email" placeholder="Email professionnel" required />
-              <span className="input-border"></span>
-            </div>
-          </div>
 
-          <div className="form-group-prestige">
-            <textarea placeholder="Décrivez votre recherche (secteur, budget, type de bien...)" rows="4" required></textarea>
-            <span className="input-border"></span>
-          </div>
-
-          <button type="submit" className="btn-gold-submit-prestige">
-            <span className="btn-label">Envoyer ma demande</span>
-            <span className="btn-shine"></span>
-          </button>
-        </form>
+        <div className="contact-cta-text">
+          <p>
+            Pour toute demande, utilisez notre formulaire de contact dédié. Notre équipe vous répondra rapidement.
+          </p>
+          <Link to="/contact" className="btn-discover-gold">
+            <span className="btn-label">Aller à la page Contact</span>
+            <span className="btn-arrow-icon">→</span>
+          </Link>
+        </div>
       </div>
 
       <div className="cta-visual-side">

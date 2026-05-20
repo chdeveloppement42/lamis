@@ -91,8 +91,8 @@ export default function DataTable({
               filteredData.map((row) => (
                 <tr key={row[keyField]}>
                   {columns.map((col, idx) => (
-                    <td key={idx} data-label={col.header}>
-                      {col.render ? col.render(row) : row[col.field]}
+                    <td key={idx} data-label={col.header}> 
+                      {col.render ? col.render(row) : row[col.field]} 
                     </td>
                   ))}
                 </tr>

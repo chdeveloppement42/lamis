@@ -53,12 +53,13 @@ export default function PublicLayout() {
     <div className="public-layout">
       <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
         <div className="header__inner">
-          <Link to="/" className="header__logo">
-            <div className="header__logo-icon">IL</div>
-            <span className="header__logo-text">
-              Immo<span className="header__logo-accent">Lamis</span>
-            </span>
-          </Link>
+          <Link to="/" className="header__logo-link">
+  <img 
+    src="/logo.svg" /* Remplacez par le nom exact de votre image dans le dossier public */
+    alt="Immo Lamis - Immobilier de Prestige à Alger" 
+    className="header__logo-horizontal" 
+  />
+</Link>
 
           <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}>
             {navLinks.map((link) => (

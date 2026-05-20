@@ -78,7 +78,39 @@
 .header__logo-accent {
   color: var(--immo-gold);
 }
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espace parfait entre l'icône SVG et le texte ImmoLamis */
+  text-decoration: none;
+}
+/* Conteneur du lien du logo */
+.header__logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 4px 0;
+  transition: transform 0.2s ease;
+}
 
+.header__logo-link:hover {
+  transform: scale(1.02); /* Petit effet de zoom léger au survol du logo */
+}
+
+/* Style de la nouvelle image horizontale */
+.header__logo-horizontal {
+  height: 55px;        /* Hauteur parfaite pour que le texte zoomé de l'image soit très lisible */
+  width: auto;         /* Conserve le ratio horizontal 16:9 sans déformer */
+  object-fit: contain; /* S'assure que toute l'image reste visible et nette */
+  display: block;
+}
+
+/* Responsive : Ajustement pour les petits écrans de smartphones */
+@media (max-width: 640px) {
+  .header__logo-horizontal {
+    height: 42px;      /* On réduit légèrement la taille sur mobile pour laisser de la place au menu */
+  }
+}
 /* --- 2. NAV LINKS WITH ICONS --- */
 .header__nav {
   display: flex;

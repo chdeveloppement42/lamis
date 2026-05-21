@@ -55,7 +55,7 @@ export default function PublicLayout() {
         <div className="header__inner">
           <Link to="/" className="header__logo-link">
   <img 
-    src="/logo.svg" /* Remplacez par le nom exact de votre image dans le dossier public */
+    src="/logolamis.svg" /* Remplacez par le nom exact de votre image dans le dossier public */
     alt="Immo Lamis - Immobilier de Prestige à Alger" 
     className="header__logo-horizontal" 
   />

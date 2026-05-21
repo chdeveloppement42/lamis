@@ -269,25 +269,56 @@ export class AdminService {
     return { message: 'Mot de passe modifié avec succès' };
   }
 
+  private async getMonthlyCounts(tableName: string, monthsBack = 12) {
+    const rows = await this.prisma.$queryRawUnsafe<Array<{ month: string; count: bigint }>>(
+      `SELECT to_char(date_trunc('month', "createdAt"), 'YYYY-MM') AS month,
+              COUNT(*) AS count
+       FROM "${tableName}"
+       WHERE "createdAt" >= NOW() - INTERVAL '${monthsBack - 1} months'
+       GROUP BY month
+       ORDER BY month`
+    );
+
+    return rows.map((row) => ({ month: row.month, count: Number(row.count) }));
+  }
+
   // ─── DASHBOARD STATS ──────────────────────────────────────────
   async getDashboardStats() {
     const [
       pendingProviders,
+      totalProviders,
       publishedListings,
+      draftListings,
+      unpublishedListings,
+      totalListings,
       activeCategories,
       unreadNotifications,
+      monthlyProviders,
+      monthlyListings,
     ] = await Promise.all([
       this.prisma.provider.count({ where: { status: 'PENDING' } }),
+      this.prisma.provider.count(),
       this.prisma.listing.count({ where: { status: 'PUBLISHED' } }),
+      this.prisma.listing.count({ where: { status: 'DRAFT' } }),
+      this.prisma.listing.count({ where: { status: 'UNPUBLISHED' } }),
+      this.prisma.listing.count(),
       this.prisma.category.count(),
       this.prisma.notification.count({ where: { isRead: false } }),
+      this.getMonthlyCounts('Provider'),
+      this.getMonthlyCounts('Listing'),
     ]);
 
     return {
       pendingProviders,
+      totalProviders,
       publishedListings,
+      draftListings,
+      unpublishedListings,
+      totalListings,
       activeCategories,
       unreadNotifications,
+      monthlyProviders,
+      monthlyListings,
     };
   }
 

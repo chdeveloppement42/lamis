@@ -86,6 +86,9 @@ export default function LandingPage() {
       L'IMMOBILIER DE PRESTIGE DEPUIS 2010
     </span>
 
+    {/* Logo before title */}
+    <img src="/logolamis.svg" alt="Immo Lamis" className="hero-logo" data-aos="zoom-out" data-aos-duration="1200" />
+
     {/* Titre Principal en Or #D9B48F */}
     <h1 className="hero-main-title" data-aos="zoom-out" data-aos-duration="1500">
       IMMO<span className="gold-text-brand">LAMIS</span>

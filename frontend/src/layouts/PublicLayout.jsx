@@ -105,6 +105,7 @@ export default function PublicLayout() {
       <footer className="footer">
         <div className="footer__inner">
           <div className="footer__section">
+            <img src="/logolamis.svg" alt="Immo Lamis" className="footer__logo" />
             <h2 className="header__logo-text">Immo<span className="header__logo-accent">Lamis</span></h2>
             <p className="footer__description">L'excellence immobilière en Algérie. Trouvez des biens d'exception adaptés à vos exigences.</p>
           </div>

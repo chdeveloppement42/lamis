@@ -257,14 +257,14 @@
   max-width: 300px;
 }
 
-.footer__links h4 {
-  color: var(--immo-gold);
-  margin-bottom: 1.5rem;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  font-weight: 800;
-}
+  /* Footer logo */
+  .footer__logo {
+    display: block;
+    height: 48px;
+    width: auto;
+    margin-bottom: 12px;
+    object-fit: contain;
+  }
 
 .footer__links a, .footer__links span {
   display: block;
@@ -401,6 +401,7 @@
   .footer__description { margin: 1.5rem auto 0; }
   .header__logo-text { font-size: 1.2rem; }
   .footer__bottom-content { justify-content: center; text-align: center; }
+  .footer__logo { height: 40px; margin-bottom: 10px; }
 }
 @media (max-width: 600px) {
   /* Réduit l'espace global du footer sur mobile */

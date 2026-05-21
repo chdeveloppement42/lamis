@@ -166,6 +166,20 @@
   color: #fff;
 }
 
+/* Logo displayed above the hero title */
+.hero-logo {
+  display: block;
+  margin: 0 auto 18px;
+  height: 72px;
+  width: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 640px) {
+  .hero-logo { height: 48px; margin-bottom: 12px; }
+  .hero-main-title { font-size: clamp(2.6rem, 10vw, 4.2rem); letter-spacing: 6px; }
+}
+
 /* Sous-titre avec lignes dorées fines */
 .hero-subtitle-wrapper {
   display: flex;

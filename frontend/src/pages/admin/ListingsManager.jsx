@@ -243,14 +243,50 @@ export default function ListingsManager() {
       width: '20%',
       render: (l) => (
         <div className="data-table__actions">
-          <button onClick={() => startEditListing(l)} className="admin-btn admin-btn--sm admin-btn--outline">Modifier</button>
+          <button
+            type="button"
+            title="Modifier"
+            aria-label="Modifier"
+            data-tooltip="Modifier"
+            onClick={() => startEditListing(l)}
+            className="admin-btn admin-btn--icon admin-btn--outline"
+          >
+            ✏️
+          </button>
           {l.status !== 'PUBLISHED' && (
-            <button onClick={() => handleAction(l.id, 'publish')} className="admin-btn admin-btn--sm admin-btn--primary">Publier</button>
+            <button
+              type="button"
+              title="Publier"
+              aria-label="Publier"
+              data-tooltip="Publier"
+              onClick={() => handleAction(l.id, 'publish')}
+              className="admin-btn admin-btn--icon admin-btn--primary"
+            >
+              ✅
+            </button>
           )}
           {l.status === 'PUBLISHED' && (
-            <button onClick={() => handleAction(l.id, 'unpublish')} className="admin-btn admin-btn--sm admin-btn--warning">Dépublier</button>
+            <button
+              type="button"
+              title="Dépublier"
+              aria-label="Dépublier"
+              data-tooltip="Dépublier"
+              onClick={() => handleAction(l.id, 'unpublish')}
+              className="admin-btn admin-btn--icon admin-btn--warning"
+            >
+              🚫
+            </button>
           )}
-          <button onClick={() => handleAction(l.id, 'delete')} className="admin-btn admin-btn--sm admin-btn--outline" style={{ color: 'var(--color-danger)' }}>Supprimer</button>
+          <button
+            type="button"
+            title="Supprimer"
+            aria-label="Supprimer"
+            data-tooltip="Supprimer"
+            onClick={() => handleAction(l.id, 'delete')}
+            className="admin-btn admin-btn--icon admin-btn--outline admin-btn--danger"
+          >
+            🗑️
+          </button>
         </div>
       )
     }

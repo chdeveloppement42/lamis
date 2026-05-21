@@ -199,17 +199,62 @@ export default function ProvidersManager() {
         <div className="data-table__actions">
           {p.status === ACCOUNT_STATUS.PENDING && (
             <>
-              <button onClick={() => handleAction(p.id, 'validate')} className="admin-btn admin-btn--sm admin-btn--primary">Valider</button>
-              <button onClick={() => handleAction(p.id, 'reject')} className="admin-btn admin-btn--sm admin-btn--outline" style={{ color: 'var(--color-danger)' }}>Rejeter</button>
+              <button
+                type="button"
+                title="Valider"
+                aria-label="Valider"
+                data-tooltip="Valider"
+                onClick={() => handleAction(p.id, 'validate')}
+                className="admin-btn admin-btn--icon admin-btn--primary"
+              >
+                ✅
+              </button>
+              <button
+                type="button"
+                title="Rejeter"
+                aria-label="Rejeter"
+                data-tooltip="Rejeter"
+                onClick={() => handleAction(p.id, 'reject')}
+                className="admin-btn admin-btn--icon admin-btn--outline admin-btn--danger"
+              >
+                ❌
+              </button>
             </>
           )}
           {p.status === ACCOUNT_STATUS.VALIDATED && (
-            <button onClick={() => handleAction(p.id, 'suspend')} className="admin-btn admin-btn--sm admin-btn--warning">Suspendre</button>
+            <button
+              type="button"
+              title="Suspendre"
+              aria-label="Suspendre"
+              data-tooltip="Suspendre"
+              onClick={() => handleAction(p.id, 'suspend')}
+              className="admin-btn admin-btn--icon admin-btn--warning"
+            >
+              ⏸️
+            </button>
           )}
           {p.status === ACCOUNT_STATUS.SUSPENDED && (
-            <button onClick={() => handleAction(p.id, 'reactivate')} className="admin-btn admin-btn--sm admin-btn--primary">Réactiver</button>
+            <button
+              type="button"
+              title="Réactiver"
+              aria-label="Réactiver"
+              data-tooltip="Réactiver"
+              onClick={() => handleAction(p.id, 'reactivate')}
+              className="admin-btn admin-btn--icon admin-btn--primary"
+            >
+              ▶️
+            </button>
           )}
-          <button onClick={() => startEditProvider(p)} className="admin-btn admin-btn--sm admin-btn--outline">Modifier</button>
+          <button
+            type="button"
+            title="Modifier"
+            aria-label="Modifier"
+            data-tooltip="Modifier"
+            onClick={() => startEditProvider(p)}
+            className="admin-btn admin-btn--icon admin-btn--outline"
+          >
+            ✏️
+          </button>
         </div>
       )
     }

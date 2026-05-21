@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  Matches,
   MinLength,
 } from 'class-validator';
 
@@ -27,6 +28,10 @@ export class RegisterDto {
 
   @IsString()
   @IsNotEmpty({ message: 'Le numéro de téléphone est requis.' })
+  @Matches(/^\+[1-9]\d{7,14}$/, {
+    message:
+      'Le numéro de téléphone doit inclure l’indicatif pays. Exemple: +213555000000.',
+  })
   phone: string;
 
   @IsString()

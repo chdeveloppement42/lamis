@@ -209,7 +209,7 @@ export class ListingsService {
       where: { providerId },
       orderBy: { createdAt: 'desc' },
       include: {
-        category: { select: { name: true } },
+        category: { select: { id: true, name: true } },
         images: { where: { isMain: true }, take: 1 },
       },
     });
@@ -302,6 +302,112 @@ export class ListingsService {
         },
         images: { where: { isMain: true }, take: 1 },
       },
+    });
+  }
+
+  async createByAdmin(data: {
+    providerId: number;
+    title: string;
+    description: string;
+    price: number;
+    type: ListingType;
+    wilaya: string;
+    commune: string;
+    quartier?: string;
+    surface?: number;
+    rooms?: number;
+    floor?: number;
+    categoryId: number;
+    status?: ListingStatus;
+    images?: string[];
+  }) {
+    const provider = await this.prisma.provider.findUnique({
+      where: { id: data.providerId },
+    });
+    if (!provider) throw new NotFoundException('Fournisseur introuvable.');
+
+    const listing = await this.prisma.listing.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        price: data.price,
+        type: data.type,
+        wilaya: data.wilaya,
+        commune: data.commune,
+        quartier: data.quartier,
+        surface: data.surface,
+        rooms: data.rooms,
+        floor: data.floor,
+        status: data.status || 'DRAFT',
+        provider: { connect: { id: data.providerId } },
+        category: { connect: { id: data.categoryId } },
+        images: {
+          create:
+            data.images?.map((url, index) => ({
+              url,
+              isMain: index === 0,
+            })) || [],
+        },
+      },
+      include: { category: true, provider: true, images: true },
+    });
+
+    await this.notificationsService.broadcast({
+      type: NotificationType.NEW_LISTING,
+      message: `Nouvelle annonce : "${listing.title}" par ${provider.firstName} ${provider.lastName}`,
+    });
+
+    return listing;
+  }
+
+  async updateByAdmin(
+    id: number,
+    data: {
+      providerId?: number;
+      title?: string;
+      description?: string;
+      price?: number;
+      type?: ListingType;
+      wilaya?: string;
+      commune?: string;
+      quartier?: string;
+      surface?: number;
+      rooms?: number;
+      floor?: number;
+      categoryId?: number;
+      status?: ListingStatus;
+      images?: string[];
+    },
+  ) {
+    const listing = await this.prisma.listing.findUnique({ where: { id } });
+    if (!listing) throw new NotFoundException('Annonce introuvable.');
+
+    const { providerId, categoryId, images, ...listingData } = data;
+
+    return this.prisma.$transaction(async (tx) => {
+      if (images) {
+        await tx.listingImage.deleteMany({ where: { listingId: id } });
+      }
+
+      return tx.listing.update({
+        where: { id },
+        data: {
+          ...listingData,
+          ...(providerId ? { provider: { connect: { id: providerId } } } : {}),
+          ...(categoryId ? { category: { connect: { id: categoryId } } } : {}),
+          ...(images
+            ? {
+                images: {
+                  create: images.map((url, index) => ({
+                    url,
+                    isMain: index === 0,
+                  })),
+                },
+              }
+            : {}),
+        },
+        include: { category: true, provider: true, images: true },
+      });
     });
   }
 

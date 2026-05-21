@@ -43,11 +43,11 @@ export class AuthService {
       userType = 'PROVIDER';
     }
 
-    if (!user) throw new UnauthorizedException('Identifiants invalides');
+    if (!user) throw new UnauthorizedException("Ce compte n'existe pas.");
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid)
-      throw new UnauthorizedException('Identifiants invalides');
+      throw new UnauthorizedException('Mot de passe incorrect.');
 
     if (userType === 'ADMIN' && user.status === 'SUSPENDED') {
       throw new UnauthorizedException(

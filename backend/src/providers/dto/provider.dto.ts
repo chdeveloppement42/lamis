@@ -1,4 +1,89 @@
-import { IsString, IsOptional, IsEmail, MinLength } from 'class-validator';
+import { AccountStatus } from '@prisma/client';
+import { IsString, IsOptional, IsEmail, MinLength, IsEnum, Matches } from 'class-validator';
+
+export class CreateProviderAdminDto {
+  @IsString()
+  firstName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(6)
+  password: string;
+
+  @IsString()
+  @Matches(/^\+[1-9]\d{7,14}$/, {
+    message:
+      'Le numéro de téléphone doit inclure l’indicatif pays. Exemple: +213555000000.',
+  })
+  phone: string;
+
+  @IsOptional()
+  @IsString()
+  wilaya?: string;
+
+  @IsOptional()
+  @IsString()
+  commune?: string;
+
+  @IsOptional()
+  @IsString()
+  quartier?: string;
+
+  @IsOptional()
+  @IsString()
+  documentUrl?: string;
+
+  @IsOptional()
+  @IsEnum(AccountStatus)
+  status?: AccountStatus;
+}
+
+export class UpdateProviderAdminDto {
+  @IsOptional()
+  @IsString()
+  firstName?: string;
+
+  @IsOptional()
+  @IsString()
+  lastName?: string;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  @Matches(/^\+[1-9]\d{7,14}$/, {
+    message:
+      'Le numéro de téléphone doit inclure l’indicatif pays. Exemple: +213555000000.',
+  })
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  wilaya?: string;
+
+  @IsOptional()
+  @IsString()
+  commune?: string;
+
+  @IsOptional()
+  @IsString()
+  quartier?: string;
+
+  @IsOptional()
+  @IsString()
+  documentUrl?: string;
+
+  @IsOptional()
+  @IsEnum(AccountStatus)
+  status?: AccountStatus;
+}
 
 export class UpdateProviderProfileDto {
   @IsOptional()

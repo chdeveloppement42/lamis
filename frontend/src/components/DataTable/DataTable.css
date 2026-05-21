@@ -282,6 +282,19 @@
   font-size: 0.95rem;
 }
 
+.providers-manager__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.providers-manager__identity .data-table__email {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.85rem;
+  line-height: 1.25;
+}
+
 /* Style de base pour les petits boutons d'action */
 .admin-btn--icon {
   width: 32px;  /* Taille fixe pour faire un carré/cercle */

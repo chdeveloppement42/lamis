@@ -64,15 +64,13 @@ export default function AdminLayout() {
       <aside className={`admin-sidebar ${mobileSidebarOpen ? 'admin-sidebar--mobile-open' : ''}`}>
         <div className="admin-sidebar__header">
           <Link to="/admin/dashboard" className="admin-sidebar__logo">
-            <div className="admin-sidebar__logo-icon">
-              <Home size={22} strokeWidth={2.5} />
-            </div>
-            {!sidebarCollapsed && (
-              <span className="admin-sidebar__logo-text">
-                Immo<span>Lamis</span>
-              </span>
-            )}
+            <img
+              src="/logolamis.svg"
+              alt="Immo Lamis"
+              className="admin-sidebar__logo-image"
+            />
           </Link>
+          
           <button className="admin-sidebar__toggle" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
             {sidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
           </button>

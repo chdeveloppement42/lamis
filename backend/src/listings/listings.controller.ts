@@ -16,7 +16,12 @@ import { ListingsService } from './listings.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../casl/permissions.guard';
 import { CheckPermissions } from '../casl/permissions.decorator';
-import { CreateListingDto, UpdateListingDto } from './dto/listing.dto';
+import {
+  CreateListingDto,
+  UpdateListingDto,
+  CreateListingAdminDto,
+  UpdateListingAdminDto,
+} from './dto/listing.dto';
 import { ListingStatus, ListingType } from '@prisma/client';
 
 @Controller('listings')
@@ -55,6 +60,58 @@ export class ListingsController {
     return this.listingsService.findLatest();
   }
 
+  // ═══════════════════════════════════════════════════════════════
+  // ADMIN ENDPOINTS
+  // Keep these before dynamic :id routes.
+  // ═══════════════════════════════════════════════════════════════
+
+  @Get('admin/all')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @CheckPermissions({ action: 'manage', subject: 'listings' })
+  findAllAdmin(@Query('status') status?: ListingStatus) {
+    return this.listingsService.findAllAdmin(status);
+  }
+
+  @Post('admin')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @CheckPermissions({ action: 'manage', subject: 'listings' })
+  createByAdmin(@Body() createListingDto: CreateListingAdminDto) {
+    return this.listingsService.createByAdmin(createListingDto);
+  }
+
+  @Put('admin/:id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @CheckPermissions({ action: 'manage', subject: 'listings' })
+  updateByAdmin(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateListingDto: UpdateListingAdminDto,
+  ) {
+    return this.listingsService.updateByAdmin(id, updateListingDto);
+  }
+
+  @Patch('admin/:id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @CheckPermissions({ action: 'manage', subject: 'listings' })
+  patchUpdateByAdmin(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateListingDto: UpdateListingAdminDto,
+  ) {
+    return this.listingsService.updateByAdmin(id, updateListingDto);
+  }
+
+  @Delete('admin/:id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @CheckPermissions({ action: 'manage', subject: 'listings' })
+  removeByAdmin(@Param('id', ParseIntPipe) id: number) {
+    return this.listingsService.removeByAdmin(id);
+  }
+
+  @Get('provider/mine')
+  @UseGuards(JwtAuthGuard)
+  findMine(@Request() req: any) {
+    return this.listingsService.findByProvider(req.user.userId);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.listingsService.findOnePublished(id);
@@ -68,12 +125,6 @@ export class ListingsController {
   @UseGuards(JwtAuthGuard)
   create(@Request() req: any, @Body() createListingDto: CreateListingDto) {
     return this.listingsService.create(req.user.userId, createListingDto);
-  }
-
-  @Get('provider/mine')
-  @UseGuards(JwtAuthGuard)
-  findMine(@Request() req: any) {
-    return this.listingsService.findByProvider(req.user.userId);
   }
 
   @Put(':id')
@@ -92,17 +143,6 @@ export class ListingsController {
     return this.listingsService.removeByProvider(id, req.user.userId);
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // ADMIN ENDPOINTS
-  // ═══════════════════════════════════════════════════════════════
-
-  @Get('admin/all')
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @CheckPermissions({ action: 'manage', subject: 'listings' })
-  findAllAdmin(@Query('status') status?: ListingStatus) {
-    return this.listingsService.findAllAdmin(status);
-  }
-
   @Patch(':id/publish')
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @CheckPermissions({ action: 'manage', subject: 'listings' })
@@ -117,10 +157,4 @@ export class ListingsController {
     return this.listingsService.unpublish(id);
   }
 
-  @Delete('admin/:id')
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @CheckPermissions({ action: 'manage', subject: 'listings' })
-  removeByAdmin(@Param('id', ParseIntPipe) id: number) {
-    return this.listingsService.removeByAdmin(id);
-  }
 }

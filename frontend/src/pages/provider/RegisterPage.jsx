@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/Toast';
 import LocationSelector from '../../components/LocationSelector';
+import { getPhoneError, normalizePhoneNumber } from '../../utils/phoneUtils';
 import './AuthPages.css';
 
 export default function RegisterPage() {
@@ -33,7 +34,7 @@ export default function RegisterPage() {
     if (name === 'lastName' && !value.trim()) error = 'Nom requis';
     if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Email invalide';
     if (name === 'password' && value.length < 6) error = 'Min. 6 caractères';
-    if (name === 'phone' && !value.trim()) error = 'Téléphone requis';
+    if (name === 'phone') error = getPhoneError(value);
     if (name === 'wilaya' && !value) error = 'Wilaya requise';
     if (name === 'commune' && !value) error = 'Commune requise';
     return error;
@@ -74,10 +75,20 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const phoneError = getPhoneError(formData.phone);
+    if (phoneError) {
+      setStep(1);
+      setErrors((prev) => ({ ...prev, phone: phoneError }));
+      showToast({ type: 'warning', message: phoneError });
+      return;
+    }
+
     setLoading(true);
     try {
       const data = new FormData();
-      Object.keys(formData).forEach(key => data.append(key, formData[key]));
+      Object.keys(formData).forEach((key) => {
+        data.append(key, key === 'phone' ? normalizePhoneNumber(formData.phone) : formData[key]);
+      });
       if (documentFile) data.append('document', documentFile);
 
       const res = await register(data);
@@ -160,7 +171,15 @@ export default function RegisterPage() {
               {/* Téléphone seul ou avec un autre champ */}
               <div className="form-group">
                 <label>Téléphone</label>
-                <input type="tel" required placeholder="0555..." value={formData.phone} onChange={update('phone')} />
+                <input
+                  type="tel"
+                  required
+                  placeholder="+213555000000"
+                  value={formData.phone}
+                  onBlur={() => setFormData((prev) => ({ ...prev, phone: normalizePhoneNumber(prev.phone) }))}
+                  onChange={update('phone')}
+                />
+                {errors.phone && <span className="error-text">{errors.phone}</span>}
               </div>
 
               {/* Le LocationSelector est souvent le plus grand, on réduit son wrapper */}

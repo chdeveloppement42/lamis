@@ -30,7 +30,8 @@
 
 .p-header-left { display: flex; align-items: center; gap: 1.5rem; }
 
-.p-logo { text-decoration: none; display: flex; flex-direction: column; line-height: 1; }
+.p-logo { text-decoration: none; display: flex; align-items: center; line-height: 1; }
+.p-logo-image { width: 150px; height: 48px; object-fit: contain; object-position: left center; display: block; }
 .p-brand-immo { color: var(--p-gold); font-weight: 900; font-size: 1.4rem; letter-spacing: 2px; }
 .p-brand-lamis { color: #fff; font-size: 0.8rem; letter-spacing: 5px; font-weight: 300; }
 

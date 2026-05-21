@@ -106,4 +106,20 @@ export class UpdateListingDto {
   @IsOptional()
   @IsEnum(ListingStatus)
   status?: ListingStatus;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  images?: string[];
+}
+
+export class CreateListingAdminDto extends CreateListingDto {
+  @IsNumber()
+  providerId: number;
+}
+
+export class UpdateListingAdminDto extends UpdateListingDto {
+  @IsOptional()
+  @IsNumber()
+  providerId?: number;
 }

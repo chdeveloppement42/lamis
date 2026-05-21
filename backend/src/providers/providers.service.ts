@@ -11,25 +11,105 @@ import * as bcrypt from 'bcrypt';
 export class ProvidersService {
   constructor(private prisma: PrismaService) {}
 
+  private readonly providerAdminSelect = {
+    id: true,
+    firstName: true,
+    lastName: true,
+    email: true,
+    phone: true,
+    wilaya: true,
+    commune: true,
+    quartier: true,
+    documentUrl: true,
+    status: true,
+    createdAt: true,
+    _count: { select: { listings: true } },
+  };
+
   // ─── ADMIN: List all providers with optional status filter ──────
   async findAll(status?: AccountStatus) {
     return this.prisma.provider.findMany({
       where: status ? { status } : undefined,
       orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        phone: true,
-        wilaya: true,
-        commune: true,
-        quartier: true,
-        documentUrl: true,
-        status: true,
-        createdAt: true,
-        _count: { select: { listings: true } },
+      select: this.providerAdminSelect,
+    });
+  }
+
+  async createByAdmin(data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    phone: string;
+    wilaya?: string;
+    commune?: string;
+    quartier?: string;
+    documentUrl?: string;
+    status?: AccountStatus;
+  }) {
+    const existingProvider = await this.prisma.provider.findUnique({
+      where: { email: data.email },
+    });
+    const existingAdmin = await this.prisma.admin.findUnique({
+      where: { email: data.email },
+    });
+
+    if (existingProvider || existingAdmin) {
+      throw new BadRequestException('Cet email est dÃ©jÃ  utilisÃ©.');
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    return this.prisma.provider.create({
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: hashedPassword,
+        phone: data.phone,
+        wilaya: data.wilaya,
+        commune: data.commune,
+        quartier: data.quartier,
+        documentUrl: data.documentUrl,
+        status: data.status || 'VALIDATED',
       },
+      select: this.providerAdminSelect,
+    });
+  }
+
+  async updateByAdmin(
+    id: number,
+    data: {
+      firstName?: string;
+      lastName?: string;
+      email?: string;
+      phone?: string;
+      wilaya?: string;
+      commune?: string;
+      quartier?: string;
+      documentUrl?: string;
+      status?: AccountStatus;
+    },
+  ) {
+    await this.findOne(id);
+
+    if (data.email) {
+      const existingProvider = await this.prisma.provider.findUnique({
+        where: { email: data.email },
+      });
+      const existingAdmin = await this.prisma.admin.findUnique({
+        where: { email: data.email },
+      });
+
+      if (existingAdmin || (existingProvider && existingProvider.id !== id)) {
+        throw new BadRequestException('Cet email est dÃ©jÃ  utilisÃ©.');
+      }
+    }
+
+    return this.prisma.provider.update({
+      where: { id },
+      data,
+      select: this.providerAdminSelect,
     });
   }
 

@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  Post,
+  Put,
   Patch,
   Param,
   Query,
@@ -16,6 +18,8 @@ import { CheckPermissions } from '../casl/permissions.decorator';
 import { AccountStatus } from '@prisma/client';
 
 import {
+  CreateProviderAdminDto,
+  UpdateProviderAdminDto,
   UpdateProviderProfileDto,
   UpdateSensitiveFieldsDto,
   ChangePasswordDto,
@@ -78,6 +82,33 @@ export class ProvidersController {
   @CheckPermissions({ action: 'manage', subject: 'providers' })
   findAll(@Query('status') status?: AccountStatus) {
     return this.providersService.findAll(status);
+  }
+
+  @Post()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @CheckPermissions({ action: 'manage', subject: 'providers' })
+  create(@Body() createProviderDto: CreateProviderAdminDto) {
+    return this.providersService.createByAdmin(createProviderDto);
+  }
+
+  @Put(':id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @CheckPermissions({ action: 'manage', subject: 'providers' })
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateProviderDto: UpdateProviderAdminDto,
+  ) {
+    return this.providersService.updateByAdmin(id, updateProviderDto);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @CheckPermissions({ action: 'manage', subject: 'providers' })
+  patchUpdate(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateProviderDto: UpdateProviderAdminDto,
+  ) {
+    return this.providersService.updateByAdmin(id, updateProviderDto);
   }
 
   @Get(':id')

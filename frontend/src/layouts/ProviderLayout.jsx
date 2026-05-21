@@ -71,8 +71,11 @@ export default function ProviderLayout() {
               <Menu size={26} />
             </button>
             <Link to="/" className="p-logo">
-              <span className="p-brand-immo">IMMO</span>
-              <span className="p-brand-lamis">LAMIS</span>
+              <img
+                src="/logolamis.svg"
+                alt="Immo Lamis"
+                className="p-logo-image"
+              />
             </Link>
           </div>
 

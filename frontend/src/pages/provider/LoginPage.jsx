@@ -8,6 +8,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   const { login, user } = useAuth();
   const { showToast } = useToast();
@@ -26,18 +27,38 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setLoginError('');
 
     try {
       await login(email, password, from);
     } catch (err) {
-      const errorMsg = err.response?.status === 401 
-        ? (err.response.data.message || 'Identifiants invalides') 
-        : 'Une erreur est survenue lors de la connexion.';
+      const apiMessage = err.response?.data?.message;
+      const message = Array.isArray(apiMessage) ? apiMessage[0] : apiMessage;
+      const errorMsg = getLoginErrorMessage(err.response?.status, message);
       
+      setLoginError(errorMsg);
       showToast({ type: 'error', message: errorMsg });
     } finally {
       setLoading(false);
     }
+  };
+
+  const getLoginErrorMessage = (status, message) => {
+    const normalizedMessage = String(message || '').toLowerCase();
+
+    if (normalizedMessage.includes("n'existe") || normalizedMessage.includes('introuvable')) {
+      return "Ce compte n'existe pas. Vérifiez votre email ou créez un compte.";
+    }
+
+    if (normalizedMessage.includes('mot de passe') || normalizedMessage.includes('password')) {
+      return 'Mot de passe incorrect. Veuillez réessayer.';
+    }
+
+    if (status === 401) {
+      return 'Email ou mot de passe incorrect.';
+    }
+
+    return 'Une erreur est survenue lors de la connexion. Veuillez réessayer.';
   };
 
   return (
@@ -85,7 +106,12 @@ export default function LoginPage() {
                   required
                   placeholder="nom@exemple.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  aria-invalid={Boolean(loginError)}
+                  aria-describedby={loginError ? 'login-error' : undefined}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setLoginError('');
+                  }}
                 />
               </div>
 
@@ -96,10 +122,21 @@ export default function LoginPage() {
                   required
                   placeholder="••••••••"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  aria-invalid={Boolean(loginError)}
+                  aria-describedby={loginError ? 'login-error' : undefined}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setLoginError('');
+                  }}
                 />
               </div>
             </div>
+
+            {loginError && (
+              <div id="login-error" className="auth-error" role="alert">
+                {loginError}
+              </div>
+            )}
 
             <button type="submit" className="auth-submit-btn" disabled={loading}>
               {loading ? "Authentification..." : 'Se connecter au compte'}

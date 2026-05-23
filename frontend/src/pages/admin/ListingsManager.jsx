@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import axiosInstance from '../../api/axiosInstance';
+import imageCompression from 'browser-image-compression';
+import LocationSelector from '../../components/LocationSelector';
 import { getCategories } from '../../api/categories.api';
 import { DataTable } from '../../components/DataTable';
 
@@ -22,7 +24,7 @@ const emptyListingForm = {
   surface: '',
   rooms: '',
   floor: '',
-  imagesText: '',
+  // images handled via upload only
 };
 
 export default function ListingsManager() {
@@ -38,6 +40,8 @@ export default function ListingsManager() {
   const [editingListing, setEditingListing] = useState(null);
   const [listingForm, setListingForm] = useState(emptyListingForm);
   const [savingListing, setSavingListing] = useState(false);
+  const [images, setImages] = useState([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
 
   const fetchListings = useCallback(async () => {
     try {
@@ -111,7 +115,7 @@ export default function ListingsManager() {
       surface: listing.surface ?? '',
       rooms: listing.rooms ?? '',
       floor: listing.floor ?? '',
-      imagesText: listing.images?.map((image) => image.url).join('\n') || '',
+      // images managed via upload
     });
     setShowForm(true);
   };
@@ -120,12 +124,32 @@ export default function ListingsManager() {
     setListingForm((prev) => ({ ...prev, [field]: event.target.value }));
   };
 
-  const buildListingPayload = () => {
-    const images = listingForm.imagesText
-      .split(/\r?\n/)
-      .map((url) => url.trim())
-      .filter(Boolean);
+  const handleImageChange = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
 
+    const options = {
+      maxSizeMB: 0.8,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+      fileType: 'image/webp',
+    };
+
+    try {
+      const compressed = await Promise.all(files.map(async (f) => imageCompression(f, options)));
+      setImages((prev) => [...prev, ...compressed]);
+    } catch (err) {
+      console.error('Error compressing images', err);
+      showToast({ type: 'error', message: 'Erreur lors de la préparation des images.' });
+    }
+  };
+
+  const removeImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const buildListingPayload = () => {
+    // images will be provided from upload step (uploadedUrls)
     return {
       providerId: Number(listingForm.providerId),
       title: listingForm.title,
@@ -140,34 +164,50 @@ export default function ListingsManager() {
       surface: listingForm.surface ? Number(listingForm.surface) : undefined,
       rooms: listingForm.rooms ? Number(listingForm.rooms) : undefined,
       floor: listingForm.floor ? Number(listingForm.floor) : undefined,
-      images,
+      images: [],
     };
   };
 
   const handleListingSubmit = async (event) => {
     event.preventDefault();
     setSavingListing(true);
-
     try {
+      // 1) If there are images selected locally, upload them first
+      let uploadedUrls = [];
+      if (images.length > 0) {
+        setUploadingImages(true);
+        const formData = new FormData();
+        images.forEach((img) => {
+          formData.append('images', img, img.name?.replace(/\.[^/.]+$/, '') + '.webp');
+        });
+
+        const mediaRes = await axiosInstance.post('/media/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+
+        uploadedUrls = mediaRes.data.urls || [];
+        setUploadingImages(false);
+      }
+
+      // 2) Build payload and merge uploaded URLs with any manual URLs
       const payload = buildListingPayload();
+      payload.images = [...(payload.images || []), ...uploadedUrls];
+
       if (editingListing) {
         await axiosInstance.patch(`/listings/admin/${editingListing.id}`, payload);
       } else {
         await axiosInstance.post('/listings/admin', payload);
       }
 
-      showToast({
-        type: 'success',
-        message: editingListing ? 'Annonce modifiée avec succès.' : 'Annonce ajoutée avec succès.',
-      });
+      showToast({ type: 'success', message: editingListing ? 'Annonce modifiée avec succès.' : 'Annonce ajoutée avec succès.' });
       resetListingForm();
+      setImages([]);
       fetchListings();
     } catch (error) {
-      showToast({
-        type: 'error',
-        message: error.response?.data?.message || "Erreur lors de l'enregistrement de l'annonce.",
-      });
+      console.error('Failed to save listing (admin):', error);
+      showToast({ type: 'error', message: error.response?.data?.message || "Erreur lors de l'enregistrement de l'annonce." });
     } finally {
+      setUploadingImages(false);
       setSavingListing(false);
     }
   };
@@ -339,8 +379,16 @@ export default function ListingsManager() {
               <option value={LISTING_STATUS.PUBLISHED}>Publié</option>
               <option value={LISTING_STATUS.UNPUBLISHED}>Dépublié</option>
             </select>
-            <input className="admin-input" placeholder="Wilaya" value={listingForm.wilaya} onChange={updateListingForm('wilaya')} required />
-            <input className="admin-input" placeholder="Commune" value={listingForm.commune} onChange={updateListingForm('commune')} required />
+            <div style={{ gridColumn: '1 / -1' }}>
+              <LocationSelector
+                wilaya={listingForm.wilaya}
+                commune={listingForm.commune}
+                onWilayaChange={(val) => setListingForm((p) => ({ ...p, wilaya: val }))}
+                onCommuneChange={(val) => setListingForm((p) => ({ ...p, commune: val }))}
+                showCommune
+                required
+              />
+            </div>
             <input className="admin-input" placeholder="Quartier" value={listingForm.quartier} onChange={updateListingForm('quartier')} />
             <input className="admin-input" type="number" min="0" placeholder="Surface m²" value={listingForm.surface} onChange={updateListingForm('surface')} />
             <input className="admin-input" type="number" min="0" placeholder="Pièces" value={listingForm.rooms} onChange={updateListingForm('rooms')} />
@@ -356,13 +404,35 @@ export default function ListingsManager() {
             required
           />
 
-          <textarea
-            className="admin-input admin-form-card__textarea"
-            rows="3"
-            placeholder="URLs des images, une URL par ligne"
-            value={listingForm.imagesText}
-            onChange={updateListingForm('imagesText')}
-          />
+          <div style={{ marginTop: '1rem' }}>
+            <label className="admin-form-label">Photos ({images.length} sélectionnées)</label>
+            <div className="provider-upload">
+              <label className="provider-upload__zone" style={{ cursor: 'pointer', display: 'block' }}>
+                <input type="file" multiple accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
+                <span style={{ fontSize: '2rem' }}>📷</span>
+                <p>Cliquez pour sélectionner vos photos</p>
+                <span className="provider-upload__hint">Max 800KB par image • Auto-compressé en WebP</span>
+              </label>
+            </div>
+
+            {images.length > 0 && (
+              <div style={{ display: 'flex', gap: '10px', marginTop: '15px', flexWrap: 'wrap' }}>
+                {images.map((img, idx) => (
+                  <div key={idx} style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '8px', overflow: 'hidden' }}>
+                    <img src={URL.createObjectURL(img)} alt={`Preview ${idx}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(idx)}
+                      style={{ position: 'absolute', top: 2, right: 2, background: 'rgba(255,0,0,0.8)', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', fontSize: '10px' }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+          </div>
 
           <div className="admin-form-card__actions">
             <button className="admin-btn admin-btn--primary" disabled={savingListing}>

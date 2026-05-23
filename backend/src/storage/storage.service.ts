@@ -130,15 +130,32 @@ export class StorageService implements OnModuleInit {
     publicId: string,
   ): Promise<string> {
     return new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { public_id: publicId, resource_type: 'image', overwrite: true },
-        (error: any, result: any) => {
-          if (error || !result)
-            return reject(error ?? new Error('Cloudinary upload failed'));
-          resolve(result.secure_url);
-        },
-      );
-      stream.end(buffer);
+      try {
+        this.logger.debug(`Starting Cloudinary upload stream for ${publicId}`);
+        const stream = cloudinary.uploader.upload_stream(
+          { public_id: publicId, resource_type: 'image', overwrite: true },
+          (error: any, result: any) => {
+            if (error) {
+              this.logger.error(`Cloudinary upload error: ${JSON.stringify(error)}`);
+              return reject(error);
+            }
+            if (!result) {
+              this.logger.error(`Cloudinary returned no result`);
+              return reject(new Error('Cloudinary upload failed: no result'));
+            }
+            this.logger.debug(`Cloudinary upload successful: ${result.secure_url}`);
+            resolve(result.secure_url);
+          },
+        );
+        stream.on('error', (err: any) => {
+          this.logger.error(`Stream error: ${JSON.stringify(err)}`);
+          reject(err);
+        });
+        stream.end(buffer);
+      } catch (err) {
+        this.logger.error(`uploadToCloudinary exception: ${(err as Error)?.message}`);
+        reject(err);
+      }
     });
   }
 

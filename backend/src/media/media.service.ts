@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { StorageService } from '../storage/storage.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class MediaService {
+  private readonly logger = new Logger(MediaService.name);
   constructor(private readonly storageService: StorageService) {}
 
   /**
@@ -16,16 +17,22 @@ export class MediaService {
     if (!files || files.length === 0) return [];
 
     const uploadPromises = files.map(async (file) => {
-      // Generate unique filename base
-      const filename = `${uuidv4()}`;
+      try {
+        this.logger.log(`Processing file ${file.originalname} size=${file.size} mimetype=${file.mimetype}`);
+        // Generate unique filename base
+        const filename = `${uuidv4()}`;
 
-      // Save with watermark (handles resize/webp/watermark)
-      const fileUrl = await this.storageService.saveWatermarked(
-        file.buffer,
-        filename,
-      );
+        // Save with watermark (handles resize/webp/watermark)
+        const fileUrl = await this.storageService.saveWatermarked(
+          file.buffer,
+          filename,
+        );
 
-      return fileUrl;
+        return fileUrl;
+      } catch (err) {
+        this.logger.error(`Failed processing file ${file.originalname}: ${(err as Error)?.message}`);
+        throw err;
+      }
     });
 
     return Promise.all(uploadPromises);

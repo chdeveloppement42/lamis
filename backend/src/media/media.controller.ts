@@ -4,6 +4,8 @@ import {
   UseInterceptors,
   UploadedFiles,
   UseGuards,
+  Req,
+  Logger,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { MediaService } from './media.service';
@@ -12,6 +14,7 @@ import * as multer from 'multer';
 
 @Controller('media')
 export class MediaController {
+  private readonly logger = new Logger(MediaController.name);
   constructor(private readonly mediaService: MediaService) {}
 
   @Post('upload')
@@ -31,11 +34,19 @@ export class MediaController {
       },
     }),
   )
-  async uploadImages(@UploadedFiles() files: Express.Multer.File[]) {
-    const urls = await this.mediaService.uploadListingImages(files);
-    return {
-      message: 'Images traitées avec succès',
-      urls,
-    };
+  async uploadImages(@UploadedFiles() files: Express.Multer.File[], @Req() req: any) {
+    this.logger.log(`media.upload invoked by user=${req.user?.id || 'unknown'} files=${files?.length || 0}`);
+
+    try {
+      const urls = await this.mediaService.uploadListingImages(files);
+      this.logger.log(`media.upload succeeded user=${req.user?.id || 'unknown'} uploaded=${urls?.length || 0}`);
+      return {
+        message: 'Images traitées avec succès',
+        urls,
+      };
+    } catch (err) {
+      this.logger.error(`media.upload failed for user=${req.user?.id || 'unknown'} error=${(err as Error)?.message}`, (err as Error)?.stack);
+      throw err;
+    }
   }
 }

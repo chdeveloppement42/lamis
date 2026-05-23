@@ -15,10 +15,9 @@ export default function ResetPasswordPage() {
   const { showToast } = useToast();
 
   const defaultToken = query.get('token') || '';
-  const defaultUserType = query.get('userType') || 'PROVIDER';
 
   const [token, setToken] = useState(defaultToken);
-  const [userType, setUserType] = useState(defaultUserType);
+  const userType = 'PROVIDER'; // Fournisseur uniquement
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -84,14 +83,6 @@ export default function ResetPasswordPage() {
                     value={token}
                     onChange={(e) => setToken(e.target.value)}
                   />
-                </div>
-
-                <div className="form-group">
-                  <label>Type de compte</label>
-                  <select value={userType} onChange={(e) => setUserType(e.target.value)}>
-                    <option value="PROVIDER">Fournisseur</option>
-                    <option value="ADMIN">Administrateur</option>
-                  </select>
                 </div>
 
                 <div className="form-group">

@@ -6,7 +6,7 @@ import '../provider/AuthPages.css';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
-  const [userType, setUserType] = useState('PROVIDER');
+  const userType = 'PROVIDER'; // Fournisseur uniquement
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -78,17 +78,6 @@ export default function ForgotPasswordPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                </div>
-
-                <div className="form-group">
-                  <label>Type de compte</label>
-                  <select
-                    value={userType}
-                    onChange={(e) => setUserType(e.target.value)}
-                  >
-                    <option value="PROVIDER">Fournisseur</option>
-                    <option value="ADMIN">Administrateur</option>
-                  </select>
                 </div>
               </div>
 

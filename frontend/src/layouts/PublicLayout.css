@@ -236,7 +236,7 @@
 .footer {
   background: linear-gradient(180deg, rgba(20, 40, 54, 1), rgba(15, 36, 48, 1));
   color: #ffffff;
-  padding-top: 2rem;
+  padding-top: 3rem;
   border-top: 3px solid rgba(217, 180, 143, 0.95);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
 }
@@ -251,7 +251,7 @@
 }
 
 .footer__description {
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
   opacity: 0.7;
   line-height: 1.6;
   max-width: 300px;
@@ -273,7 +273,14 @@
   margin-bottom: 0.8rem;
   transition: 0.3s;
 }
-
+.footer__links h4 {
+  color: var(--immo-gold);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1.5rem; /* ◄ Augmente l'espace entre le titre et le premier lien */
+}
 .footer__links a:hover { color: var(--immo-gold); padding-left: 5px; }
 
 .footer__bottom {
@@ -446,5 +453,15 @@
   .footer__bottom-content {
     gap: 0.4rem; /* Resserre l'espace entre le copyright et le crédit CH-PUB */
     font-size: 0.75rem;
+  }
+}
+@media (max-width: 600px) {
+  /* ... vos autres styles mobiles ... */
+
+  .footer__links h4 {
+    margin-top: 1rem;       /* Éloigne le titre du bloc précédent */
+    margin-bottom: 1rem;    /* ◄ Crée l'espace entre le titre et sa liste sur mobile */
+    font-size: 1.05rem;
+    color: var(--immo-gold);
   }
 }

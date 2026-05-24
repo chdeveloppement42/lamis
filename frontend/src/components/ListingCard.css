@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   IMMO LAMIS — ULTRA MODERN GLASSMORPHISM THEME (BLUR)
+   IMMO LAMIS — ULTRA MODERN GLASSMORPHISM THEME (FULL COMPLETE)
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
@@ -14,7 +14,7 @@
   display: flex;
   flex-direction: column;
   
-  /* 🌟 ÉLIMINATION DU BLANC : Fond semi-transparent + Effet de flou (Blur) */
+  /* Fond semi-transparent effet "verre poli" (Glassmorphism) */
   background: rgba(255, 255, 255, 0.75); 
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -23,7 +23,7 @@
   overflow: hidden;
   text-decoration: none;
   
-  /* Bordure très fine et lumineuse pour accentuer l'effet verre */
+  /* Bordure fine style cristal */
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 10px 30px rgba(20, 40, 54, 0.04);
   position: relative;
@@ -33,13 +33,11 @@
               border-color 0.4s ease;
 }
 
-/* Effet de lévitation et reflets au survol */
+/* Effet de survol / Lévitation premium */
 .listing-card:hover {
   transform: translateY(-10px);
-  
-  /* Le verre devient légèrement plus lumineux et opaque au survol */
   background: rgba(255, 255, 255, 0.9); 
-  border-color: rgba(217, 180, 143, 0.4); /* Lueur Or discrète sur les bords */
+  border-color: rgba(217, 180, 143, 0.45); /* Délicate lueur dorée */
   box-shadow: 0 30px 60px rgba(20, 40, 54, 0.12);
 }
 
@@ -60,11 +58,28 @@
   transition: transform 0.8s var(--card-shadow);
 }
 
+/* Zoom cinématique très fluide sur l'image */
 .listing-card:hover .listing-card__img {
   transform: scale(1.04);
 }
 
-/* --- Badges --- */
+/* Placeholder si aucune image disponible */
+.listing-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+}
+
+.listing-card__placeholder-icon {
+  width: 36px;
+  height: 36px;
+  opacity: 0.25;
+}
+
+/* --- Configuration des Badges Modernes --- */
 .listing-card__badges-group {
   position: absolute;
   top: 12px;
@@ -81,31 +96,38 @@
   text-transform: uppercase;
   letter-spacing: 0.8px;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-/* 🔵 LOCATION : Bleu profond */
+/* 🔵 LOCATION : Thème Bleu Profond semi-transparent */
 .listing-card__badge--location {
-  background: linear-gradient(135deg, var(--immo-blue), #23475a);
+  background: rgba(52, 101, 127, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* 🌟 VENTE : Beige / Or */
+/* 🌟 VENTE : Thème Beige / Or semi-transparent */
 .listing-card__badge--vente {
-  background: linear-gradient(135deg, var(--immo-gold), #bca082);
+  background: rgba(217, 180, 143, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #142836;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Badge catégorie */
+/* 🔮 CATÉGORIE : Entièrement transparente avec flou cristallin */
 .listing-card__badge--category {
-  background: rgba(20, 40, 54, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--immo-dark);
-  border: 1px solid rgba(20, 40, 54, 0.1);
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
-/* Compteur de photos */
+/* Compteur de photos (Capsule en bas de l'image) */
 .listing-card__photo-counter {
   position: absolute;
   bottom: 12px;
@@ -130,7 +152,7 @@
   filter: brightness(0) invert(1);
 }
 
-/* --- Contenu de la carte --- */
+/* --- Corps de la Carte --- */
 .listing-card__content {
   padding: 20px 24px 24px;
   display: flex;
@@ -138,6 +160,7 @@
   flex: 1;
 }
 
+/* Section Localisation */
 .listing-card__location {
   display: flex;
   align-items: center;
@@ -156,6 +179,7 @@
   opacity: 0.6;
 }
 
+/* Titre principal (hauteur fixe pour un alignement horizontal parfait) */
 .listing-card__title {
   font-size: 1.15rem;
   font-weight: 700;
@@ -166,9 +190,15 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  height: 3.3rem;
+  height: 3.3rem; 
+  transition: color 0.3s ease;
 }
 
+.listing-card:hover .listing-card__title {
+  color: var(--immo-blue);
+}
+
+/* Ligne de séparation moderne */
 .listing-card__divider {
   width: 100%;
   height: 1px;
@@ -177,13 +207,14 @@
   margin-bottom: 18px;
 }
 
-/* --- Footer --- */
+/* --- Section Bas de Carte (Footer) --- */
 .listing-card__footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
+/* Typographie du Prix */
 .listing-card__price-amount {
   font-size: 1.35rem;
   font-weight: 800;
@@ -192,16 +223,16 @@
   transition: color 0.3s ease;
 }
 
-/* Illumination dynamique du prix selon la catégorie au survol */
+/* Illumination dynamique de la couleur du prix selon le type lors du survol */
 .listing-card:has(.listing-card__badge--location):hover .listing-card__price-amount {
-  color: var(--immo-blue);
+  color: var(--immo-blue); /* Passe au bleu au survol si c'est une location */
 }
 
 .listing-card:has(.listing-card__badge--vente):hover .listing-card__price-amount {
-  color: #cda276;
+  color: #cda276; /* Passe à l'or chaud au survol si c'est une vente */
 }
 
-/* --- Profil Agent --- */
+/* --- Bloc Avatar de l'Agent / Propriétaire --- */
 .listing-card__avatar-wrapper {
   position: relative;
   width: 38px;
@@ -215,7 +246,7 @@
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, var(--immo-dark), var(--immo-blue));
-  color: var(--immo-gold);
+  color: var(--immo-gold); /* Initiales colorées en Or */
   font-weight: 700;
   font-size: 0.85rem;
   border-radius: 50%;
@@ -223,6 +254,7 @@
   box-shadow: 0 4px 12px rgba(20, 40, 54, 0.1);
 }
 
+/* Badge de vérification superposé (uniquement si validé) */
 .listing-card__verified-icon {
   position: absolute;
   bottom: -2px;

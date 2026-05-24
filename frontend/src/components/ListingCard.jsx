@@ -18,7 +18,9 @@ export default function ListingCard({ listing }) {
   } = listing;
 
   const thumbUrl = images.length > 0 ? getImageUrl(images[0].url) : null;
-  const providerInitial = provider?.firstName?.charAt(0) || provider?.email?.charAt(0) || 'F';
+  
+  // Si le provider existe, on prend son initiale, sinon on laisse vide pour afficher l'icône SVG
+  const providerInitial = provider?.firstName?.charAt(0) || provider?.email?.charAt(0) || '';
 
   return (
     <Link 
@@ -80,7 +82,23 @@ export default function ListingCard({ listing }) {
 
           <div className="listing-card__agent">
             <div className="listing-card__avatar-wrapper">
-              <span className="listing-card__avatar-initial">{providerInitial}</span>
+              <span className="listing-card__avatar-initial">
+                {providerInitial ? (
+                  providerInitial
+                ) : (
+                  /* Icône agent en SVG ultra-propre si les données ne sont pas chargées */
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2.5" 
+                    style={{ width: '14px', height: '14px', display: 'block' }}
+                  >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle cx="12" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </span>
               {provider?.status === 'VALIDATED' && (
                 <img 
                   src="/branding/verified-badge.svg" 

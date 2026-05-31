@@ -143,11 +143,9 @@ export default function LoginPage() {
             </button>
 
             <div className="auth-form__footer" style={{ marginTop: '2rem', textAlign: 'center' }}>
-              <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
-                Pas encore de compte ?
-              </p>
+              
               <Link to="/register" style={{ color: '#D9B48F', fontWeight: '700', textDecoration: 'none' }}>
-                Devenir fournisseur partenaire
+                creer un compte 
               </Link>
               <div style={{ marginTop: '0.8rem' }}>
                 <Link to="/forgot-password" style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem' }}>

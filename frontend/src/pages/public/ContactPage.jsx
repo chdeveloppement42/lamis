@@ -113,11 +113,11 @@ export default function ContactPage() {
               </div>
 
               <div className="map-container-luxe">
-                <iframe 
-                  title="Map Immo Lamis" 
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=3.00,36.70,3.10,36.78&layer=mapnik"
-                ></iframe>
-              </div>
+  <iframe 
+    title="Map Immo Lamis - Oran" 
+    src="https://www.openstreetmap.org/export/embed.html?bbox=-0.6800,35.6800,-0.5700,35.7400&layer=mapnik"
+  ></iframe>
+</div>
             </div>
 
             {/* FORMULAIRE D'EXPÉDITION */}

@@ -303,7 +303,7 @@ export default function LandingPage() {
           <div className="contact-info-badge">
             <p>Disponible 7j/7</p>
             <span className="gold-line"></span>
-            <p>Alger, DZ</p>
+            <p>Oran, DZ</p>
           </div>
         </div>
         <img src="/villa.png" alt="Immobilier Luxe" className="visual-img" />

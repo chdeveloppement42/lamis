@@ -138,9 +138,9 @@ export default function LandingPage() {
             {[
               { icon: <ShieldCheck size={35}/>, title: "ANNONCES VÉRIFIÉES", desc: "Chaque bien est audité par nos modérateurs avant publication pour garantir une sérénité totale."},
               { icon: <MapPin size={35}/>, title: "VISIBILITÉ PREMIUM", 
-          desc: "Une vitrine de haut standing pour sublimer vos villas, terrains et locaux commerciaux."},
+          desc: "Une vitrine de haut standing pour sublimer vos villas, terrains et appartements."},
               { icon: <Headphones size={35}/>, title: "CONTACT DIRECT", 
-          desc: "Pas d'intermédiaires inutiles. Contactez le fournisseur directement sur son numéro vérifié." }
+          desc: "Pas d'intermédiaires inutiles. Contactez l'agent immobilière directement sur son numéro vérifié." }
             ].map((item, idx) => (
               <div className="why-card-aymen" key={idx} data-aos="fade-up" data-aos-delay={idx * 200}>
                 <div className="why-card-top">

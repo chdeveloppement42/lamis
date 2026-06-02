@@ -42,7 +42,7 @@ export default function AboutPage() {
               Immo Lamis redéfinit l'expérience immobilière en Algérie. Plus qu'une plateforme, nous sommes un <span className="text-gold">label de qualité</span> qui garantit la rencontre entre l'offre et la demande dans un cadre sécurisé.
             </p>
             <p className="p-luxe">
-              Chaque fournisseur est un partenaire privilégié, et chaque visiteur est un client précieux. Notre mission est de supprimer les barrières de l'incertitude pour laisser place à la <span className="text-gold">concrétisation de vos rêves</span>.
+              Chaque agent immobilié est un partenaire privilégié, et chaque visiteur est un client précieux. Notre mission est de supprimer les barrières de l'incertitude pour laisser place à la <span className="text-gold">concrétisation de vos rêves</span>.
             </p>
           </div>
           <div className="presentation-image-luxe" data-aos="fade-left">
@@ -66,7 +66,7 @@ export default function AboutPage() {
             <div className="mission-card-luxe" data-aos="fade-up" data-aos-delay="200">
               <div className="icon-circle"><ShieldCheck size={32} /></div>
               <h3>Sécurité</h3>
-              <p>Un environnement où fournisseurs et clients interagissent en toute transparence et sérénité.</p>
+              <p>Un environnement où agents immobiliers et clients interagissent en toute transparence et sérénité.</p>
             </div>
             <div className="mission-card-luxe" data-aos="fade-up" data-aos-delay="300">
               <div className="icon-circle"><BarChart3 size={32} /></div>

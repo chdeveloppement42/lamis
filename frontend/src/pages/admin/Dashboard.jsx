@@ -34,8 +34,8 @@ export default function Dashboard() {
   }, []);
 
   const statCards = [
-    { label: 'Fournisseurs en attente', value: stats.pendingProviders, icon: '👥', color: '#fef3c7' },
-    { label: 'Total fournisseurs', value: stats.totalProviders, icon: '🧑‍💼', color: '#fde68a' },
+    { label: 'Agents immobiliers en attente', value: stats.pendingProviders, icon: '👥', color: '#fef3c7' },
+    { label: 'Total agents immobiliers', value: stats.totalProviders, icon: '🧑‍💼', color: '#fde68a' },
     { label: 'Annonces publiées', value: stats.publishedListings, icon: '🏠', color: '#d1fae5' },
     { label: 'Annonces brouillon', value: stats.draftListings, icon: '📝', color: '#fbcfe8' },
     { label: 'Annonces dépubliées', value: stats.unpublishedListings, icon: '🚫', color: '#fed7aa' },
@@ -139,7 +139,7 @@ export default function Dashboard() {
         </div>
 
         <div className="chart-card chart-card--compact">
-          <div className="chart-card__header">Statut des fournisseurs</div>
+          <div className="chart-card__header">Statut des agents immobiliers</div>
           <div className="donut-chart-card">
             <div className="donut-chart">
               <svg viewBox="0 0 36 36" className="donut-chart__svg">
@@ -195,7 +195,7 @@ export default function Dashboard() {
         </div>
 
         <div className="chart-card">
-          <div className="chart-card__header">Fournisseurs créés par mois</div>
+          <div className="chart-card__header">Agents immobiliers inscrits par mois</div>
           <div className="bar-chart">
             {monthlyProviderData.map((item) => (
               <div key={item.label} className="bar-row">

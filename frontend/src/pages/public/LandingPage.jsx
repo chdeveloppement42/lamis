@@ -241,7 +241,7 @@ export default function LandingPage() {
       {[
         { 
           icon: <Sparkles size={28} />, name: "Karim Benali", role: "Acquéreur", 
-          text: "J'ai trouvé ma villa à Hydra en quelques clics. Le contact direct avec le propriétaire a facilité toute la transaction.",
+          text: "J'ai trouvé ma villa à Akid Lotfi en quelques clics. Le contact direct avec le propriétaire a facilité toute la transaction.",
           initials: "KB"
         },
         { 

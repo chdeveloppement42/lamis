@@ -240,7 +240,7 @@ export default function ListingsManager() {
       render: (l) => <strong>{l.title}</strong>
     },
     {
-      header: 'Fournisseur',
+      header: 'Agent Immobilier',
       width: '15%',
       field: 'provider',
       render: (l) => `${l.provider?.firstName || ''} ${l.provider?.lastName || ''}`.trim() || '—'
@@ -355,7 +355,7 @@ export default function ListingsManager() {
 
           <div className="admin-form-grid admin-form-grid--wide">
             <select className="admin-input" value={listingForm.providerId} onChange={updateListingForm('providerId')} required>
-              <option value="">Sélectionner un fournisseur</option>
+              <option value="">Sélectionner un Agent Immobilier</option>
               {providers.map((provider) => (
                 <option key={provider.id} value={provider.id}>
                   {provider.firstName} {provider.lastName} - {provider.email}
@@ -390,7 +390,7 @@ export default function ListingsManager() {
               />
             </div>
             <input className="admin-input" placeholder="Quartier" value={listingForm.quartier} onChange={updateListingForm('quartier')} />
-            <input className="admin-input" type="number" min="0" placeholder="Surface m²" value={listingForm.surface} onChange={updateListingForm('surface')} />
+            <input className="admin-input" type="number" min="0" placeholder="Superficie (m²)" value={listingForm.surface} onChange={updateListingForm('surface')} />
             <input className="admin-input" type="number" min="0" placeholder="Pièces" value={listingForm.rooms} onChange={updateListingForm('rooms')} />
             <input className="admin-input" type="number" placeholder="Étage" value={listingForm.floor} onChange={updateListingForm('floor')} />
           </div>

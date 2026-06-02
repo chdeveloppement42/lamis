@@ -45,7 +45,7 @@ export default function AdminLayout() {
   // Configuration des icônes modernes ici
   const navItems = [
     { to: '/admin/dashboard', label: 'Tableau de bord', icon: <LayoutDashboard size={20} />, permission: null },
-    { to: '/admin/providers', label: 'Fournisseurs', icon: <Users size={20} />, permission: 'manage:providers' },
+    { to: '/admin/providers', label: 'Agents Immobiliers', icon: <Users size={20} />, permission: 'manage:providers' },
     { to: '/admin/listings', label: 'Annonces', icon: <Home size={20} />, permission: 'manage:listings' },
     { to: '/admin/categories', label: 'Catégories', icon: <FolderTree size={20} />, permission: 'manage:categories' },
     { to: '/admin/users', label: 'Utilisateurs', icon: <Key size={20} />, permission: 'manage:admins' },

@@ -149,7 +149,7 @@ export default function ProvidersManager() {
 
   const columns = [
     {
-      header: 'Fournisseur',
+      header: 'Agent Immobilier',
       width: '30%',
       field: 'email',
       render: (p) => (
@@ -264,18 +264,18 @@ export default function ProvidersManager() {
     <div className="admin-page">
       <div className="admin-page__header">
         <div>
-          <h2 className="admin-page__title">Fournisseurs</h2>
-          <p className="admin-page__subtitle">Gérer les comptes fournisseurs et leurs documents</p>
+          <h2 className="admin-page__title">Agent Immobilier</h2>
+          <p className="admin-page__subtitle">Gérer les comptes des agents immobiliers et leurs documents</p>
         </div>
         <button className="admin-btn admin-btn--primary" onClick={startCreateProvider}>
-          Ajouter un fournisseur
+          Ajouter un agent immobilier
         </button>
       </div>
 
       {showForm && (
         <form ref={formRef} className="admin-form-card" onSubmit={handleProviderSubmit}>
           <div className="admin-form-card__header">
-            <h3>{editingProvider ? 'Modifier le fournisseur' : 'Ajouter un fournisseur'}</h3>
+            <h3>{editingProvider ? 'Modifier l\'agent immobilier' : 'Ajouter un agent immobilier'}</h3>
             <button type="button" className="admin-btn admin-btn--sm admin-btn--outline" onClick={resetProviderForm}>
               Annuler
             </button>

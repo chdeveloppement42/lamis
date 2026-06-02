@@ -1,5 +1,6 @@
 :root {
   --immo-bg: #0F2633;
+  --immo-blue: #34657F;
   --immo-gold: #D9B48F;
   --immo-dark-card: #1B3444;
   --white: #FFFFFF;
@@ -169,6 +170,96 @@
 
 .btn-gold-luxe:hover { background: #0F2633; transform: translateY(-3px); }
 
+/* --- 📄 NEW BLOCK: SECTION POLICY PDF (GLASSMORPHISM) --- */
+.policy-section-luxe {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.policy-box-glass {
+  background: rgba(27, 52, 68, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(217, 180, 143, 0.2);
+  padding: 40px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.policy-icon-wrapper {
+  background: rgba(217, 180, 143, 0.1);
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(217, 180, 143, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.policy-text-content {
+  flex: 1;
+}
+
+.policy-text-content h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.policy-text-content p {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.policy-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.btn-policy-gold, .btn-policy-outline {
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-policy-gold {
+  background: var(--immo-gold);
+  color: var(--immo-bg);
+}
+
+.btn-policy-gold:hover {
+  background: #ebd2ba;
+  transform: translateY(-2px);
+}
+
+.btn-policy-outline {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-policy-outline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--white);
+  transform: translateY(-2px);
+}
+
 /* --- FAQ --- */
 .section-spacer { height: 100px; }
 
@@ -211,6 +302,8 @@
 @media (max-width: 982px) {
   .contact-grid-luxe { grid-template-columns: 1fr; margin-top: 20px; gap: 40px; }
   .contact-hero-luxe { height: 40vh; }
+  .policy-box-glass { flex-direction: column; text-align: center; padding: 30px 20px; }
+  .policy-actions { width: 100%; }
 }
 
 @media (max-width: 768px) {

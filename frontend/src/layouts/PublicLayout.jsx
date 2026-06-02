@@ -126,11 +126,11 @@ export default function PublicLayout() {
           <div className="footer__links">
             <h4>Contact</h4>
             <div className="footer__item">📍 Oran, Algérie</div>
-            <a href="tel:+213555000000" className="footer__item footer__contact-link">
-              📞 +213 (0) 555 00 00 00
+            <a href="tel:+213560938285" className="footer__item footer__contact-link">
+              📞 +213 (0) 560 93 82 85
             </a>
             <a 
-              href="https://wa.me/213555000000" 
+              href="https://wa.me/213560938285" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="footer__item whatsapp-footer-link"

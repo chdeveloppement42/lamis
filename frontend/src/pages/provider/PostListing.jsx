@@ -224,7 +224,7 @@ export default function PostListing() {
                 <input type="number" className="form-input" placeholder="12 000 000" value={listing.price} onChange={update('price')} />
               </div>
               <div className="form-group">
-                <label className="form-label">Surface (m²) <span style={{ fontSize: '0.8rem', fontWeight: 400, opacity: 0.7 }}>(optionnel)</span></label>
+                <label className="form-label">Superficie (m²) <span style={{ fontSize: '0.8rem', fontWeight: 400, opacity: 0.7 }}>(optionnel)</span></label>
                 <input type="number" className="form-input" placeholder="85" value={listing.surface} onChange={update('surface')} />
               </div>
             </div>

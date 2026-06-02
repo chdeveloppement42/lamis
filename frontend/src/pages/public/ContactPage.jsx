@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import { Mail, Phone, Send, Loader2, ChevronDown, ChevronUp, User, Building2 } from 'lucide-react';
+import { Mail, Phone, Send, Loader2, ChevronDown, ChevronUp, User, Building2, FileText, ExternalLink, Download } from 'lucide-react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './ContactPage.css';
 
 const FAQ_CONTENT = {
- acheteur: [
+  acheteur: [
     { 
       q: "Dois-je créer un compte pour contacter un vendeur ?", 
       a: "Non, aucun compte n'est requis. Vous pouvez accéder directement au numéro de téléphone du vendeur ou lui envoyer un message via WhatsApp en un clic." 
     },
     { 
       q: "Comment prendre rendez-vous pour une visite ?", 
-      a: "Il suffit de cliquer sur le bouton 'Appeler' ou l'icône WhatsApp sur l'annonce du bien pour discuter directement avec le propriétaire ou l'agent." 
+      a: "Il suffit de cliquer sur le bouton 'Appeler' ou l'icône WhatsApp sur l'annonce du bien pour discuter directement avec l'agent immobilier." 
     },
     { 
       q: "Est-ce que le service est gratuit pour moi ?", 
@@ -35,11 +35,11 @@ const FAQ_CONTENT = {
     },
     { 
       q: "Comment publier mes annonces ?", 
-      a: "Pour vous, la création d'un compte partenaire est nécessaire afin de gérer votre catalogue, modifier vos prix et suivre vos statistiques de vues." 
+      a: "Pour vous, la création d'un compte agent immobilier est nécessaire afin de gérer votre catalogue, modifier vos prix et suivre vos statistiques de vues." 
     },
     { 
       q: "Comment s'inscrire en tant que vendeur ?", 
-      a: "Remplissez le formulaire d'inscription Partenaire. Après avoir choisi votre pack et effectué le paiement, un administrateur vous contactera pour valider votre identité et activer votre compte." 
+      a: "Remplissez le formulaire d'inscription Agent. Après avoir choisi votre pack et effectué le paiement, un administrateur vous contactera pour valider votre identité et activer votre compte." 
     },
     { 
       q: "Quelles sont les étapes pour commencer à publier ?", 
@@ -47,10 +47,9 @@ const FAQ_CONTENT = {
     },
     { 
       q: "Pourquoi l'accès vendeur est-il payant ?", 
-      a: "Le paiement garantit le sérieux de nos partenaires. Cela nous permet de maintenir une plateforme haut de gamme, sans publicité intrusive et sans fausses annonces pour vos futurs clients." 
+      a: "Le paiement garantit le sérieux de nos agents immobiliers. Cela nous permet de maintenir une plateforme haut de gamme, sans publicité intrusive et sans fausses annonces pour vos futurs clients." 
     }
-    ]
-
+  ]
 };
 
 export default function ContactPage() {
@@ -104,11 +103,11 @@ export default function ContactPage() {
                   </div>
                 </a>
 
-                <a href="tel:+213555123456" className="modern-card-luxe">
+                <a href="tel:+213560938285" className="modern-card-luxe">
                   <div className="icon-circle-gold"><Phone size={22} /></div>
                   <div className="card-details">
                     <h3>Téléphone</h3>
-                    <p>+213 555 123 456</p>
+                    <p>+213 (0) 560 93 82 85</p>
                   </div>
                 </a>
               </div>
@@ -183,6 +182,32 @@ export default function ContactPage() {
 
           <div className="section-spacer"></div>
 
+          {/* 📄 NEW SECTION : CONDITIONS & POLITIQUES (PDF) */}
+          <div className="policy-section-luxe" data-aos="fade-up">
+            <div className="policy-box-glass">
+              <div className="policy-icon-wrapper">
+                <FileText size={36} className="text-gold" />
+              </div>
+              <div className="policy-text-content">
+                <h2>Conditions Générales & Politiques</h2>
+                <p>
+                  Consultez nos conditions d'utilisation et règles de confidentialité régissant la plateforme <strong>Immo Lamis</strong>. 
+                  Un document PDF officiel est mis à votre disposition pour une transparence totale.
+                </p>
+              </div>
+              <div className="policy-actions">
+                {/* Ouvre le PDF dans un nouvel onglet */}
+                <a href="https://drive.google.com/file/d/17Dn3Pitxnde_Cf5oQ528mhBQkoIQBkAW/view?usp=drive_link" target="_blank" rel="noopener noreferrer" className="btn-policy-outline">
+                  <ExternalLink size={16} /> Lire le document
+                </a>
+                {/* Force le téléchargement du PDF */}
+               
+              </div>
+            </div>
+          </div>
+
+          <div className="section-spacer"></div>
+
           {/* --- FAQ SECTION --- */}
           <div className="faq-section-header">
             <p className="cursive-accent centered" data-aos="fade-up">Questions Fréquentes</p>
@@ -200,7 +225,7 @@ export default function ContactPage() {
                 className={`tab-btn ${activeTab === 'fournisseur' ? 'active' : ''}`} 
                 onClick={() => { setActiveTab('fournisseur'); setActiveIndex(null); }}
               >
-                <Building2 size={20} /> <span>Espace Partenaire</span>
+                <Building2 size={20} /> <span>Espace Agent Immobilier</span>
               </button>
             </div>
 

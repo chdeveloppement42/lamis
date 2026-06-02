@@ -63,13 +63,13 @@ export default function PermissionsManager() {
     }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (role) => {
     showModal({
       title: 'Supprimer le rôle',
-      message: 'Supprimer ce rôle ? Tous les utilisateurs de ce rôle seront suspendus.',
+      message: `Supprimer le rôle "${role.name}" ? Tous les utilisateurs de ce rôle seront suspendus.`,
       onConfirm: async () => {
         try {
-          const res = await axiosInstance.delete(`/roles/${id}`);
+          const res = await axiosInstance.delete(`/roles/${role.id}`);
           alert(res.data.message);
           fetchData();
         } catch (err) {
@@ -171,9 +171,7 @@ export default function PermissionsManager() {
             {!role.isSuperAdmin && (
               <div className="role-card__actions">
                 <button className="admin-btn admin-btn--sm admin-btn--outline" onClick={() => handleEdit(role)}>✏️ Modifier</button>
-                {!role.isDefault && (
-                  <button className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => handleDelete(role.id)}>🗑️ Supprimer</button>
-                )}
+                <button className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => handleDelete(role)}>🗑️ Supprimer</button>
               </div>
             )}
           </div>

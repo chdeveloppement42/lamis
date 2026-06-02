@@ -97,28 +97,24 @@ export class RolesService {
       throw new BadRequestException(
         'Le rôle Super Admin ne peut pas être supprimé',
       );
-    if (role.isDefault)
+    const fallbackRole = await this.prisma.role.findFirst({
+      where: { id: { not: id }, isSuperAdmin: false },
+    });
+
+    if (role._count.admins > 0 && !fallbackRole) {
       throw new BadRequestException(
-        'Les rôles par défaut ne peuvent pas être supprimés',
+        'Impossible de supprimer ce role : aucun role de remplacement disponible',
       );
+    }
 
-    await this.prisma.admin.updateMany({
-      where: { roleId: id },
-      data: { status: 'SUSPENDED' },
-    });
-
-    await this.prisma.rolePermission.deleteMany({ where: { roleId: id } });
-
-    const defaultRole = await this.prisma.role.findFirst({
-      where: { isDefault: true, isSuperAdmin: false },
-    });
-
-    if (defaultRole) {
+    if (fallbackRole) {
       await this.prisma.admin.updateMany({
         where: { roleId: id },
-        data: { roleId: defaultRole.id },
+        data: { status: 'SUSPENDED', roleId: fallbackRole.id },
       });
     }
+
+    await this.prisma.rolePermission.deleteMany({ where: { roleId: id } });
 
     await this.prisma.role.delete({ where: { id } });
 

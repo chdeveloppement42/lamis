@@ -4,7 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { AccountStatus } from '@prisma/client';
+import { AccountStatus, ProviderType } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -21,15 +21,19 @@ export class ProvidersService {
     commune: true,
     quartier: true,
     documentUrl: true,
+    type: true,
     status: true,
     createdAt: true,
     _count: { select: { listings: true } },
   };
 
   // ─── ADMIN: List all providers with optional status filter ──────
-  async findAll(status?: AccountStatus) {
+  async findAll(status?: AccountStatus, type?: ProviderType) {
+    const where: any = {};
+    if (status) where.status = status;
+    if (type) where.type = type;
     return this.prisma.provider.findMany({
-      where: status ? { status } : undefined,
+      where: Object.keys(where).length ? where : undefined,
       orderBy: { createdAt: 'desc' },
       select: this.providerAdminSelect,
     });
@@ -46,6 +50,7 @@ export class ProvidersService {
     quartier?: string;
     documentUrl?: string;
     status?: AccountStatus;
+    type?: ProviderType;
   }) {
     const existingProvider = await this.prisma.provider.findUnique({
       where: { email: data.email },
@@ -72,6 +77,7 @@ export class ProvidersService {
         quartier: data.quartier,
         documentUrl: data.documentUrl,
         status: data.status || 'VALIDATED',
+        type: data.type || 'PARTICULIER',
       },
       select: this.providerAdminSelect,
     });
@@ -89,6 +95,7 @@ export class ProvidersService {
       quartier?: string;
       documentUrl?: string;
       status?: AccountStatus;
+      type?: ProviderType;
     },
   ) {
     await this.findOne(id);
@@ -184,6 +191,25 @@ export class ProvidersService {
     });
   }
 
+  // ─── ADMIN: Delete a provider and all related listings ──────────
+  async removeByAdmin(id: number) {
+    const provider = await this.prisma.provider.findUnique({ where: { id } });
+    if (!provider) throw new NotFoundException('Fournisseur introuvable.');
+
+    const listings = await this.prisma.listing.findMany({
+      where: { providerId: id },
+      select: { id: true },
+    });
+
+    if (listings.length > 0) {
+      const listingIds = listings.map((listing) => listing.id);
+      await this.prisma.listingImage.deleteMany({ where: { listingId: { in: listingIds } } });
+      await this.prisma.listing.deleteMany({ where: { id: { in: listingIds } } });
+    }
+
+    return this.prisma.provider.delete({ where: { id } });
+  }
+
   // ─── PROVIDER: Get own profile (GAP 8) ─────────────────────────
   async getOwnProfile(id: number) {
     const provider = await this.prisma.provider.findUnique({
@@ -199,6 +225,7 @@ export class ProvidersService {
         quartier: true,
         documentUrl: true,
         status: true,
+        type: true,
         createdAt: true,
         _count: { select: { listings: true } },
       },

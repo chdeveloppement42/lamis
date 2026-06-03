@@ -5,7 +5,9 @@ import {
   IsString,
   Matches,
   MinLength,
+  IsEnum,
 } from 'class-validator';
+import { ProviderType } from '@prisma/client';
 
 export class RegisterDto {
   @IsString()
@@ -52,4 +54,8 @@ export class RegisterDto {
 
   @IsOptional()
   document?: any;
+
+  @IsOptional()
+  @IsEnum(ProviderType)
+  type?: ProviderType;
 }

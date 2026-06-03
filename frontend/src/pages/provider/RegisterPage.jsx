@@ -16,6 +16,7 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     firstName: '', lastName: '', email: '', password: '', phone: '', 
     wilaya: '', commune: '', quartier: '',
+    type: 'PARTICULIER',
   });
   const [errors, setErrors] = useState({});
   const [documentFile, setDocumentFile] = useState(null);
@@ -180,6 +181,20 @@ export default function RegisterPage() {
                   onChange={update('phone')}
                 />
                 {errors.phone && <span className="error-text">{errors.phone}</span>}
+              </div>
+
+              <div className="form-group">
+                <label>Type</label>
+                <select value={formData.type} onChange={update('type')} className="admin-input">
+                  <option value="PROMOTEUR">Promoteur</option>
+                  <option value="PARTENARIAT">Partenariat</option>
+                  <option value="ARCHITECTE">Architecte</option>
+                  <option value="SOC_TRAVAUX_PUBLICS">Soc. Travaux Publics</option>
+                  <option value="SOC_TRAVAUX_CONSTRUCTION">Soc. Travaux Construction</option>
+                  <option value="NOTAIRE">Notaire</option>
+                  <option value="PARTICULIER">Particulier</option>
+                  <option value="AUTRE">Autre</option>
+                </select>
               </div>
 
               {/* Le LocationSelector est souvent le plus grand, on réduit son wrapper */}

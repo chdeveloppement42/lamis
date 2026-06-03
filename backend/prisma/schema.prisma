@@ -66,11 +66,23 @@ model Provider {
   quartier    String?
   documentUrl String?
   status      AccountStatus @default(PENDING)
+  type        ProviderType  @default(PARTICULIER)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   listings    Listing[]
 
   @@index([status])
+}
+
+enum ProviderType {
+  PROMOTEUR
+  PARTENARIAT
+  ARCHITECTE
+  SOC_TRAVAUX_PUBLICS
+  SOC_TRAVAUX_CONSTRUCTION
+  NOTAIRE
+  PARTICULIER
+  AUTRE
 }
 
 model Category {

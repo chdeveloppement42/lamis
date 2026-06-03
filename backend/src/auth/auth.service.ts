@@ -161,6 +161,7 @@ export class AuthService {
         quartier,
         documentUrl: finalDocumentUrl,
         status: 'PENDING',
+        type: registerDto.type || 'PARTICULIER',
       },
     });
 

@@ -1,4 +1,4 @@
-import { AccountStatus } from '@prisma/client';
+import { AccountStatus, ProviderType } from '@prisma/client';
 import { IsString, IsOptional, IsEmail, MinLength, IsEnum, Matches } from 'class-validator';
 
 export class CreateProviderAdminDto {
@@ -41,6 +41,10 @@ export class CreateProviderAdminDto {
   @IsOptional()
   @IsEnum(AccountStatus)
   status?: AccountStatus;
+
+  @IsOptional()
+  @IsEnum(ProviderType)
+  type?: ProviderType;
 }
 
 export class UpdateProviderAdminDto {
@@ -83,6 +87,10 @@ export class UpdateProviderAdminDto {
   @IsOptional()
   @IsEnum(AccountStatus)
   status?: AccountStatus;
+
+  @IsOptional()
+  @IsEnum(ProviderType)
+  type?: ProviderType;
 }
 
 export class UpdateProviderProfileDto {
@@ -109,6 +117,10 @@ export class UpdateProviderProfileDto {
   @IsOptional()
   @IsString()
   quartier?: string;
+
+  @IsOptional()
+  @IsEnum(ProviderType)
+  type?: ProviderType;
 }
 
 export class UpdateSensitiveFieldsDto {

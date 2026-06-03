@@ -21,6 +21,7 @@ const emptyProviderForm = {
   quartier: '',
   documentUrl: '',
   status: ACCOUNT_STATUS.VALIDATED,
+  type: 'PARTICULIER',
 };
 
 export default function ProvidersManager() {
@@ -30,6 +31,7 @@ export default function ProvidersManager() {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editingProvider, setEditingProvider] = useState(null);
   const [providerForm, setProviderForm] = useState(emptyProviderForm);
@@ -39,7 +41,10 @@ export default function ProvidersManager() {
   const fetchProviders = useCallback(async () => {
     try {
       setLoading(true);
-      const url = statusFilter ? `/providers?status=${statusFilter}` : '/providers';
+      const params = [];
+      if (statusFilter) params.push(`status=${statusFilter}`);
+      if (typeFilter) params.push(`type=${typeFilter}`);
+      const url = params.length ? `/providers?${params.join('&')}` : '/providers';
       const response = await axiosInstance.get(url);
       setProviders(response.data);
     } catch (error) {
@@ -136,6 +141,7 @@ export default function ProvidersManager() {
       formattedDate,
       provider.createdAt,
       provider.phone,
+      provider.type,
       statusText,
     ].filter(Boolean).join(' ');
   };
@@ -165,6 +171,7 @@ export default function ProvidersManager() {
       quartier: provider.quartier || '',
       documentUrl: provider.documentUrl || '',
       status: provider.status || ACCOUNT_STATUS.VALIDATED,
+      type: provider.type || 'PARTICULIER',
     });
     setShowForm(true);
   };
@@ -364,6 +371,17 @@ export default function ProvidersManager() {
               <option value={ACCOUNT_STATUS.SUSPENDED}>Suspendu</option>
               <option value={ACCOUNT_STATUS.REJECTED}>Rejeté</option>
             </select>
+            <select className="admin-input" value={providerForm.type} onChange={updateProviderForm('type')}>
+              <option value="">Type (optionnel)</option>
+              <option value="PROMOTEUR">Promoteur</option>
+              <option value="PARTENARIAT">Partenariat</option>
+              <option value="ARCHITECTE">Architecte</option>
+              <option value="SOC_TRAVAUX_PUBLICS">Soc. Travaux Publics</option>
+              <option value="SOC_TRAVAUX_CONSTRUCTION">Soc. Travaux Construction</option>
+              <option value="NOTAIRE">Notaire</option>
+              <option value="PARTICULIER">Particulier</option>
+              <option value="AUTRE">Autre</option>
+            </select>
             <input className="admin-input" placeholder="Quartier" value={providerForm.quartier} onChange={updateProviderForm('quartier')} />
             <input className="admin-input" placeholder="URL du document" value={providerForm.documentUrl} onChange={updateProviderForm('documentUrl')} />
           </div>
@@ -397,6 +415,21 @@ export default function ProvidersManager() {
             <option value={ACCOUNT_STATUS.VALIDATED}>Validés</option>
             <option value={ACCOUNT_STATUS.SUSPENDED}>Suspendus</option>
             <option value={ACCOUNT_STATUS.REJECTED}>Rejetés</option>
+          </select>
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="admin-input"
+          >
+            <option value="">Tous les types</option>
+            <option value="PROMOTEUR">Promoteur</option>
+            <option value="PARTENARIAT">Partenariat</option>
+            <option value="ARCHITECTE">Architecte</option>
+            <option value="SOC_TRAVAUX_PUBLICS">Soc. Travaux Publics</option>
+            <option value="SOC_TRAVAUX_CONSTRUCTION">Soc. Travaux Construction</option>
+            <option value="NOTAIRE">Notaire</option>
+            <option value="PARTICULIER">Particulier</option>
+            <option value="AUTRE">Autre</option>
           </select>
         </div>
       </div>

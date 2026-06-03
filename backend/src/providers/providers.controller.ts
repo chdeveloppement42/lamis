@@ -81,8 +81,8 @@ export class ProvidersController {
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @CheckPermissions({ action: 'manage', subject: 'providers' })
-  findAll(@Query('status') status?: AccountStatus) {
-    return this.providersService.findAll(status);
+  findAll(@Query('status') status?: AccountStatus, @Query('type') type?: string) {
+    return this.providersService.findAll(status, type as any);
   }
 
   @Post()

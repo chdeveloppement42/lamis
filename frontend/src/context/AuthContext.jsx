@@ -71,6 +71,7 @@ export const AuthProvider = ({ children }) => {
 
   const hasPermission = (action) => {
     if (!user || user.userType !== 'ADMIN') return false;
+    if (user.isSuperAdmin) return true;
     // SuperAdmin gets all permissions from the backend, but just in case:
     if (user.permissions?.includes('all')) return true;
     return user.permissions?.includes(action);

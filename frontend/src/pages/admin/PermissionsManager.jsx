@@ -46,6 +46,16 @@ export default function PermissionsManager() {
     setShowForm(true);
   };
 
+  const selectAllPermissions = () => {
+    setFormData(prev => {
+      const allIds = permissions.map((perm) => perm.id);
+      return {
+        ...prev,
+        permissionIds: prev.permissionIds.length === allIds.length ? [] : allIds,
+      };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -88,7 +98,11 @@ export default function PermissionsManager() {
           <h1 className="admin-page__title">Gestion des permissions</h1>
           <p className="admin-page__subtitle">{roles.length} rôle(s) · {permissions.length} permission(s)</p>
         </div>
-        <button className="admin-btn admin-btn--primary" onClick={() => { setShowForm(!showForm); setEditingRole(null); setFormData({ name: '', permissionIds: [] }); }}>
+        <button className="admin-btn admin-btn--primary" onClick={() => {
+          setShowForm(!showForm);
+          setEditingRole(null);
+          setFormData({ name: '', permissionIds: !showForm ? permissions.map((perm) => perm.id) : [] });
+        }}>
           {showForm ? '✕ Fermer' : '+ Nouveau rôle'}
         </button>
       </div>
@@ -110,10 +124,7 @@ export default function PermissionsManager() {
               <button 
                 type="button" 
                 className="admin-btn admin-btn--sm admin-btn--outline"
-                onClick={() => {
-                  const allIds = permissions.map(p => p.id);
-                  setFormData({ ...formData, permissionIds: formData.permissionIds.length === allIds.length ? [] : allIds });
-                }}
+                onClick={selectAllPermissions}
               >
                 {formData.permissionIds.length === permissions.length ? 'Tout désélectionner' : 'Tout sélectionner'}
               </button>

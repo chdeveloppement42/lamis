@@ -100,6 +100,13 @@
   font-weight: 500;
 }
 
+.data-table-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
 /* --- TABLE STRUCTURE --- */
 .data-table-container { 
   overflow-x: auto; 
@@ -121,6 +128,19 @@
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   border-bottom: 1px solid rgba(217, 180, 143, 0.1);
+}
+
+.data-table__select-col {
+  width: 44px;
+  min-width: 44px;
+  text-align: center;
+}
+
+.data-table__select-col input {
+  width: 18px;
+  height: 18px;
+  accent-color: #D9B48F;
+  cursor: pointer;
 }
 
 .data-table td {
@@ -203,6 +223,12 @@
     border-bottom: none; 
     justify-content: center; 
     padding-top: 1rem; 
+  }
+
+  .data-table__select-col {
+    width: 100%;
+    min-width: 0;
+    text-align: left;
   }
 }
 /* On cible spécifiquement la balise p dans le header pour écraser les styles globaux */

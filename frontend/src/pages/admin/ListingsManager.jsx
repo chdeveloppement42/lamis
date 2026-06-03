@@ -42,6 +42,7 @@ export default function ListingsManager() {
   const [savingListing, setSavingListing] = useState(false);
   const [images, setImages] = useState([]);
   const [uploadingImages, setUploadingImages] = useState(false);
+  const [selectedListingIds, setSelectedListingIds] = useState([]);
 
   const fetchListings = useCallback(async () => {
     try {
@@ -230,6 +231,47 @@ export default function ListingsManager() {
         }
       }
     });
+  };
+
+  const handleBulkDelete = () => {
+    if (selectedListingIds.length === 0) return;
+
+    showModal({
+      title: 'Supprimer les annonces selectionnees',
+      message: `Voulez-vous vraiment supprimer ${selectedListingIds.length} annonce(s) selectionnee(s) ?`,
+      onConfirm: async () => {
+        try {
+          await Promise.all(
+            selectedListingIds.map((id) => axiosInstance.delete(`/listings/admin/${id}`))
+          );
+          setSelectedListingIds([]);
+          fetchListings();
+          showToast({ type: 'success', message: 'Annonces supprimees avec succes.' });
+        } catch (error) {
+          console.error('Failed to delete selected listings:', error);
+          showToast({
+            type: 'error',
+            message: error.response?.data?.message || 'Erreur lors de la suppression des annonces.',
+          });
+        }
+      }
+    });
+  };
+
+  const getListingSearchText = (listing) => {
+    const providerName = `${listing.provider?.firstName || ''} ${listing.provider?.lastName || ''}`;
+    const createdAt = listing.createdAt ? new Date(listing.createdAt) : null;
+    const formattedDate = createdAt ? createdAt.toLocaleDateString() : '';
+
+    return [
+      listing.title,
+      providerName,
+      listing.provider?.email,
+      formattedDate,
+      listing.createdAt,
+      listing.price,
+      listing.category?.name,
+    ].filter(Boolean).join(' ');
   };
 
   const columns = [
@@ -462,7 +504,21 @@ export default function ListingsManager() {
         data={listings}
         isLoading={loading}
         emptyMessage="Aucune annonce trouvée."
-        searchPlaceholder="Rechercher par titre, catégorie..."
+        searchPlaceholder="Rechercher par titre, agent, date, prix, categorie..."
+        getSearchText={getListingSearchText}
+        selectable
+        selectedIds={selectedListingIds}
+        onSelectedIdsChange={setSelectedListingIds}
+        actions={
+          <button
+            type="button"
+            className="admin-btn admin-btn--danger"
+            onClick={handleBulkDelete}
+            disabled={selectedListingIds.length === 0}
+          >
+            Supprimer la selection ({selectedListingIds.length})
+          </button>
+        }
       />
     </div>
   );

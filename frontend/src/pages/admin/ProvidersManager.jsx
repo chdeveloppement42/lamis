@@ -34,6 +34,7 @@ export default function ProvidersManager() {
   const [editingProvider, setEditingProvider] = useState(null);
   const [providerForm, setProviderForm] = useState(emptyProviderForm);
   const [savingProvider, setSavingProvider] = useState(false);
+  const [selectedProviderIds, setSelectedProviderIds] = useState([]);
 
   const fetchProviders = useCallback(async () => {
     try {
@@ -76,6 +77,67 @@ export default function ProvidersManager() {
         }
       }
     });
+  };
+
+  const handleDeleteProvider = (id) => {
+    showModal({
+      title: 'Supprimer l\'agent immobilier',
+      message: 'Voulez-vous vraiment supprimer cet agent immobilier et toutes ses annonces ?',
+      onConfirm: async () => {
+        try {
+          await axiosInstance.delete(`/providers/${id}`);
+          fetchProviders();
+          showToast({ type: 'success', message: 'Agent immobilier supprime avec succes.' });
+        } catch (error) {
+          console.error('Failed to delete provider:', error);
+          showToast({
+            type: 'error',
+            message: error.response?.data?.message || 'Erreur lors de la suppression de l\'agent immobilier.',
+          });
+        }
+      }
+    });
+  };
+
+  const handleBulkDelete = () => {
+    if (selectedProviderIds.length === 0) return;
+
+    showModal({
+      title: 'Supprimer les agents selectionnes',
+      message: `Voulez-vous vraiment supprimer ${selectedProviderIds.length} agent(s) immobilier(s) selectionne(s) et toutes leurs annonces ?`,
+      onConfirm: async () => {
+        try {
+          await Promise.all(
+            selectedProviderIds.map((id) => axiosInstance.delete(`/providers/${id}`))
+          );
+          setSelectedProviderIds([]);
+          fetchProviders();
+          showToast({ type: 'success', message: 'Agents immobiliers supprimes avec succes.' });
+        } catch (error) {
+          console.error('Failed to delete selected providers:', error);
+          showToast({
+            type: 'error',
+            message: error.response?.data?.message || 'Erreur lors de la suppression des agents immobiliers.',
+          });
+        }
+      }
+    });
+  };
+
+  const getProviderSearchText = (provider) => {
+    const fullName = `${provider.firstName || ''} ${provider.lastName || ''}`;
+    const createdAt = provider.createdAt ? new Date(provider.createdAt) : null;
+    const formattedDate = createdAt ? createdAt.toLocaleDateString() : '';
+    const statusText = provider.status === ACCOUNT_STATUS.VALIDATED ? 'verifie valide validated' : provider.status;
+
+    return [
+      fullName,
+      provider.email,
+      formattedDate,
+      provider.createdAt,
+      provider.phone,
+      statusText,
+    ].filter(Boolean).join(' ');
   };
 
   const resetProviderForm = () => {
@@ -344,7 +406,21 @@ export default function ProvidersManager() {
         data={providers}
         isLoading={loading}
         emptyMessage="Aucun fournisseur trouvé."
-        searchPlaceholder="Rechercher par nom, email..."
+        searchPlaceholder="Rechercher par nom, date, contact, verifie..."
+        getSearchText={getProviderSearchText}
+        selectable
+        selectedIds={selectedProviderIds}
+        onSelectedIdsChange={setSelectedProviderIds}
+        actions={
+          <button
+            type="button"
+            className="admin-btn admin-btn--danger"
+            onClick={handleBulkDelete}
+            disabled={selectedProviderIds.length === 0}
+          >
+            Supprimer la selection ({selectedProviderIds.length})
+          </button>
+        }
       />
     </div>
   );

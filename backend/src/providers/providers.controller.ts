@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Put,
+  Delete,
   Patch,
   Param,
   Query,
@@ -116,6 +117,13 @@ export class ProvidersController {
   @CheckPermissions({ action: 'manage', subject: 'providers' })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.providersService.findOne(id);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @CheckPermissions({ action: 'manage', subject: 'providers' })
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.providersService.removeByAdmin(id);
   }
 
   @Patch(':id/validate')

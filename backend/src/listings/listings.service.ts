@@ -11,13 +11,35 @@ import {
   ListingType,
 } from '@prisma/client';
 import { NotificationsService } from '../notifications/notifications.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class ListingsService {
   constructor(
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
+    private storageService: StorageService,
   ) {}
+
+  // ─── HELPER: Delete all images for a listing from storage & DB ──
+  private async deleteListingImages(listingId: number): Promise<void> {
+    const images = await this.prisma.listingImage.findMany({
+      where: { listingId },
+    });
+    
+    // Delete from Cloudinary/Storage
+    for (const image of images) {
+      try {
+        await this.storageService.deleteFile(image.url);
+      } catch (error) {
+        // Log but don't throw — continue cleanup even if one fails
+        console.error(`Failed to delete image ${image.url}:`, error);
+      }
+    }
+    
+    // Delete from database
+    await this.prisma.listingImage.deleteMany({ where: { listingId } });
+  }
 
   // ─── HELPER: Common Safety Lock Filter ──────────────────────────
   private get safetyLockWhere(): any {
@@ -279,8 +301,8 @@ export class ListingsService {
       );
     }
 
-    // Delete images first, then listing
-    await this.prisma.listingImage.deleteMany({ where: { listingId: id } });
+    // Delete images from storage & DB
+    await this.deleteListingImages(id);
     return this.prisma.listing.delete({ where: { id } });
   }
 
@@ -385,7 +407,16 @@ export class ListingsService {
     const { providerId, categoryId, images, ...listingData } = data;
 
     return this.prisma.$transaction(async (tx) => {
+      // If updating images, delete old ones from storage first
       if (images) {
+        const oldImages = await tx.listingImage.findMany({ where: { listingId: id } });
+        for (const image of oldImages) {
+          try {
+            await this.storageService.deleteFile(image.url);
+          } catch (error) {
+            console.error(`Failed to delete old image ${image.url}:`, error);
+          }
+        }
         await tx.listingImage.deleteMany({ where: { listingId: id } });
       }
 
@@ -435,7 +466,7 @@ export class ListingsService {
   async removeByAdmin(id: number) {
     const listing = await this.prisma.listing.findUnique({ where: { id } });
     if (!listing) throw new NotFoundException('Annonce introuvable.');
-    await this.prisma.listingImage.deleteMany({ where: { listingId: id } });
+    await this.deleteListingImages(id);
     return this.prisma.listing.delete({ where: { id } });
   }
 }

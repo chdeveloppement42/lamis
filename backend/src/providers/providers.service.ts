@@ -6,10 +6,14 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { AccountStatus, ProviderType } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class ProvidersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private storageService: StorageService,
+  ) {}
 
   private readonly providerAdminSelect = {
     id: true,
@@ -203,6 +207,21 @@ export class ProvidersService {
 
     if (listings.length > 0) {
       const listingIds = listings.map((listing) => listing.id);
+      
+      // Get all images for these listings and delete from Cloudinary
+      const images = await this.prisma.listingImage.findMany({
+        where: { listingId: { in: listingIds } },
+      });
+      
+      for (const image of images) {
+        try {
+          await this.storageService.deleteFile(image.url);
+        } catch (error) {
+          console.error(`Failed to delete image ${image.url}:`, error);
+        }
+      }
+      
+      // Then delete from database
       await this.prisma.listingImage.deleteMany({ where: { listingId: { in: listingIds } } });
       await this.prisma.listing.deleteMany({ where: { id: { in: listingIds } } });
     }

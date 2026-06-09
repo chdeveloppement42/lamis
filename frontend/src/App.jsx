@@ -11,6 +11,7 @@ import ServicesPage from './pages/public/ServicesPage';
 import ListingDetail from './pages/public/ListingDetail';
 import AboutPage from './pages/public/AboutPage';
 import ContactPage from './pages/public/ContactPage';
+import EstimatePage from './pages/public/EstimatePage';
 
 // Provider Pages
 import LoginPage from './pages/provider/LoginPage';
@@ -48,6 +49,7 @@ function App() {
             <Route path="/listing/:id" element={<ListingDetail />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/estimate" element={<EstimatePage />} />
 
             {/* STANDALONE AUTH ROUTES */}
             <Route path="/login" element={<LoginPage />} />

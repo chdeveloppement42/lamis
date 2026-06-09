@@ -16,6 +16,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { StorageModule } from './storage/storage.module';
 import { MediaModule } from './media/media.module';
 import { ContactModule } from './contact/contact.module';
+import { EstimateModule } from './estimate/estimate.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { envValidationSchema } from './config/env.validation';
 
@@ -63,6 +64,7 @@ import { envValidationSchema } from './config/env.validation';
     StorageModule,
     MediaModule,
     ContactModule,
+    EstimateModule,
     PrismaModule,
   ],
   controllers: [AppController],

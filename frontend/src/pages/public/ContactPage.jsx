@@ -95,11 +95,11 @@ export default function ContactPage() {
             {/* SIDEBAR INFOS */}
             <div className="contact-sidebar-luxe" data-aos="fade-right">
               <div className="info-stack-luxe">
-                <a href="mailto:sanalaptop0@gmail.com" className="modern-card-luxe">
+                <a href="mailto:immolamis@gmail.com" className="modern-card-luxe">
                   <div className="icon-circle-gold"><Mail size={22} /></div>
                   <div className="card-details">
                     <h3>Email</h3>
-                    <p>sanalaptop0@gmail.com</p>
+                    <p>immolamis@gmail.com</p>
                   </div>
                 </a>
 

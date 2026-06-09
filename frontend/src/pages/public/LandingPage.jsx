@@ -10,6 +10,7 @@ import 'aos/dist/aos.css';
 import { getCategories } from '../../api/categories.api';
 import { getLatestListings } from '../../api/listings.api';
 import ListingCard from '../../components/ListingCard';
+import EstimateFormModal from '../../components/EstimateFormModal';
 import './LandingPage.css';
 
 const CATEGORY_ICONS = {
@@ -25,6 +26,7 @@ export default function LandingPage() {
   const [categories, setCategories] = useState([]);
   const [latestListings, setLatestListings] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [estimateModalOpen, setEstimateModalOpen] = useState(false);
   const catRef = useRef(null);
   const annoncesRef = useRef(null);
 
@@ -311,6 +313,31 @@ export default function LandingPage() {
     </div>
   </div>
 </section>
+
+{/* --- ESTIMATION SECTION --- */}
+<section className="unified-section estimate-cta-section">
+  <div className="container">
+    <div className="estimate-cta-box" data-aos="fade-up">
+      <div className="estimate-content">
+        <h3>Vous avez un bien à estimer ?</h3>
+        <p>Obtenez une évaluation gratuite en quelques minutes. Nos experts vous recontacteront rapidement.</p>
+        <button 
+          onClick={() => setEstimateModalOpen(true)}
+          className="btn-estimate-large"
+        >
+          💰 Demander une Estimation Gratuite
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* Modal Estimation */}
+<EstimateFormModal 
+  isOpen={estimateModalOpen} 
+  onClose={() => setEstimateModalOpen(false)}
+  categories={categories}
+/>
       
     </div>
   );

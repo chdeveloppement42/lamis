@@ -20,7 +20,8 @@
     "react-dom": "^19.2.5",
     "react-i18next": "^17.0.7",
     "react-router-dom": "^7.14.2",
-    "react-select": "^5.10.2"
+    "react-select": "^5.10.2",
+    "react-helmet-async": "^3.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

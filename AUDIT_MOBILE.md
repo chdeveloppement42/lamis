@@ -45,6 +45,7 @@ Utiliser les breakpoints dans `/src/styles/breakpoints.css`
 | **DetailPage** | ⚠️ À vérifier | `992px, 768px, 480px` | À mettre aux normes |
 | **ContactPage** | ⚠️ À vérifier | `982px, 768px` | À mettre aux normes |
 | **AboutPage** | ⚠️ À vérifier | `1024px, 600px` | À mettre aux normes |
+| **BlogPage** | 🆕 NEW | `1024px, 768px, 640px, 480px` | Page Blog ajoutée |
 
 **Action requise** : Uniformiser tous les breakpoints → `1024px, 768px, 640px, 480px`
 

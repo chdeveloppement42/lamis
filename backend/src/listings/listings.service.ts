@@ -26,8 +26,6 @@ export class ListingsService {
     const images = await this.prisma.listingImage.findMany({
       where: { listingId },
     });
-    
-    // Delete from Cloudinary/Storage
     for (const image of images) {
       try {
         await this.storageService.deleteFile(image.url);
@@ -36,8 +34,6 @@ export class ListingsService {
         console.error(`Failed to delete image ${image.url}:`, error);
       }
     }
-    
-    // Delete from database
     await this.prisma.listingImage.deleteMany({ where: { listingId } });
   }
 

@@ -1,0 +1,393 @@
+/* Palette Immo Lamis */
+:root {
+  --primary-blue: #34657F;
+  --luxury-gold: #D9B48F;
+  --deep-bg: #142836;
+}
+
+.detail-page { background: var(--deep-bg); color: #fff; min-height: 100vh; }
+
+.detail-page__hero {
+  padding: 100px 0 20px;
+
+  border-bottom: 1px solid rgba(217, 180, 143, 0.2);
+}
+
+.detail-page__breadcrumb { font-size: 0.85rem; display: flex; gap: 10px; color: var(--luxury-gold); }
+.detail-page__breadcrumb a { color: #fff; opacity: 0.7; }
+
+.detail-content {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 40px;
+  padding: 40px 0;
+}
+
+/* Galerie */
+.detail-gallery__main {
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(217, 180, 143, 0.3);
+  cursor: zoom-in;
+}
+.detail-gallery__main img { width: 100%; height: 100%; object-fit: cover; }
+
+.detail-gallery__thumbs { display: flex; gap: 10px; margin-top: 15px; }
+.detail-gallery__thumb { 
+  width: 80px; height: 60px; border: 2px solid transparent; 
+  opacity: 0.5; transition: 0.3s;
+}
+.detail-gallery__thumb.active { border-color: var(--luxury-gold); opacity: 1; }
+
+/* Infos & Table */
+.detail-header { 
+  display: flex; justify-content: space-between; 
+  border-bottom: 1px solid rgba(255,255,255,0.1); padding: 30px 0;
+}
+.detail-header__title { color: var(--luxury-gold); font-family: 'Playfair Display', serif; }
+.detail-header__price { font-size: 2rem; font-weight: 800; color: #fff; }
+
+.detail-info-table table { width: 100%; margin-top: 20px; }
+.detail-info-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.detail-info-table .label { color: var(--luxury-gold); font-weight: 600; width: 150px; }
+
+/* Sidebar Contact */
+.detail-provider-card {
+  background: rgba(52, 101, 127, 0.15);
+  padding: 25px;
+  border: 1px solid var(--luxury-gold);
+  border-radius: 12px;
+  position: sticky; top: 120px;
+}
+
+.btn-phone-luxe {
+  display: block; text-align: center; background: var(--luxury-gold);
+  color: var(--deep-bg); padding: 15px; font-weight: 800;
+  border-radius: 5px; margin: 20px 0; transition: 0.3s;
+}
+
+.social-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.social-btn { 
+  padding: 10px; text-align: center; border-radius: 4px; font-size: 0.8rem;
+  border: 1px solid rgba(255,255,255,0.2); color: #fff;
+}
+.whatsapp { background: #25D366; border: none; }
+.viber { background: #7360f2; border: none; }
+
+/* Lightbox */
+.detail-lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+  display: flex; align-items: center; justify-content: center; z-index: 9999;
+}
+.detail-lightbox img { max-width: 90%; max-height: 80%; border: 2px solid var(--luxury-gold); }
+.close-lightbox { position: absolute; top: 30px; right: 30px; font-size: 2rem; color: #fff; }
+/* Style pour les titres h3 dans les sections de détails */
+.detail-info-table h3, 
+.detail-description h3 {
+    color: #D9B48F; /* Ton doré (aymen-gold) */
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: 1px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* Petit trait doré sous le titre pour le style "Luxe" */
+.detail-info-table h3::after, 
+.detail-description h3::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px; /* Ligne courte */
+    height: 2px;
+    background-color: #D9B48F;
+    border-radius: 2px;
+}
+
+/* Style optionnel pour le tableau en dessous */
+.detail-info-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background: rgba(255, 255, 255, 0.02); /* Fond très léger */
+    border-radius: 8px;
+}
+
+.detail-info-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(217, 180, 143, 0.1); /* Bordure dorée très discrète */
+    color: #ffffff;
+}
+
+.detail-info-table td.label {
+    color: #D9B48F; /* Labels en doré */
+    font-weight: 500;
+    width: 40%;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+/* Style pour le paragraphe de description */
+.detail-description p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.8;
+    font-size: 1.05rem;
+    white-space: pre-wrap; /* Garde les retours à la ligne de la base de données */
+}
+/* --- CARTE DU PRESTATAIRE --- */
+.detail-provider-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(217, 180, 143, 0.2);
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.detail-provider-card__header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* --- AVATAR (Cercle avec l'initiale) --- */
+.detail-provider-card__avatar {
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(135deg, #D9B48F 0%, #b38f6d 100%);
+    color: #162b3a; /* Bleu nuit pour le contraste avec l'or */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- NOM (FirstName & LastName) --- */
+.detail-provider-card__name {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+    text-transform: capitalize; /* Met la première lettre en majuscule */
+}
+
+/* --- BADGE VÉRIFIÉ --- */
+.verified-badge {
+    display: inline-block;
+    color: #4CAF50; /* Vert pour la confiance */
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: rgba(76, 175, 80, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+/* --- CORRECTION DU ZOOM DANS LE CADRE --- */
+
+.detail-gallery__main {
+    width: 100%;
+    height: 500px;
+    border-radius: 12px;
+    
+    /* TRÈS IMPORTANT : Force l'image à rester dans les limites, 
+       même pendant l'animation */
+    overflow: hidden; 
+    
+    background: #0a1923;
+    border: 1px solid rgba(217, 180, 143, 0.2);
+    cursor: zoom-in;
+    position: relative;
+    
+    /* Fix pour certains navigateurs mobiles avec border-radius + overflow */
+    mask-image: radial-gradient(white, black);
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
+.detail-gallery__main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    
+    /* On utilise translateZ pour forcer le rendu GPU, 
+       ce qui aide souvent à garder l'overflow propre */
+    transform: scale(1) translateZ(0);
+    
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.detail-gallery__main:hover img {
+    /* Le zoom s'applique, mais overflow: hidden le coupe proprement */
+    transform: scale(1.08) translateZ(0); 
+}
+/* --- RESPONSIVE MOBILE VERSION --- */
+
+@media (max-width: 1024px) {
+    .detail-page__hero {
+        padding: 80px 15px 20px; /* Moins de padding haut sur tablette */
+    }
+
+    .detail-content {
+        grid-template-columns: 1fr; /* Sidebar passe en dessous */
+        gap: 30px;
+        padding: 20px 15px;
+    }
+
+    .detail-provider-card {
+        position: static; /* Désactive le sticky pour qu'elle suive le flux */
+        margin-top: 10px;
+    }
+
+    .detail-gallery__main {
+        height: 400px; /* Hauteur fixe pour tablettes */
+    }
+}
+
+@media (max-width: 768px) {
+    /* Header & Titre */
+    .detail-header {
+        flex-direction: column; /* Titre au dessus du prix */
+        align-items: flex-start;
+        gap: 15px;
+        padding: 20px 0;
+    }
+
+    .detail-header__price {
+        font-size: 1.6rem;
+    }
+
+    .detail-header__title {
+        font-size: 1.8rem;
+    }
+
+    /* Galerie Mobile */
+    .detail-gallery__main {
+        height: 280px; /* Plus compact sur smartphone */
+        aspect-ratio: auto; /* On laisse la hauteur fixe décider */
+    }
+
+    .detail-gallery__thumbs {
+        overflow-x: auto; /* Permet de swiper les miniatures */
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .detail-gallery__thumb {
+        flex: 0 0 70px; /* Largeur fixe pour le défilement horizontal */
+        height: 55px;
+    }
+
+    /* Table de caractéristiques */
+    .detail-info-table td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .detail-info-table .label {
+        width: 110px; /* On réduit la colonne de gauche */
+    }
+
+    /* Actions sociales */
+    .social-actions {
+        grid-template-columns: 1fr; /* Boutons l'un sur l'autre sur petit mobile */
+        gap: 8px;
+    }
+    
+    .social-btn {
+        padding: 14px; /* Plus facile à cliquer avec le doigt */
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .detail-page__hero {
+        padding-top: 70px;
+    }
+
+    .detail-gallery__main {
+        height: 220px;
+    }
+
+    .massive-title-small {
+        font-size: 1.5rem;
+    }
+
+    .detail-description p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+}
+
+@media (max-width: 420px) {
+    .detail-page {
+        min-height: auto;
+    }
+
+    .detail-page__hero {
+        padding: 60px 12px 14px;
+    }
+
+    .detail-content {
+        padding: 15px 12px 25px;
+    }
+
+    .detail-gallery__main {
+        height: 200px;
+    }
+
+    .detail-gallery__thumbs {
+        gap: 8px;
+    }
+
+    .detail-gallery__thumb {
+        width: 64px;
+        height: 48px;
+    }
+
+    .detail-header {
+        padding: 16px 0;
+    }
+
+    .detail-header__title {
+        font-size: 1.6rem;
+    }
+
+    .detail-header__price {
+        font-size: 1.4rem;
+    }
+
+    .detail-info-table td {
+        padding: 10px 8px;
+        font-size: 0.9rem;
+    }
+
+    .detail-info-table .label {
+        width: auto;
+    }
+
+    .detail-info-table td {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .detail-provider-card {
+        padding: 16px;
+    }
+
+    .btn-phone-luxe {
+        padding: 14px;
+    }
+}

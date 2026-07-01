@@ -1,0 +1,486 @@
+/* ═══════════════════════════════════════════════════════════════════
+   IMMO LAMIS — AUTH PAGES (LOGIN & REGISTER)
+   Background : Bleu Sombre (#142836)
+   Style : Compact & Luxe
+   ═══════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap');
+
+:root {
+  --primary-blue: #34657F;
+  --dark-blue: #142836;
+  --accent-gold: #D9B48F;
+  --white: #ffffff;
+  --gray-bg: #f8fafc;
+  --transition-lux: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- 1. CONFIGURATION DU BODY --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--dark-blue);
+  color: var(--white);
+}
+
+/* --- 2. CONTENEUR & CARTE --- */
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: radial-gradient(circle at top right, rgba(217, 180, 143, 0.05), transparent),
+              var(--dark-blue);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 1000px;
+  background: var(--white);
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(217, 180, 143, 0.1);
+}
+
+/* --- 3. SECTION GAUCHE (BRANDING) --- */
+.auth-card__left {
+  background: linear-gradient(135deg, #1B3444 0%, var(--dark-blue) 100%);
+  padding: 3rem 2.5rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  border-right: 1px solid rgba(217, 180, 143, 0.1);
+}
+
+.auth-visual__content h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.2rem;
+}
+
+.auth-visual__content p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.auth-visual__footer {
+  position: absolute;
+  bottom: 2rem;
+  left: 2.5rem;
+  font-size: 0.8rem;
+  color: var(--accent-gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- 4. SECTION DROITE (FORMULAIRE) --- */
+.auth-card__right {
+  padding: 2.5rem 3.5rem;
+  background: var(--white);
+  color: var(--dark-blue);
+}
+
+.auth-form__header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--dark-blue);
+  margin-bottom: 5px;
+}
+
+.auth-form__header p {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- 5. INPUTS & LABELS --- */
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 800;
+  font-size: 0.75rem;
+  color: var(--primary-blue);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.form-group input, 
+.form-group select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid #eee;
+  border-radius: 8px;
+  background: #fdfdfd;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--dark-blue); /* Assure la visibilité du texte */
+  transition: var(--transition-lux);
+}
+
+.form-group input:focus, 
+.form-group select:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+  background: #fdfaf7;
+  box-shadow: 0 5px 15px rgba(217, 180, 143, 0.1);
+}
+
+/* --- 6. CORRECTIF LOCATION SELECTOR (Wilaya/Commune) --- */
+/* On force les couleurs sombres pour les éléments de sélection sur fond blanc */
+.auth-card__right select,
+.auth-card__right option,
+.auth-card__right .location-selector label {
+  color: var(--dark-blue) !important;
+}
+
+.auth-card__right .location-selector select {
+  background-color: var(--white) !important;
+  border: 1.5px solid #e2e8f0 !important;
+}
+
+/* --- 7. BOUTONS --- */
+.auth-submit-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: var(--transition-lux);
+  margin-top: 0.5rem;
+}
+
+.auth-submit-btn:hover {
+  background: var(--dark-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(52, 101, 127, 0.2);
+}
+
+/* --- 8. ALERTES --- */
+.auth-error {
+  background: #fdf2f2;
+  color: #9b2c2c;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  border: 1px solid #fbd5d5;
+}
+
+/* --- 9. RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .auth-card {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+  }
+  .auth-card__left {
+    display: none;
+  }
+  .auth-card__right {
+    padding: 2.5rem 2rem;
+  }
+}
+/* --- MISES À JOUR DES CLASSES --- */
+.text-gold { color: var(--accent-gold); }
+.error-text { color: #e53e3e; font-size: 0.75rem; margin-top: 4px; display: block; }
+.link-gold { color: var(--accent-gold); font-weight: 700; text-decoration: none; }
+
+/* Grille flexible pour les champs Nom/Prénom etc. */
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.location-box-wrapper {
+  margin-top: 0.5rem;
+  padding: 1.2rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #edf2f7;
+}
+
+/* Zone Upload */
+.file-upload-container {
+  border: 2px dashed #e2e8f0;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  background: #f8fafc;
+  transition: var(--transition-lux);
+}
+.file-upload-container.has-file { background: #f0fff4; border-color: #48bb78; }
+.file-upload-label { cursor: pointer; color: var(--primary-blue); font-weight: 800; font-size: 0.8rem; }
+.file-upload-hint { font-size: 0.7rem; color: #64748b; margin-top: 0.5rem; }
+
+.verification-note { font-size: 0.85rem; color: #64748b; font-style: italic; margin-top: 1rem; }
+
+/* Groupe de boutons */
+.auth-actions-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.auth-btn-back {
+  flex: 1;
+  background: #e2e8f0;
+  color: #475569;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* --- AJUSTEMENTS RESPONSIVE --- */
+@media (max-width: 968px) {
+  .auth-container { padding: 1rem; }
+  
+  .auth-card {
+    grid-template-columns: 1fr; /* Une seule colonne */
+    max-width: 550px;
+    border-radius: 1rem;
+  }
+
+  .auth-card__left { display: none; } /* On cache le visuel sur mobile */
+
+  .auth-card__right {
+    padding: 2rem 1.5rem;
+  }
+
+  .form-row-2 {
+    grid-template-columns: 1fr; /* On empile les champs sur mobile */
+    gap: 0;
+  }
+
+  .auth-visual__main-text h1 { font-size: 1.8rem; }
+}
+
+@media (max-width: 480px) {
+  .auth-form__header h2 { font-size: 1.5rem; }
+  .auth-submit-btn { font-size: 0.85rem; padding: 0.8rem; }
+  .location-box-wrapper { padding: 0.8rem; }
+}
+
+/* --- RESPONSIVE MOBILE (CORRIGÉ) --- */
+@media (max-width: 968px) {
+  .auth-card {
+    grid-template-columns: 1fr;
+    max-width: 420px; /* Largeur de carte mobile idéale */
+  }
+  
+  .auth-card__right {
+    padding: 1.5rem;
+  }
+}
+/* --- OPTIMISATION COMPACTE MOBILE --- */
+@media (max-width: 968px) {
+  .auth-container {
+    padding: 0.2rem; /* Moins d'espace autour de la carte */
+  }
+
+  .auth-card {
+    grid-template-columns: 1fr;
+    max-width: 380px; /* RÉDUCTION : Largeur plus étroite pour mobile */
+    border-radius: 1rem; /* Arrondi plus petit pour plus de place */
+  }
+  
+  .auth-card__right {
+    padding: 1.1rem 1.3rem; /* RÉDUCTION : Moins de vide sur les côtés */
+  }
+
+  .auth-form__header {
+    margin-bottom: 1rem; /* Resserre le titre vers le haut */
+    text-align: center;
+  }
+
+  .auth-form__header h2 {
+    font-size: 1.3rem; /* Titre plus petit */
+  }
+
+  .auth-form__header p {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Resserre encore plus les champs */
+  .form-group {
+    margin-bottom: 0.6rem;
+  }
+
+  .form-group input {
+    padding: 0.6rem 0.8rem; /* Champs plus fins */
+    font-size: 0.85rem;
+  }
+
+  .location-box-wrapper {
+    padding: 0.7rem; /* Sélecteur de wilaya plus serré */
+    margin-top: 0.2rem;
+  }
+
+  .auth-actions-group {
+    margin-top: 1rem;
+    gap: 0.6rem; /* Boutons plus proches */
+  }
+
+  .auth-submit-btn {
+    padding: 0.7rem; /* Bouton moins haut */
+    font-size: 0.8rem;
+  }
+
+  /* Zone d'upload document plus compacte */
+  .file-upload-container {
+    padding: 1.2rem;
+  }
+}
+
+/* --- OPTIMISATION ÉCRANS TRÈS PETITS --- */
+@media (max-width: 400px) {
+  .auth-card {
+    max-width: 100%; /* Prend toute la largeur disponible sans dépasser */
+  }
+  
+  .auth-card__right {
+    padding: 1rem;
+  }
+}
+/* --- COMPORTEMENT DE LA SECTION GAUCHE SUR MOBILE --- */
+@media (max-width: 968px) {
+  .auth-card {
+    grid-template-columns: 1fr; /* Une seule colonne */
+    max-width: 400px;
+  }
+
+  /* On ne cache plus la section, on la transforme en bandeau supérieur */
+ 
+
+  .auth-visual__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Réduction massive du logo et des marges pour sauver de l'espace */
+  .auth-logo h1 {
+    font-size: 1.4rem !important; 
+    margin: 0 !important;
+  }
+
+  /* Le bloc "Ravis de vous revoir" devient très discret sur mobile */
+  .auth-visual__content div[style*="margin-top: 2.5rem"] {
+    margin-top: 0.5rem !important; /* On réduit le 2.5rem à 0.5rem */
+  }
+
+  .auth-visual__content div h1 {
+    font-size: 1.1rem !important; /* Titre plus petit */
+    margin-bottom: 0.2rem !important;
+  }
+
+  .auth-visual__content p {
+    font-size: 0.8rem !important; /* Texte de description petit */
+    line-height: 1.3;
+    max-width: 280px;
+    margin: 0 auto;
+    opacity: 0.7;
+  }
+
+  /* On cache le footer copyright sur mobile pour gagner de la hauteur */
+  .auth-visual__footer {
+    display: none; 
+  }
+}
+
+/* --- OPTIMISATION ÉCRANS TRÈS PETITS --- */
+@media (max-width: 480px) {
+  .auth-card__left {
+    padding: 1rem !important;
+  }
+  
+  /* Sur très petit écran, on peut même cacher le paragraphe pour ne garder que le logo et le titre */
+  .auth-visual__content p {
+    display: none; 
+  }
+}
+/* Rendre le sélecteur de localisation ultra-compact */
+.location-box-wrapper .location-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Met Wilaya et Commune sur la même ligne */
+  gap: 0.8rem; /* Espace entre les deux */
+}
+
+/* Si vous avez un champ Quartier en dessous, il prendra toute la largeur */
+.location-box-wrapper .location-selector .form-group:last-child {
+  grid-column: span 2; 
+}
+
+/* Réduction drastique des marges internes du sélecteur */
+.location-box-wrapper .form-group {
+  margin-bottom: 0.3rem !important;
+}
+
+.location-box-wrapper label {
+  font-size: 0.6rem !important; /* Labels encore plus petits */
+  margin-bottom: 0.1rem !important;
+}
+
+.location-box-wrapper select {
+  padding: 0.4rem 0.6rem !important; /* Sélecteurs très fins */
+  font-size: 0.8rem !important;
+  height: auto !important;
+}
+/* Wrapper principal pour empiler Hero et Container */
+.auth-page-wrapper {
+  background-color: var(--dark-blue);
+  min-height: 100vh;
+}
+
+/* Ajustement du container pour qu'il ne prenne plus toute la hauteur (vh) 
+   puisqu'il y a le Hero au-dessus */
+.auth-container {
+  padding: 4rem 1.5rem; /* Un peu d'espace après le Hero */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Aligne la carte vers le haut */
+}
+
+/* On s'assure que le Hero garde son style Luxe */
+/* --- AUGMENTATION DE LA HAUTEUR DU HERO --- */
+.contact-hero-luxe {
+  /* Augmentez cette valeur selon votre besoin (ex: de 40vh à 60vh) */
+  height: 60vh; 
+  min-height: 450px; /* Assure une hauteur minimum sur les petits écrans */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Ajustement pour le responsive (Tablettes et Mobiles) */
+@media (max-width: 968px) {
+  .contact-hero-luxe {
+    height: 45vh; /* Hauteur un peu plus courte sur mobile pour voir le formulaire */
+    min-height: 350px;
+  }
+}

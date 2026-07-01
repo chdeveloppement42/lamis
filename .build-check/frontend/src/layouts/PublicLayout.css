@@ -1,0 +1,467 @@
+/* ═══════════════════════════════════════════════════════════════════
+   IMMO LAMIS — GLOBAL LAYOUT & RESPONSIVE (WITH ICONS)
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Branding public = Admin/Provider (bleu + beige/or) */
+  --immo-blue: #34657F;
+  --immo-dark: #142836;
+  --immo-gold: #D9B48F;
+  --immo-bg: #0f2430;
+  --immo-bg-creme: #fcfdf2;
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- 1. HEADER & NAVIGATION --- */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 85px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  transition: var(--transition);
+  background: transparent;
+}
+
+/* État lors du scroll */
+.header--scrolled {
+  background: rgba(20, 40, 54, 0.96);
+  backdrop-filter: blur(12px);
+  height: 70px;
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.35),
+    inset 0 -1px 0 rgba(217, 180, 143, 0.2);
+}
+
+.header__inner {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+/* Logo Style (cohérent Admin/Provider) */
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.header__logo-icon {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: 900;
+  color: var(--immo-dark);
+  background: linear-gradient(135deg, var(--immo-gold), #f2d6b0);
+  box-shadow: 0 10px 25px rgba(217, 180, 143, 0.25);
+  border: 1px solid rgba(217, 180, 143, 0.45);
+}
+
+.header__logo-text {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+.header__logo-accent {
+  color: var(--immo-gold);
+}
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espace parfait entre l'icône SVG et le texte ImmoLamis */
+  text-decoration: none;
+}
+/* Conteneur du lien du logo */
+.header__logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 4px 0;
+  transition: transform 0.2s ease;
+}
+
+.header__logo-link:hover {
+  transform: scale(1.02); /* Petit effet de zoom léger au survol du logo */
+}
+
+/* Style de la nouvelle image horizontale */
+.header__logo-horizontal {
+  height: 55px;        /* Hauteur parfaite pour que le texte zoomé de l'image soit très lisible */
+  width: auto;         /* Conserve le ratio horizontal 16:9 sans déformer */
+  object-fit: contain; /* S'assure que toute l'image reste visible et nette */
+  display: block;
+}
+
+/* Responsive : Ajustement pour les petits écrans de smartphones */
+@media (max-width: 640px) {
+  .header__logo-horizontal {
+    height: 42px;      /* On réduit légèrement la taille sur mobile pour laisser de la place au menu */
+  }
+}
+/* --- 2. NAV LINKS WITH ICONS --- */
+.header__nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.header__nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+  position: relative;
+}
+
+.nav-link-icon svg {
+  width: 18px;
+  height: 18px;
+  transition: var(--transition);
+}
+
+.header__nav-link:hover,
+.header__nav-link--active {
+  color: var(--immo-gold);
+}
+
+.header__nav-link:hover .nav-link-icon svg {
+  transform: translateY(-2px);
+}
+
+.header__nav-link--active {
+  background: rgba(217, 180, 143, 0.08);
+  border: 1px solid rgba(217, 180, 143, 0.22);
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+/* Soulignage discret (laisser le background actif) */
+.header__nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--immo-gold);
+  transition: var(--transition);
+  transform: translateX(-50%);
+  opacity: 0.0;
+}
+
+.header__nav-link--active::after {
+  width: 100%;
+  opacity: 1;
+}
+
+/* --- 3. BOUTONS & ACTIONS --- */
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-primary {
+  background: var(--immo-gold);
+  color: var(--immo-dark);
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--immo-gold);
+}
+
+.btn-primary:hover {
+  background: transparent;
+  color: var(--immo-gold);
+  box-shadow: 0 0 20px rgba(217, 180, 143, 0.4);
+}
+
+.btn-secondary {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn-secondary:hover {
+  color: var(--immo-gold);
+}
+
+/* --- 4. BURGER MENU --- */
+.header__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+.header__burger span {
+  width: 28px;
+  height: 3px;
+  background: var(--immo-gold);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* Animation Burger ouvert */
+.header__burger--open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.header__burger--open span:nth-child(2) { opacity: 0; }
+.header__burger--open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* --- 5. FOOTER --- */
+.footer {
+  background: linear-gradient(180deg, rgba(20, 40, 54, 1), rgba(15, 36, 48, 1));
+  color: #ffffff;
+  padding-top: 3rem;
+  border-top: 3px solid rgba(217, 180, 143, 0.95);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.footer__inner {
+  max-width: 1500px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 3rem;
+  padding: 0 2rem 4rem;
+}
+
+.footer__description {
+  margin-top: 2.5rem;
+  opacity: 0.7;
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+  /* Footer logo */
+  .footer__logo {
+    display: block;
+    height: 48px;
+    width: auto;
+    margin-bottom: 12px;
+    object-fit: contain;
+  }
+
+.footer__links a, .footer__links span {
+  display: block;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  margin-bottom: 0.8rem;
+  transition: 0.3s;
+}
+.footer__links h4 {
+  color: var(--immo-gold);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1.5rem; /* ◄ Augmente l'espace entre le titre et le premier lien */
+}
+.footer__links a:hover { color: var(--immo-gold); padding-left: 5px; }
+
+.footer__bottom {
+  background: rgba(0,0,0,0.3);
+  padding: 1.5rem 2rem;
+  border-top: 1px solid rgba(217, 180, 143, 0.1);
+}
+
+.footer__bottom-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer__credit-group { color: var(--immo-gold); font-weight: 700; }
+
+/* --- 6. RESPONSIVE MOBILE MENU --- */
+@media (max-width: 1024px) {
+  .header__actions { display: none; } /* Cacher boutons desktop */
+  .header__burger { display: flex; }
+
+  .header__nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    height: 100vh;
+    background: linear-gradient(180deg, rgba(20, 40, 54, 1), rgba(15, 36, 48, 1));
+    flex-direction: column;
+    padding: 6rem 2rem;
+    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+    align-items: flex-start;
+    gap: 1.5rem;
+    border-left: 1px solid rgba(217, 180, 143, 0.18);
+  }
+
+  .header__nav--open {
+    right: 0;
+  }
+
+  .header__nav-link {
+    font-size: 1.2rem;
+    width: 100%;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .nav-link-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .header__mobile-actions {
+    margin-top: 2rem;
+    width: 100%;
+  }
+
+  .footer__inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.footer__contact-link {
+  text-decoration: none; /* Enlève le soulignement */
+  color: inherit;        /* Garde la même couleur que le texte autour */
+  transition: color 0.3s ease;
+}
+
+.footer__contact-link:hover {
+  color: #D9B48F;        /* Change en Or au survol */
+}
+/* Style pour le lien WhatsApp dans le footer */
+/* --- WHATSAPP FOOTER LINK --- */
+.whatsapp-footer-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.whatsapp-icon-wrapper {
+  background-color: rgba(37, 211, 102, 0.1); /* Fond vert très léger */
+  color: #25D366; /* Vert WhatsApp */
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(37, 211, 102, 0.2);
+  transition: all 0.3s ease;
+}
+
+.whatsapp-footer-link:hover .whatsapp-icon-wrapper {
+  background-color: #25D366;
+  color: white;
+  transform: scale(1.1) rotate(10deg);
+  box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
+}
+
+.whatsapp-footer-link:hover span {
+  color: #D9B48F; /* Transition vers ton Or au survol */
+}
+
+/* Animation discrète pour attirer l'oeil */
+.whatsapp-icon-wrapper {
+  animation: pulse-whatsapp 3s infinite;
+}
+
+@keyframes pulse-whatsapp {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+@media (max-width: 600px) {
+  .footer__inner { grid-template-columns: 1fr; text-align: center; }
+  .footer__description { margin: 1.5rem auto 0; }
+  .header__logo-text { font-size: 1.2rem; }
+  .footer__bottom-content { justify-content: center; text-align: center; }
+  .footer__logo { height: 40px; margin-bottom: 10px; }
+}
+@media (max-width: 600px) {
+  /* Réduit l'espace global du footer sur mobile */
+  .footer {
+    padding-top: 2.5rem; 
+  }
+
+  /* Resserre la grille et réduit l'espace entre les sections */
+  .footer__inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 1.8rem; /* Réduit l'espace entre les blocs (Navigation, Support, etc.) */
+    padding-bottom: 2.5rem;
+  }
+
+  /* Description plus compacte */
+  .footer__description {
+    margin: 1rem auto 0;
+    font-size: 0.85rem; /* Texte un peu plus petit */
+    line-height: 1.4; /* Resserre les lignes de la description */
+    max-width: 280px;
+  }
+
+  /* Resserre les liens de navigation et contact */
+  .footer__links h4 {
+    margin-bottom: 0.8rem; /* Moins d'espace sous les titres (Navigation, Support) */
+    font-size: 0.8rem;
+  }
+
+  .footer__links a, 
+  .footer__links span {
+    margin-bottom: 0.4rem; /* RÉDUCTION : Espace entre chaque lien/ligne */
+    font-size: 0.9rem;      /* Taille de police légèrement réduite */
+    line-height: 1.2;      /* Resserre l'espace vertical entre les lignes */
+  }
+
+  /* Footer Bottom (Copyright) plus compact */
+  .footer__bottom {
+    padding: 1rem;
+  }
+
+  .footer__bottom-content {
+    gap: 0.4rem; /* Resserre l'espace entre le copyright et le crédit CH-PUB */
+    font-size: 0.75rem;
+  }
+}
+@media (max-width: 600px) {
+  /* ... vos autres styles mobiles ... */
+
+  .footer__links h4 {
+    margin-top: 1rem;       /* Éloigne le titre du bloc précédent */
+    margin-bottom: 1rem;    /* ◄ Crée l'espace entre le titre et sa liste sur mobile */
+    font-size: 1.05rem;
+    color: var(--immo-gold);
+  }
+}

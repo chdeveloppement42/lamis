@@ -1,0 +1,223 @@
+/* ═══════════════════════════════════════════════════════════════
+   PERMISSIONS & ROLES — SECURITY PANEL (Immo Lamis)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── GRILLE DES RÔLES ─────────────────────────────────────── */
+.roles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.role-card {
+    background: #0f2633;
+    border-radius: 20px;
+    border: 1px solid rgba(217, 180, 143, 0.1);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.role-card:hover {
+    border-color: rgba(217, 180, 143, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.role-card--super {
+    border: 1px solid #D9B48F;
+    background: linear-gradient(145deg, #0f2633, #162e3d);
+}
+
+.role-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.role-card__header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #D9B48F; /* Or */
+    text-transform: capitalize;
+}
+
+/* ─── TAGS DE PERMISSIONS ──────────────────────────────────── */
+.role-card__permissions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-height: 50px;
+}
+
+.permission-tag {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-family: 'Monaco', 'Consolas', monospace;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.permission-tag--empty {
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+}
+
+.role-card__actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ─── FORMULAIRE DE CRÉATION/EDITION ────────────────────────── */
+.admin-role-form {
+    background: var(--admin-blue-main) !important;
+    border-radius: 24px;
+    padding: 2.75rem;
+    border: 1px solid rgba(217, 180, 143, 0.12) !important;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25) !important;
+    animation: fadeInDown 0.4s ease-out;
+}
+
+.admin-role-form__header {
+    margin-bottom: 2rem;
+}
+
+.admin-role-form__permissions {
+    margin-bottom: 2rem;
+}
+
+.admin-role-form h4 {
+    color: #D9B48F;
+    margin: 0;
+}
+
+/* ─── GROUPES DE PERMISSIONS ───────────────────────────────── */
+.permission-group {
+    background: var(--admin-blue-main) !important;
+    border-radius: 24px;
+    border: 1px solid rgba(217, 180, 143, 0.12) !important;
+    padding: 2rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+}
+
+.permission-group__title {
+    color: var(--admin-beige) !important;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 1.05rem;
+    letter-spacing: 0.4px;
+    margin-bottom: 1.5rem;
+    opacity: 1;
+}
+
+.permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+/* ─── CUSTOM CHECKBOX (Style Luxe) ────────────────────────── */
+.permission-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.permission-checkbox:hover {
+    background: rgba(217, 180, 143, 0.05);
+}
+
+.permission-checkbox input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(217, 180, 143, 0.5);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    top: 2px;
+    transition: all 0.2s ease;
+}
+
+.permission-checkbox input[type="checkbox"]:checked {
+    background-color: #D9B48F;
+    border-color: #D9B48F;
+}
+
+.permission-checkbox input[type="checkbox"]:checked::after {
+    content: "✓";
+    color: #0b1b25;
+    font-size: 12px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+}
+
+.permission-checkbox__label {
+    display: flex;
+    flex-direction: column;
+}
+
+.permission-checkbox__label strong {
+    color: #ffffff;
+    font-size: 0.9rem;
+    text-transform: capitalize;
+}
+
+.permission-checkbox__label small {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.75rem;
+}
+
+/* ─── ANIMATIONS ───────────────────────────────────────────── */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ─── BADGES ───────────────────────────────────────────────── */
+.admin-badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.admin-badge--info {
+    background: rgba(217, 180, 143, 0.2);
+    color: #D9B48F;
+    border: 1px solid rgba(217, 180, 143, 0.3);
+}
+
+/* ─── RESPONSIVE ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .roles-grid {
+        grid-template-columns: 1fr;
+    }
+    .permissions-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}

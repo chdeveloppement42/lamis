@@ -1,0 +1,329 @@
+/* ==================== ESTIMATE PAGE STYLES ==================== */
+
+.estimate-wrapper {
+  width: 100%;
+  background: linear-gradient(135deg, #0a0e27 0%, #0f1535 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- HERO SECTION --- */
+.estimate-hero-luxe {
+  position: relative;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+}
+
+.estimate-hero-luxe .hero-overlay-dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  z-index: 1;
+}
+
+.estimate-hero-luxe::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(10, 14, 39, 0.85) 0%, rgba(15, 21, 53, 0.85) 100%);
+  z-index: 2;
+}
+
+.estimate-hero-luxe .hero-content-luxe {
+  position: relative;
+  z-index: 3;
+}
+
+.estimate-hero-luxe .gold-badge {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #d4a574;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 1rem;
+}
+
+.estimate-hero-luxe .massive-title {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.estimate-hero-luxe .hero-subtitle {
+  font-size: 1.1rem;
+  color: #b0b0b0;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* --- MAIN SECTION --- */
+.estimate-main-section {
+  padding: 4rem 0;
+}
+
+.estimate-form-container {
+  background: linear-gradient(135deg, #1a1f42 0%, #15192f 100%);
+  border: 1px solid rgba(212, 165, 116, 0.2);
+  border-radius: 12px;
+  padding: 3rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Form Header */
+.estimate-form-container .form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.estimate-form-container .form-header h2 {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.estimate-form-container .gold-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #d4a574, #e8c77f);
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+/* Form Sections */
+.estimate-form .form-section {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(212, 165, 116, 0.15);
+}
+
+.estimate-form .form-section:last-of-type {
+  border-bottom: none;
+}
+
+.estimate-form .section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.estimate-form .section-header h3 {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.estimate-form .text-gold {
+  color: #d4a574;
+}
+
+/* Input Groups */
+.estimate-form .input-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.estimate-form .input-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.estimate-form .input-group-luxe {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.estimate-form .input-group-luxe label {
+  color: #d4a574;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.estimate-form .input-group-luxe input,
+.estimate-form .input-group-luxe textarea,
+.estimate-form .input-group-luxe select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  color: white;
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.estimate-form .input-group-luxe input::placeholder,
+.estimate-form .input-group-luxe textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.estimate-form .input-group-luxe input:focus,
+.estimate-form .input-group-luxe textarea:focus,
+.estimate-form .input-group-luxe select:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #d4a574;
+  box-shadow: 0 0 10px rgba(212, 165, 116, 0.2);
+}
+
+.estimate-form .admin-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  color: white;
+  cursor: pointer;
+}
+
+.estimate-form .admin-input option {
+  background: #1a1f42;
+  color: white;
+}
+
+/* Form Actions */
+.estimate-form .form-actions {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.estimate-form .btn-gold-luxe {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #d4a574, #e8c77f);
+  color: #0a0e27;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
+}
+
+.estimate-form .btn-gold-luxe:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(212, 165, 116, 0.4);
+}
+
+.estimate-form .btn-gold-luxe:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.estimate-form .spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Messages */
+.estimate-form .success-msg {
+  background: rgba(76, 175, 80, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  color: #4caf50;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.estimate-form .error-msg {
+  background: rgba(244, 67, 54, 0.15);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  color: #f44336;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.estimate-form .form-notice {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .estimate-hero-luxe .massive-title {
+    font-size: 2rem;
+  }
+
+  .estimate-hero-luxe .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .estimate-form-container {
+    padding: 2rem;
+  }
+
+  .estimate-form .input-row-2,
+  .estimate-form .input-row-3 {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .estimate-form .section-header {
+    margin-bottom: 1rem;
+  }
+
+  .estimate-form .form-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .estimate-hero-luxe {
+    height: 250px;
+  }
+
+  .estimate-hero-luxe .massive-title {
+    font-size: 1.5rem;
+  }
+
+  .estimate-form-container {
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+
+  .estimate-form .btn-gold-luxe {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}

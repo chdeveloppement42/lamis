@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Role {
+  id           Int              @id @default(autoincrement())
+  name         String           @unique
+  isDefault    Boolean          @default(false)
+  isSuperAdmin Boolean          @default(false)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  admins       Admin[]
+  permissions  RolePermission[]
+}
+
+model Permission {
+  id          Int              @id @default(autoincrement())
+  action      String           @unique
+  description String?
+  createdAt   DateTime         @default(now())
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  id           Int        @id @default(autoincrement())
+  roleId       Int
+  permissionId Int
+  createdAt    DateTime   @default(now())
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  role         Role       @relation(fields: [roleId], references: [id])
+
+  @@unique([roleId, permissionId])
+}
+
+model Admin {
+  id            Int            @id @default(autoincrement())
+  firstName     String
+  lastName      String
+  email         String         @unique
+  password      String
+  isSuperAdmin  Boolean        @default(false)
+  status        AccountStatus  @default(VALIDATED)
+  roleId        Int
+  createdById   Int?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  createdBy     Admin?         @relation("AdminCreatedBy", fields: [createdById], references: [id])
+  createdAdmins Admin[]        @relation("AdminCreatedBy")
+  role          Role           @relation(fields: [roleId], references: [id])
+  notifications Notification[]
+}
+
+model Provider {
+  id          Int           @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String        @unique
+  password    String
+  phone       String
+  wilaya      String?
+  commune     String?
+  quartier    String?
+  documentUrl String?
+  status      AccountStatus @default(PENDING)
+  type        ProviderType  @default(PARTICULIER)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  listings    Listing[]
+
+  @@index([status])
+}
+
+enum ProviderType {
+  PROMOTEUR
+  PARTENARIAT
+  ARCHITECTE
+  SOC_TRAVAUX_PUBLICS
+  SOC_TRAVAUX_CONSTRUCTION
+  NOTAIRE
+  PARTICULIER
+  AUTRE
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  listings  Listing[]
+}
+
+model Listing {
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String
+  price       Float
+  type        ListingType    @default(VENTE)
+  wilaya      String?
+  commune     String?
+  quartier    String?
+  surface     Float?
+  rooms       Int?
+  floor       Int?
+  status      ListingStatus  @default(DRAFT)
+  providerId  Int
+  categoryId  Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  category    Category       @relation(fields: [categoryId], references: [id])
+  provider    Provider       @relation(fields: [providerId], references: [id])
+  images      ListingImage[]
+
+  @@index([status])
+  @@index([providerId])
+  @@index([categoryId])
+  @@index([wilaya])
+  @@index([status, categoryId])
+}
+
+model ListingImage {
+  id        Int      @id @default(autoincrement())
+  url       String
+  isMain    Boolean  @default(false)
+  listingId Int
+  createdAt DateTime @default(now())
+  listing   Listing  @relation(fields: [listingId], references: [id])
+}
+
+model Notification {
+  id        Int              @id @default(autoincrement())
+  type      NotificationType
+  message   String
+  isRead    Boolean          @default(false)
+  adminId   Int
+  createdAt DateTime         @default(now())
+  admin     Admin            @relation(fields: [adminId], references: [id])
+
+  @@index([adminId, isRead])
+}
+
+model PasswordResetToken {
+  id          Int      @id @default(autoincrement())
+  userType    UserType
+  userId      Int
+  tokenHash   String   @unique
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  usedAt      DateTime?
+
+  @@index([userType, userId])
+  @@index([expiresAt])
+}
+
+enum NotificationType {
+  NEW_PROVIDER
+  NEW_LISTING
+  SENSITIVE_DATA_CHANGE
+  CONTACT_MESSAGE
+  SYSTEM
+}
+
+enum AccountStatus {
+  PENDING
+  VALIDATED
+  REJECTED
+  SUSPENDED
+}
+
+enum ListingStatus {
+  DRAFT
+  PUBLISHED
+  UNPUBLISHED
+}
+
+enum ListingType {
+  VENTE
+  LOCATION
+}
+
+enum UserType {
+  PROVIDER
+  ADMIN
+}

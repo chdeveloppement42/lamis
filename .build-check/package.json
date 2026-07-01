@@ -1,0 +1,31 @@
+{
+  "name": "immo_lamis",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently --names \"BE,FE\" --prefix-colors \"blue,green\" \"npm run backend\" \"npm run frontend\"",
+    "build": "npm run build --workspace=backend && npm run build --workspace=frontend",
+    "backend": "npm --workspace=backend run start:dev",
+    "frontend": "npm --workspace=frontend run dev",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspace=backend",
+    "test:e2e": "npm run test:e2e --workspace=backend",
+    "db:seed": "npm --workspace=backend run db:seed",
+    "db:migrate": "npm --workspace=backend run db:migrate",
+    "db:migrate:deploy": "npm --workspace=backend run db:migrate:deploy"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "i18next": "^26.1.0",
+    "i18next-browser-languagedetector": "^8.2.1",
+    "lucide-react": "^1.14.0",
+    "react-helmet-async": "^3.0.0",
+    "react-i18next": "^17.0.7"
+  }
+}

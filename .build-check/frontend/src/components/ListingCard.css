@@ -1,0 +1,268 @@
+/* ═══════════════════════════════════════════════════════════════
+   IMMO LAMIS — ULTRA MODERN GLASSMORPHISM THEME (FULL COMPLETE)
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --immo-dark: #142836;
+  --immo-blue: #34657F;
+  --immo-gold: #D9B48F;
+  --text-muted: #64748b;
+  --card-shadow: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.listing-card {
+  display: flex;
+  flex-direction: column;
+  
+  /* Fond semi-transparent effet "verre poli" (Glassmorphism) */
+  background: rgba(255, 255, 255, 0.75); 
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  
+  border-radius: 24px;
+  overflow: hidden;
+  text-decoration: none;
+  
+  /* Bordure fine style cristal */
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 30px rgba(20, 40, 54, 0.04);
+  position: relative;
+  transition: transform 0.5s var(--card-shadow), 
+              box-shadow 0.5s var(--card-shadow), 
+              background 0.4s ease,
+              border-color 0.4s ease;
+}
+
+/* Effet de survol / Lévitation premium */
+.listing-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.9); 
+  border-color: rgba(217, 180, 143, 0.45); /* Délicate lueur dorée */
+  box-shadow: 0 30px 60px rgba(20, 40, 54, 0.12);
+}
+
+/* --- Zone Média (Image encapsulée) --- */
+.listing-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10.5;
+  overflow: hidden;
+  background: #f1f5f9;
+  margin: 10px 10px 0 10px;
+  border-radius: 18px;
+}
+
+.listing-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--card-shadow);
+}
+
+/* Zoom cinématique très fluide sur l'image */
+.listing-card:hover .listing-card__img {
+  transform: scale(1.04);
+}
+
+/* Placeholder si aucune image disponible */
+.listing-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+}
+
+.listing-card__placeholder-icon {
+  width: 36px;
+  height: 36px;
+  opacity: 0.25;
+}
+
+/* --- Configuration des Badges Modernes --- */
+.listing-card__badges-group {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.listing-card__badge {
+  padding: 6px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* 🔵 LOCATION : Thème Bleu Profond semi-transparent */
+.listing-card__badge--location {
+  background: rgba(52, 101, 127, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* 🌟 VENTE : Thème Beige / Or semi-transparent */
+.listing-card__badge--vente {
+  background: rgba(217, 180, 143, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #142836;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 🔮 CATÉGORIE : Entièrement transparente avec flou cristallin */
+.listing-card__badge--category {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Compteur de photos (Capsule en bas de l'image) */
+.listing-card__photo-counter {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(20, 40, 54, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  border-radius: 30px;
+  z-index: 2;
+}
+
+.listing-card__counter-icon {
+  width: 12px;
+  height: 12px;
+  filter: brightness(0) invert(1);
+}
+
+/* --- Corps de la Carte --- */
+.listing-card__content {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Section Localisation */
+.listing-card__location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.listing-card__pin-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.6;
+}
+
+/* Titre principal (hauteur fixe pour un alignement horizontal parfait) */
+.listing-card__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--immo-dark);
+  line-height: 1.45;
+  margin-bottom: 18px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 3.3rem; 
+  transition: color 0.3s ease;
+}
+
+.listing-card:hover .listing-card__title {
+  color: var(--immo-blue);
+}
+
+/* Ligne de séparation moderne */
+.listing-card__divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(20, 40, 54, 0.06) 0%, rgba(20, 40, 54, 0.01) 100%);
+  margin-top: auto;
+  margin-bottom: 18px;
+}
+
+/* --- Section Bas de Carte (Footer) --- */
+.listing-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Typographie du Prix */
+.listing-card__price-amount {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--immo-dark);
+  letter-spacing: -0.3px;
+  transition: color 0.3s ease;
+}
+
+/* Illumination dynamique de la couleur du prix selon le type lors du survol */
+.listing-card:has(.listing-card__badge--location):hover .listing-card__price-amount {
+  color: var(--immo-blue); /* Passe au bleu au survol si c'est une location */
+}
+
+.listing-card:has(.listing-card__badge--vente):hover .listing-card__price-amount {
+  color: #cda276; /* Passe à l'or chaud au survol si c'est une vente */
+}
+
+/* --- Bloc Avatar de l'Agent / Propriétaire --- */
+.listing-card__avatar-wrapper {
+  position: relative;
+  width: 38px;
+  height: 38px;
+}
+
+.listing-card__avatar-initial {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--immo-dark), var(--immo-blue));
+  color: var(--immo-gold); /* Initiales colorées en Or */
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(20, 40, 54, 0.1);
+}
+
+/* Badge de vérification superposé (uniquement si validé) */
+.listing-card__verified-icon {
+  position: absolute;
+  bottom: -2px;
+  right: -3px;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 50%;
+  padding: 1px;
+  z-index: 3;
+}

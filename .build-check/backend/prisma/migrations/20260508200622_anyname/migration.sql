@@ -1,4 +1,11 @@
+/*
+  Warnings:
 
+  - You are about to drop the column `city` on the `Listing` table. All the data in the column will be lost.
+  - You are about to drop the column `district` on the `Listing` table. All the data in the column will be lost.
+  - You are about to drop the column `address` on the `Provider` table. All the data in the column will be lost.
+
+*/
 -- CreateEnum
 CREATE TYPE "ListingType" AS ENUM ('VENTE', 'LOCATION');
 
